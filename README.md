@@ -8,15 +8,16 @@ Electro-Smith Daisy Seed.**
 [![Platform: Daisy Seed](https://img.shields.io/badge/platform-Daisy%20Seed%20%C2%B7%20STM32H750-8a2be2.svg)](https://daisy.audio/products/seed3)
 [![Standard: C++14](https://img.shields.io/badge/C%2B%2B-14-00599c.svg)](#requirements)
 
-[Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) is an open-source reverb
-built "for emulating huge, endless spaces and modulated echoes" and released as
-a VST plugin under the MIT license. This library ports its C++ kernel to single
-precision and wraps it in an engine for the Daisy Seed (STM32H750) that runs the
-plugin's programs **at their full size**: all twelve delay lines of the largest
-program, with the CPU load measured and bounded.
+[Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) is an open-source reverb built "for emulating huge, endless spaces
+and modulated echoes" and released as a VST plugin under the MIT license. This
+library ports its C++ kernel to single precision and wraps it in an engine for
+the [Daisy Seed](https://daisy.audio/products/seed3) (STM32H750) that runs the plugin's programs **at their full
+size**: all twelve delay lines of the largest program, with the CPU load
+measured and bounded.
 
 It ships the plugin's **nine factory programs** and the built-in program of its
-successor, Ghost Note Audio's Cloud Seed 2, from its MIT-licensed
+successor, [Ghost Note Audio](https://ghostnoteaudio.uk/)'s Cloud Seed 2, from
+its MIT-licensed
 [core](https://github.com/GhostNoteAudio/CloudSeedCore).
 
 📘 **[TECHNICAL.md](TECHNICAL.md)** is the engineering reference: the
@@ -94,7 +95,7 @@ https://github.com/user-attachments/assets/e8208ab8-9eb2-41cf-bf61-d0b1e594856c
 </details>
 
 [`demo/`](demo/) holds the renderer, the CC0 sources and the script that builds
-every clip: `demo/make_demos.sh`.
+every clip: [`demo/make_demos.sh`](demo/make_demos.sh).
 
 ## 📖 Table of contents
 
@@ -126,7 +127,7 @@ every clip: `demo/make_demos.sh`.
 |---|---|
 | 🎛️ **Hardware** | A [Daisy Seed](https://daisy.audio/products/seed3) (any revision) with its 64 MB SDRAM. The 480 MHz clock needs an STM32H750 of silicon revision V or X, which the library detects. |
 | 📚 **libDaisy** | [libDaisy](https://github.com/electro-smith/libDaisy), built. Developed against revision `cc146d5065dd8286078a662e2830bf820c37a612`; the tests read its `CpuLoadMeter` and STM32 headers from whatever checkout `LIBDAISY_DIR` names. |
-| 🔨 **Toolchain** | The [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (built and tested with GCC 12.2 and 16.2) and GNU make. A C++14 compiler for the host tests. **DaisySP is not needed.** |
+| 🔨 **Toolchain** | The [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (built and tested with GCC 12.2 and 16.2) and GNU make. A C++14 compiler for the host tests. **[DaisySP](https://github.com/electro-smith/DaisySP) is not needed.** |
 | 🎚️ **Audio** | A block size of 48 samples, or a divisor or multiple of it (see `Engine::Config`). |
 
 ### Add the library
@@ -153,7 +154,8 @@ include lib/cloudseed-daisy/cloudseed.mk
 
 The firmware hands the engine its programs and its audio configuration, calls it
 from the audio callback, and services it from the main loop. This is the whole
-contract; `examples/seed/main.cpp` is the complete version:
+contract; [`examples/seed/main.cpp`](examples/seed/main.cpp) is the complete
+version:
 
 ```cpp
 #include "cloudseed_daisy/engine.h"
@@ -250,16 +252,17 @@ Around that:
 
 | Path | Contents |
 |---|---|
-| `src/cloudseed/` | The reverb kernel: a platform-neutral port of Cloud Seed's DSP (`ReverbController`), the staging manager (`Staging`), and the programs (`presets.h`). Compiles on any host. |
-| `src/cloudseed_daisy/` | The Daisy Seed layer: the engine (`engine.h`), the MDMA transport, the Seed's system settings (`seed_system.h`). |
-| `cloudseed.mk` | The make integration for libDaisy projects. |
-| `examples/seed/` | Cloud Seed on a bare Daisy Seed: the smallest complete firmware. |
-| `demo/` | The demo clips in the README, the renderer that makes them and their CC0 sources. |
-| `test/` | The host test suites (see [Tests](#-tests)). |
+| [`src/cloudseed/`](src/cloudseed/) | The reverb kernel: a platform-neutral port of Cloud Seed's DSP (`ReverbController`), the staging manager (`Staging`), and the programs (`presets.h`). Compiles on any host. |
+| [`src/cloudseed_daisy/`](src/cloudseed_daisy/) | The Daisy Seed layer: the engine (`engine.h`), the MDMA transport, the Seed's system settings (`seed_system.h`). |
+| [`cloudseed.mk`](cloudseed.mk) | The make integration for libDaisy projects. |
+| [`examples/seed/`](examples/seed/) | Cloud Seed on a bare Daisy Seed: the smallest complete firmware. |
+| [`demo/`](demo/) | The demo clips in the README, the renderer that makes them and their CC0 sources. |
+| [`test/`](test/) | The host test suites (see [Tests](#-tests)). |
 
 ## 🧩 The engine
 
-`cloudseed_daisy::Engine` (`src/cloudseed_daisy/engine.h`) owns:
+`cloudseed_daisy::Engine`
+([`src/cloudseed_daisy/engine.h`](src/cloudseed_daisy/engine.h)) owns:
 
 - the reverb and its delay memory in every memory of the STM32H750,
 - the staging and its transport,
@@ -298,7 +301,8 @@ placed there is constructed.
 
 ### The Seed's system settings
 
-`src/cloudseed_daisy/seed_system.h` holds the settings the engine's performance
+[`src/cloudseed_daisy/seed_system.h`](src/cloudseed_daisy/seed_system.h) holds
+the settings the engine's performance
 was measured with, as functions an application calls after `DaisySeed::Init()`.
 **None of them is specific to the reverb.**
 
@@ -417,7 +421,9 @@ TECHNICAL.md explains every field.
 
 ## 📦 The kernel without the engine
 
-`cloudseed::ReverbController` (`src/cloudseed/reverb_controller.h`) is the reverb
+`cloudseed::ReverbController`
+([`src/cloudseed/reverb_controller.h`](src/cloudseed/reverb_controller.h)) is
+the reverb
 itself:
 
 - parameters as the plugin's normalized 0..1 values (`Parameter`, `presets.h`),
@@ -429,25 +435,29 @@ It takes its delay memory from a `MemoryPool` the caller fills, has **no
 dependency on libDaisy**, and compiles and runs on a desktop host — which is how
 its tests work.
 
-`Staging` (`src/cloudseed/staging.h`) is the staging manager, a template on a
+`Staging` ([`src/cloudseed/staging.h`](src/cloudseed/staging.h)) is the staging
+manager, a template on a
 transport type, so that another STM32H7 board or another DMA can supply its own;
-`test/queued_transport.h` is the smallest one.
+[`test/queued_transport.h`](test/queued_transport.h) is the smallest one.
 
 ## 🧪 Tests
 
-Every suite runs on the host with a C++14 compiler; **`test/all.sh` runs them
-all**, and the GitHub workflow runs the suites and builds the example.
+Every suite runs on the host with a C++14 compiler;
+**[`test/all.sh`](test/all.sh) runs them
+all**, and the [GitHub workflow](.github/workflows/test.yml) runs the suites
+and builds the example.
 
 | Suite | What it establishes |
 |---|---|
-| `test/regression.sh` | The DSP and the staging under ASan and UBSan: bit-identical output between staged and direct paths across block sizes, wraps, partial and failed staging, freezes and reloads; the filters; every program; both kernel families at 4 and 12 lines. |
-| `test/engine.sh` | The engine's callback and main-loop sides with the real DSP and libDaisy's `CpuLoadMeter` on a deterministic clock: overload detection and recovery, per-program limits, the selector handoff without main, transport failures and unfinished aborts, parameter thresholds, the profiling mailbox. Needs `LIBDAISY_DIR`. |
-| `test/mdma.sh` | The MDMA transport at register level against a stub channel: descriptors and links, timing paths, bounded aborts, the unexpectedly enabled channel. Needs `LIBDAISY_DIR`. |
-| `test/trig.sh` | The port's `sin()`/`cos()` against fdlibm: 8,024,008 values identical. |
-| `test/run.sh path/to/CloudSeed` | Fidelity against the plugin's own kernel (a corrected copy of the checkout): 82 to 147 dB below the signal with modulation off. Needs a [CloudSeed](https://github.com/ValdemarOrn/CloudSeed) checkout and Python 3. |
-| `test/benchmark.sh [--stress]` | Desktop timings of the direct paths; `--stress` renders two minutes per program frozen and checks every output stays finite. |
+| [`test/regression.sh`](test/regression.sh) | The DSP and the staging under ASan and UBSan: bit-identical output between staged and direct paths across block sizes, wraps, partial and failed staging, freezes and reloads; the filters; every program; both kernel families at 4 and 12 lines. |
+| [`test/engine.sh`](test/engine.sh) | The engine's callback and main-loop sides with the real DSP and libDaisy's `CpuLoadMeter` on a deterministic clock: overload detection and recovery, per-program limits, the selector handoff without main, transport failures and unfinished aborts, parameter thresholds, the profiling mailbox. Needs `LIBDAISY_DIR`. |
+| [`test/mdma.sh`](test/mdma.sh) | The MDMA transport at register level against a stub channel: descriptors and links, timing paths, bounded aborts, the unexpectedly enabled channel. Needs `LIBDAISY_DIR`. |
+| [`test/trig.sh`](test/trig.sh) | The port's `sin()`/`cos()` against fdlibm: 8,024,008 values identical. |
+| [`test/run.sh`](test/run.sh) `path/to/CloudSeed` | Fidelity against the plugin's own kernel (a corrected copy of the checkout): 82 to 147 dB below the signal with modulation off. Needs a [CloudSeed](https://github.com/ValdemarOrn/CloudSeed) checkout and Python 3. |
+| [`test/benchmark.sh`](test/benchmark.sh) `[--stress]` | Desktop timings of the direct paths; `--stress` renders two minutes per program frozen and checks every output stays finite. |
 
-`test/inventory.cpp` prints every program's delay buffers, their placement and
+[`test/inventory.cpp`](test/inventory.cpp) prints every program's delay
+buffers, their placement and
 the staging plan:
 
 ```sh
@@ -456,13 +466,12 @@ g++ -O2 -std=c++14 -I src test/inventory.cpp src/cloudseed/*.cpp
 
 ## 🎹 Reference application
 
-This library took shape inside the [Löwenzahnhonig
-firmware](https://github.com/wgd-modular/loewenzahnhonig-firmware) and now lives
-on its own. That firmware's Cloud Seed build (`src/cloudseed` there) is the
-library's **reference application**: it maps a program selector, a mix, a decay
-and a tone pot and two CV inputs onto the engine, uses this library as a
-submodule, and is the firmware every measurement here was taken from — on its
-module. Its README describes the module.
+This library took shape inside the [Löwenzahnhonig firmware](https://github.com/wgd-modular/loewenzahnhonig-firmware) and now lives on its
+own. That firmware's Cloud Seed build (`src/cloudseed` there) is the library's
+**reference application**: it maps a program selector, a mix, a decay and a
+tone pot and two CV inputs onto the engine, uses this library as a submodule,
+and is the firmware every measurement here was taken from — on its module. Its
+README describes the module.
 
 ## 📚 References
 
