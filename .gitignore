@@ -12,3 +12,7 @@ build/
 .vscode/
 .idea/
 *~
+
+# demo clips are built, not committed
+demo/build/
+demo/clips/
