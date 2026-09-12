@@ -8,7 +8,7 @@ trap 'rm -rf "$WORK"' EXIT
 for LINES in 4 12; do
   for STAGED in 1 0; do
     # STAGED=0 compiles different interleaved/wrap-free ring kernels.
-    "${CXX:-g++}" -O2 -g -std=c++14 -Wall -Wextra -Werror \
+    "${CXX:-g++}" -O2 -ffp-contract=off -g -std=c++14 -Wall -Wextra -Werror \
       -fsanitize=address,undefined,float-cast-overflow -fno-omit-frame-pointer \
       -fno-sanitize-recover=all -DCLOUDSEED_MAX_LINES="$LINES" \
       -DCLOUDSEED_STAGED_MEMORY="$STAGED" -I "$HERE/../src" \

@@ -1,12 +1,16 @@
 // Renders a dry WAV through one Cloud Seed program, tail included.
 //
-//   g++ -O2 -std=c++14 -I ../src render_demo.cpp ../src/cloudseed/*.cpp -o render
+//   g++ -O2 -ffp-contract=off -std=c++14 -I ../src render_demo.cpp ../src/cloudseed/*.cpp -o render
 //   ./render "Medium Space" dry.wav wet.wav 12
 //
-// Input must be 48 kHz WAV (16-bit PCM or 32-bit float), mono or stereo; the
+// Input must be 48 kHz WAV (16/24-bit PCM or 32-bit float), mono or stereo; the
 // output is 32-bit float stereo. The program runs at its own parameters, so
 // the dry/wet balance is the preset's own.
+#include <cerrno>
+#include <cmath>
 #include <cstdint>
+#include <exception>
+#include <memory>
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -31,82 +35,135 @@ struct Audio {
   std::vector<float> left, right;
 };
 
-// A deliberately small RIFF reader: enough for what ffmpeg writes here.
+// RIFF integers and samples are little endian, independent of the host.
+uint32_t U32(const uint8_t* p) {
+  return uint32_t(p[0]) | (uint32_t(p[1]) << 8) |
+         (uint32_t(p[2]) << 16) | (uint32_t(p[3]) << 24);
+}
+uint16_t U16(const uint8_t* p) { return uint16_t(p[0] | (p[1] << 8)); }
+struct CloseFile {
+  void operator()(std::FILE* file) const { std::fclose(file); }
+};
+using File = std::unique_ptr<std::FILE, CloseFile>;
+constexpr size_t kMaxFrames = (UINT32_MAX - 36u) / 8u;
+
+// A small reader for uncompressed mono/stereo WAVs. Validate the complete
+// RIFF container and format before allocating or decoding sample data.
 bool ReadWav(const char* path, Audio& audio) {
-  std::FILE* f = std::fopen(path, "rb");
-  if (!f) return false;
-  char riff[12];
-  if (std::fread(riff, 1, 12, f) != 12 || std::memcmp(riff, "RIFF", 4) ||
-      std::memcmp(riff + 8, "WAVE", 4)) { std::fclose(f); return false; }
-  int channels = 0, bits = 0, format = 0;
-  uint32_t rate = 0;
-  bool ok = false;
-  for (;;) {
-    char id[4];
-    uint32_t size;
-    if (std::fread(id, 1, 4, f) != 4 || std::fread(&size, 4, 1, f) != 1) break;
-    const long next = std::ftell(f) + size + (size & 1);
-    if (!std::memcmp(id, "fmt ", 4)) {
-      uint16_t fmt, ch, block, bps;
-      uint32_t sr, byte_rate;
-      if (std::fread(&fmt, 2, 1, f) != 1 || std::fread(&ch, 2, 1, f) != 1 ||
-          std::fread(&sr, 4, 1, f) != 1 || std::fread(&byte_rate, 4, 1, f) != 1 ||
-          std::fread(&block, 2, 1, f) != 1 || std::fread(&bps, 2, 1, f) != 1) break;
-      format = fmt; channels = ch; rate = sr; bits = bps;
-    } else if (!std::memcmp(id, "data", 4)) {
-      const uint32_t frames = channels ? size / (channels * (bits / 8)) : 0;
-      audio.left.resize(frames);
-      audio.right.resize(frames);
-      std::vector<uint8_t> raw(size);
-      if (std::fread(raw.data(), 1, size, f) != size) break;
-      for (uint32_t i = 0; i < frames; i++) {
-        for (int c = 0; c < channels; c++) {
-          const uint8_t* p = raw.data() + (i * channels + c) * (bits / 8);
-          float v = 0.f;
-          if (format == 3 && bits == 32) std::memcpy(&v, p, 4);
-          else if (bits == 16) { int16_t s; std::memcpy(&s, p, 2); v = s / 32768.f; }
-          else if (bits == 24) {
-            const int32_t s = (p[0] << 8) | (p[1] << 16) | (int32_t(int8_t(p[2])) << 24);
-            v = s / 2147483648.f;
-          }
-          if (c == 0) audio.left[i] = v;
-          if (c == 1 || channels == 1) audio.right[i] = v;
-        }
-      }
-      ok = true;
+  File file(std::fopen(path, "rb"));
+  auto* f = file.get();
+  if (!f || std::fseek(f, 0, SEEK_END) != 0) return false;
+  const long length = std::ftell(f);
+  if (length < 12 || std::fseek(f, 0, SEEK_SET) != 0) return false;
+  uint8_t header[12];
+  if (std::fread(header, 1, 12, f) != 12 || std::memcmp(header, "RIFF", 4) ||
+      std::memcmp(header + 8, "WAVE", 4)) return false;
+  const uint64_t end = uint64_t(U32(header + 4)) + 8;
+  if (end < 12 || end > uint64_t(length)) return false;
+
+  uint8_t fmt[16] = {};
+  bool have_fmt = false, have_data = false;
+  uint32_t data_size = 0;
+  long data_offset = 0;
+  for (uint64_t offset = 12; offset < end;) {
+    uint8_t chunk[8];
+    if (end - offset < 8 || std::fread(chunk, 1, 8, f) != 8) return false;
+    const uint32_t size = U32(chunk + 4);
+    const uint64_t next = offset + 8 + uint64_t(size) + (size & 1);
+    if (next > end) return false;
+    if (!std::memcmp(chunk, "fmt ", 4)) {
+      if (have_fmt || size < sizeof(fmt) ||
+          std::fread(fmt, 1, sizeof(fmt), f) != sizeof(fmt)) return false;
+      have_fmt = true;
+    } else if (!std::memcmp(chunk, "data", 4)) {
+      if (have_data) return false;
+      have_data = true;
+      data_offset = std::ftell(f);
+      if (data_offset < 0) return false;
+      data_size = size;
     }
-    if (std::fseek(f, next, SEEK_SET) != 0) break;
+    // next is bounded by the successfully measured (long) file length.
+    if (std::fseek(f, static_cast<long>(next), SEEK_SET) != 0) return false;
+    offset = next;
   }
-  std::fclose(f);
-  if (ok && rate != 48000) {
-    std::fprintf(stderr, "%s is %u Hz; resample it to 48000 first\n", path, rate);
+  if (!have_fmt || !have_data) return false;
+  const unsigned format = U16(fmt), channels = U16(fmt + 2);
+  const uint32_t rate = U32(fmt + 4), byte_rate = U32(fmt + 8);
+  const unsigned block = U16(fmt + 12), bits = U16(fmt + 14);
+  if ((channels != 1 && channels != 2) ||
+      !((format == 1 && (bits == 16 || bits == 24)) ||
+        (format == 3 && bits == 32)) ||
+      rate != 48000 || block != channels * (bits / 8) ||
+      byte_rate != rate * block || data_size % block != 0) return false;
+  const size_t frames = data_size / block;
+  if (frames > kMaxFrames || std::fseek(f, data_offset, SEEK_SET) != 0)
     return false;
+  Audio decoded;
+  decoded.left.resize(frames);
+  decoded.right.resize(frames);
+  for (size_t i = 0; i < frames; ++i) {
+    uint8_t frame[8];
+    if (std::fread(frame, 1, block, f) != block) return false;
+    for (unsigned c = 0; c < channels; ++c) {
+      const uint8_t* p = frame + c * (bits / 8);
+      float value;
+      if (format == 3) {
+        const uint32_t word = U32(p);
+        std::memcpy(&value, &word, sizeof(value));
+        if (!std::isfinite(value)) return false;
+      } else if (bits == 16) {
+        const int32_t word = U16(p);
+        value = (word >= 0x8000 ? word - 0x10000 : word) / 32768.f;
+      } else {
+        const int32_t word = p[0] | (p[1] << 8) | (p[2] << 16);
+        value = (word >= 0x800000 ? word - 0x1000000 : word) / 8388608.f;
+      }
+      if (c == 0) decoded.left[i] = value;
+      if (c == 1 || channels == 1) decoded.right[i] = value;
+    }
   }
-  return ok;
+  audio = std::move(decoded);
+  return true;
 }
 
 bool WriteWav(const char* path, const Audio& audio) {
-  std::FILE* f = std::fopen(path, "wb");
+  if (audio.left.size() != audio.right.size() ||
+      audio.left.size() > kMaxFrames) return false;
+  File file(std::fopen(path, "wb"));
+  auto* f = file.get();
   if (!f) return false;
-  const uint32_t frames = uint32_t(audio.left.size());
-  const uint32_t data = frames * 2 * 4;  // stereo, 32-bit float
-  auto u32 = [&](uint32_t v) { std::fwrite(&v, 4, 1, f); };
-  auto u16 = [&](uint16_t v) { std::fwrite(&v, 2, 1, f); };
-  std::fwrite("RIFF", 1, 4, f);      u32(36 + data);
-  std::fwrite("WAVEfmt ", 1, 8, f);  u32(16);
-  u16(3);                            // IEEE float
-  u16(2);                            // channels
-  u32(48000);                        // sample rate
-  u32(48000 * 2 * 4);                // byte rate
-  u16(2 * 4);                        // block align
-  u16(32);                           // bits per sample
-  std::fwrite("data", 1, 4, f);      u32(data);
-  for (uint32_t i = 0; i < frames; i++) {
-    std::fwrite(&audio.left[i], 4, 1, f);
-    std::fwrite(&audio.right[i], 4, 1, f);
+  const uint32_t data = static_cast<uint32_t>(audio.left.size() * 8);
+  bool ok = true;
+  auto bytes = [&](const void* p, size_t size) {
+    if (std::fwrite(p, 1, size, f) != size) ok = false;
+  };
+  auto u32 = [&](uint32_t v) {
+    const uint8_t p[] = {uint8_t(v), uint8_t(v >> 8),
+                         uint8_t(v >> 16), uint8_t(v >> 24)};
+    bytes(p, sizeof(p));
+  };
+  auto u16 = [&](uint16_t v) {
+    const uint8_t p[] = {uint8_t(v), uint8_t(v >> 8)};
+    bytes(p, sizeof(p));
+  };
+  bytes("RIFF", 4);      u32(36 + data);
+  bytes("WAVEfmt ", 8);  u32(16);
+  u16(3);               // IEEE float
+  u16(2);               // channels
+  u32(48000);           // sample rate
+  u32(48000 * 2 * 4);    // byte rate
+  u16(2 * 4);           // block align
+  u16(32);              // bits per sample
+  bytes("data", 4);      u32(data);
+  for (size_t i = 0; i < audio.left.size() && ok; ++i) {
+    for (float sample : {audio.left[i], audio.right[i]}) {
+      uint32_t word;
+      std::memcpy(&word, &sample, sizeof(word));
+      u32(word);
+    }
   }
-  std::fclose(f);
-  return true;
+  const bool closed = std::fclose(file.release()) == 0;
+  return ok && closed;
 }
 
 const cs::Preset* Find(const std::string& name) {
@@ -117,8 +174,8 @@ const cs::Preset* Find(const std::string& name) {
 
 }  // namespace
 
-int main(int argc, char** argv) {
-  if (argc < 4) {
+int main(int argc, char** argv) try {
+  if (argc < 4 || argc > 5) {
     std::fprintf(stderr, "usage: render <program> <in.wav> <out.wav> [tail_s]\n");
     for (auto* preset : kAll) std::fprintf(stderr, "  %s\n", preset->name);
     return 2;
@@ -128,8 +185,16 @@ int main(int argc, char** argv) {
 
   Audio in;
   if (!ReadWav(argv[2], in)) { std::fprintf(stderr, "cannot read %s\n", argv[2]); return 1; }
-  const double tail = argc > 4 ? std::atof(argv[4]) : 12.0;
-  const size_t tail_frames = size_t(tail * 48000);
+  char* tail_end = nullptr;
+  errno = 0;
+  const double tail = argc > 4 ? std::strtod(argv[4], &tail_end) : 12.0;
+  if ((argc > 4 && (tail_end == argv[4] || *tail_end != '\0')) ||
+      errno == ERANGE || !std::isfinite(tail) || tail < 0.0 ||
+      tail * 48000 > double(kMaxFrames - in.left.size())) {
+    std::fprintf(stderr, "invalid tail duration or output too large for RIFF\n");
+    return 2;
+  }
+  const size_t tail_frames = static_cast<size_t>(tail * 48000);
 
   cloudseed::FastSin::Init();
   std::vector<float> pool(cloudseed::ReverbController::RequiredPoolFloats(48000));
@@ -160,4 +225,7 @@ int main(int argc, char** argv) {
   std::printf("%-26s lines=%2d  %.1fs in, %.1fs out -> %s\n", preset->name,
               reverb.line_count(), in.left.size() / 48000.0, total / 48000.0, argv[3]);
   return 0;
+} catch (const std::exception& error) {
+  std::fprintf(stderr, "render failed: %s\n", error.what());
+  return 1;
 }

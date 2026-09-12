@@ -35,7 +35,8 @@ class ReverbController {
 
   int sample_rate() const { return sample_rate_; }
 
-  // Sets a parameter from its normalized 0..1 value.
+  // Sets a parameter from its normalized 0..1 value. Invalid parameters,
+  // non-finite values and values outside that range are ignored.
   void SetParameter(Parameter param, double value);
   double GetParameter(Parameter param) const;
 
@@ -45,8 +46,10 @@ class ReverbController {
 
   // Sets all kParameterCount parameters from a preset, then places the
   // delay buffers (see PlaceBuffers). Call ClearBuffers() afterwards.
-  void LoadPreset(const double* values);
-  void LoadPreset(const float* values);
+  // Pass false to adjust parameters on the full-size home buffers first;
+  // then call PlaceBuffers() and ClearBuffers() before processing.
+  void LoadPreset(const double* values, bool place_buffers = true);
+  void LoadPreset(const float* values, bool place_buffers = true);
 
   // Internal-RAM pools for the delay memory of the loaded preset. The memory
   // from Init() (the SDRAM on the Daisy Seed) holds every buffer at its

@@ -14,7 +14,7 @@ WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 for OPTIONS in '4 0 1' '1 0 1' '4 1 1' '4 0 0' '12 1 1'; do
   read -r LINES PROFILE STAGING <<< "$OPTIONS"
-  "${CXX:-g++}" -O1 -g -std=c++14 -Wall -Wextra -Werror \
+  "${CXX:-g++}" -O1 -ffp-contract=off -g -std=c++14 -Wall -Wextra -Werror \
   -DCLOUDSEED_MAX_LINES="$LINES" -DCLOUDSEED_PROFILE="$PROFILE" \
   -DCLOUDSEED_STAGING="$STAGING" -DCLOUDSEED_STAGED_MEMORY="$STAGING" \
   -fsanitize=address,undefined,float-cast-overflow -fno-omit-frame-pointer \

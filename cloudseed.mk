@@ -109,13 +109,16 @@ C_INCLUDES += -I$(CLOUDSEED_DAISY_DIR)/src
 # with its fused operations written out (src/cloudseed/fdlibm_trig.cpp).
 # GCC's default for C++ is -ffp-contract=fast, in standard modes too. This
 # applies to the project's own objects as well.
-CPPFLAGS += -ffp-contract=off
 
 # libDaisy's core Makefile defines BUILD_DIR after this point; the rules
 # below need it now (a command-line BUILD_DIR overrides both).
 BUILD_DIR ?= build
 SYSTEM_FILES_DIR ?= $(LIBDAISY_DIR)/core
 include $(SYSTEM_FILES_DIR)/Makefile
+
+# libDaisy assigns CPPFLAGS with '='. Append after that assignment so the
+# numerical contract above reaches the actual compiler commands.
+override CPPFLAGS += -ffp-contract=off
 
 # --- Rules ------------------------------------------------------------------
 

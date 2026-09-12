@@ -12,8 +12,9 @@ Electro-Smith Daisy Seed.**
 and modulated echoes" and released as a VST plugin under the MIT license. This
 library ports its C++ kernel to single precision and wraps it in an engine for
 the [Daisy Seed](https://daisy.audio/products/seed3) (STM32H750) that runs the plugin's programs **at their full
-size**: all twelve delay lines of the largest program, with the CPU load
-measured and bounded.
+size**: all twelve delay lines of the largest program, with per-block CPU
+measurement and overload recovery. The performance figures below are from an
+earlier reference firmware; the current library still needs a hardware capture.
 
 It ships the plugin's **nine factory programs** and the built-in program of its
 successor, [Ghost Note Audio](https://ghostnoteaudio.uk/)'s Cloud Seed 2, from
@@ -29,8 +30,8 @@ lessons worth keeping.
 
 - **Ten programs.** Cloud Seed's nine factory presets plus Cloud Seed 2's
   Dark Plate.
-- **Full size, not a reduction.** The largest program runs all twelve of its
-  late delay lines inside the audio deadline.
+- **Twelve-line capacity.** Earlier hardware captures ran the largest program
+  at its full line count. The engine reduces that count if a block exceeds budget.
 - **Bit-identical paths.** Staged and direct processing agree bit for bit, and
   sit 82 to 147 dB below the plugin's own kernel with modulation off.
 - **Self-protecting.** Every block is measured; a block over budget stops the
@@ -38,7 +39,7 @@ lessons worth keeping.
 - **Three-line build integration.** Point a libDaisy Makefile at
   `cloudseed.mk`; DaisySP is not needed.
 - **Testable on a desktop.** The DSP kernel is platform-neutral and compiles on
-  any host; six suites run in CI.
+  a C++14 host; the suites run in CI.
 
 ## 🎧 Hear it
 
@@ -196,6 +197,9 @@ int main() {
   config.program_count = 2;
   config.sample_rate = seed.AudioSampleRate();
   config.block_size = seed.AudioBlockSize();
+  config.on_program_loaded = [](cloudseed::ReverbController& reverb, void*) {
+    reverb.SetParameter(cloudseed::Parameter::DryOut, 0.0);
+  };  // the callback above mixes the dry signal itself
   if (!engine.Init(config)) for (;;) {}
   engine.Start(0);
   seed.StartAudio(AudioCallback);
@@ -276,13 +280,13 @@ afterwards. The engine's header documents every call; this is the shape.
 
 | Call | Context | What it does |
 |---|---|---|
-| `Init(config)` | main, once | The delay memory, the reverb, the staging, the load meter. False when the delay memory does not fit the sample rate. |
+| `Init(config)` | main, once | The delay memory, the reverb, the staging, the load meter. False for invalid configuration or insufficient delay memory. |
 | `Start(program)` | main, before the audio | Loads the first program. |
 | `BeginBlock()` | callback, first | Starts the block's load measurement and profiling. |
 | `RequestProgram(i)` | callback, every block | Selects the program; a change fades out, main loads, fades in. |
-| `SetParameter(p, value, threshold)` | callback | A normalized 0..1 parameter, applied when the callback owns the reverb and the value moved by more than the threshold (a pot's noise must not recompute the delay lines). |
+| `SetParameter(p, value, threshold)` | callback | A supported live control (listed below), applied when the callback owns the reverb and the value moved by more than the threshold; false for invalid values or controls that require reloading. |
 | `SetFrozen(bool)` | callback | Freezes the late reverb: unity feedback, damping bypassed, no new input. |
-| `Process(in_l, in_r, wet_l, wet_r, size)` | callback | Renders the wet signal with the program fade applied; false while a program is loaded or recovered, when the application passes the dry signal alone. |
+| `Process(in_l, in_r, wet_l, wet_r, size)` | callback | Renders the wet signal with the program fade applied; false while a program is loaded or recovered, when the application passes the dry signal alone. Also rejects a size different from the configured block size. |
 | `EndBlock()` | callback, last | Ends the measurement; decides an overload. |
 | `Service()` | main loop | Loads requested programs, reduces overloaded ones, recovers from faults. |
 | `state()`, `program()`, `line_count()`, `line_limit(i)`, `frozen()`, `overloaded()` | any | Status; `overloaded()` is what an LED should show. |
@@ -292,6 +296,23 @@ A `Program` is a preset and the late delay lines per channel it runs with. The
 engine remembers, per program and until reset, the line count at which the
 program last exceeded the budget, so revisiting a heavy program does not retry a
 workload that failed.
+
+Use one `Engine` per application: its DSP, pools and transport are shared static
+storage. Configure a finite, positive, whole-number sample rate no higher than
+`CLOUDSEED_SAMPLE_RATE`; the callback block must be a divisor or multiple of 48
+and remain equal to `Config::block_size`. Fade duration must be finite and
+nonnegative, with a step large enough to change a float gain; zero disables the
+fade. CPU budget must be finite and in `(0, 1]`. Program pointers and names must
+be non-null, and every preset value must be finite and in `[0, 1]`.
+
+Live `SetParameter` supports `InputMix`, `HighPass`, `LowPass`,
+`DiffusionFeedback`, `LineDecay`, `LateDiffusionFeedback`, the five `Post*` tone
+parameters, the four output gains, and the five filter-enable switches. Other
+parameters return false: delay lengths, taps (including `TapGain`), stage/line
+counts, diffusion enable switches, modulation, seeds, `LateStageTap`, and
+`Interpolation` require a preset or `on_program_loaded` hook. The hook runs
+before placement and staging, so it can safely change those parameters.
+Invalid values and negative or non-finite thresholds also return false.
 
 **Place the engine and the callback's buffers in the DTCM**
 (`CLOUDSEED_DAISY_DTCM`): it is neither cached nor subject to wait states, and
@@ -373,10 +394,12 @@ against the capacity beside it.
 
 ## 📊 Performance
 
-Measured on the reference module with the profiling build at **480 MHz, 48 kHz,
+Historical measurements from reference image `623fe82a`, at **480 MHz, 48 kHz,
 48-sample blocks**, over 125 one-second reports with no overload. The line
 counts are the programs' own. TECHNICAL.md, "Measured performance", has the
-breakdown per section.
+breakdown per section. These observed peaks are not a worst-case timing bound.
+The current code, including the corrected floating-point build flag, needs a
+fresh hardware capture before these figures can be attributed to it.
 
 | Program | Lines | Mean load | Peak block |
 |---|---:|---:|---:|
@@ -447,13 +470,15 @@ transport type, so that another STM32H7 board or another DMA can supply its own;
 
 Every suite runs on the host with a C++14 compiler;
 **[`test/all.sh`](test/all.sh) runs them
-all**, and the [GitHub workflow](.github/workflows/test.yml) runs the suites
+all** (pass a CloudSeed checkout to include fidelity), and the [GitHub workflow](.github/workflows/test.yml) runs the suites
 and builds the example.
 
 | Suite | What it establishes |
 |---|---|
-| [`test/regression.sh`](test/regression.sh) | The DSP and the staging under ASan and UBSan: bit-identical output between staged and direct paths across block sizes, wraps, partial and failed staging, freezes and reloads; the filters; every program; both kernel families at 4 and 12 lines. |
-| [`test/engine.sh`](test/engine.sh) | The engine's callback and main-loop sides with the real DSP and libDaisy's `CpuLoadMeter` on a deterministic clock: overload detection and recovery, per-program limits, the selector handoff without main, transport failures and unfinished aborts, parameter thresholds, the profiling mailbox. Needs `LIBDAISY_DIR`. |
+| [`test/build.sh`](test/build.sh) | Expanded libDaisy compiler recipes retain the numerical flags across four build configurations. Needs `LIBDAISY_DIR`. |
+| [`test/render.py`](test/render.py) | WAV decoding, malformed files, CLI validation and output failures under ASan and UBSan. |
+| [`test/regression.sh`](test/regression.sh) | The DSP and the staging under ASan and UBSan: bit-identical output between staged and direct paths across block sizes, wraps, partial and failed staging, freezes and reloads; the filters and lower sample rates; invalid parameters; every program; both kernel families at 4 and 12 lines. |
+| [`test/engine.sh`](test/engine.sh) | The engine's callback and main-loop sides with the real DSP and libDaisy's `CpuLoadMeter` on a deterministic clock: overload detection and recovery, per-program limits, the selector handoff without main, transport failures and unfinished aborts, parameter thresholds and safety, configuration validation, geometry hooks, fixed callback sizes, the profiling mailbox. Needs `LIBDAISY_DIR`. |
 | [`test/mdma.sh`](test/mdma.sh) | The MDMA transport at register level against a stub channel: descriptors and links, timing paths, bounded aborts, the unexpectedly enabled channel. Needs `LIBDAISY_DIR`. |
 | [`test/trig.sh`](test/trig.sh) | The port's `sin()`/`cos()` against fdlibm: 8,024,008 values identical. |
 | [`test/run.sh`](test/run.sh) `path/to/CloudSeed` | Fidelity against the plugin's own kernel (a corrected copy of the checkout): 82 to 147 dB below the signal with modulation off. Needs a [CloudSeed](https://github.com/ValdemarOrn/CloudSeed) checkout and Python 3. |
@@ -464,7 +489,7 @@ buffers, their placement and
 the staging plan:
 
 ```sh
-g++ -O2 -std=c++14 -I src test/inventory.cpp src/cloudseed/*.cpp
+g++ -O2 -ffp-contract=off -std=c++14 -I src test/inventory.cpp src/cloudseed/*.cpp
 ```
 
 ## 🎹 Reference application

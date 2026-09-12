@@ -66,6 +66,61 @@ float Noise(uint32_t& state) {
   return (static_cast<float>(state >> 8) / 16777216.f - 0.5f) * 0.5f;
 }
 
+void TestLowerRates() {
+  for (int rate : {8000, 16000, 32000, 44100, 96000}) {
+    // Independently test the shelf's impulse response at and above Nyquist.
+    for (double frequency : {rate * .5, rate * .75, 20000.}) {
+      Biquad shelf;
+      shelf.Init(Biquad::FilterType::HighShelf, rate);
+      shelf.SetGain(.5);
+      shelf.frequency = frequency;
+      shelf.Update();
+      bool stable = true;
+      double tail_energy = 0;
+      for (int i = 0; i < rate; ++i) {
+        const float y = shelf.Process(i == 0 ? 1.f : 0.f);
+        stable &= std::isfinite(y) && std::fabs(y) <= 2.f;
+        if (i > rate / 2) tail_energy += double(y) * y;
+      }
+      Check(stable && tail_energy < 1e-8, "shelf impulse decays at lower rates");
+      Check(shelf.frequency == frequency, "requested frequency survives clamp");
+    }
+    std::vector<float> storage(ReverbController::RequiredPoolFloats(rate));
+    MemoryPool pool; pool.Init(storage.data(), storage.size());
+    ReverbController reverb;
+    Check(reverb.Init(rate, pool), "lower-rate reverb initializes");
+    for (auto* preset : kPresets) {
+      reverb.LoadPreset(preset->values);
+      reverb.ClearBuffers();
+      bool finite = true;
+      for (int sample = 0; sample < 2 * rate; sample += kBlock) {
+        float in[kBlock] = {}, left[kBlock], right[kBlock];
+        if (sample == 0) in[0] = .5f;
+        reverb.Process(in, in, left, right, kBlock);
+        for (int i = 0; i < kBlock; ++i)
+          finite &= std::isfinite(left[i]) && std::isfinite(right[i]);
+      }
+      if (!finite) std::fprintf(stderr, "%s at %d Hz: ", preset->name, rate);
+      Check(finite, "factory preset stays finite at alternate rate");
+    }
+  }
+}
+
+void TestInvalidParameters() {
+  Fixture fixture;
+  fixture.Load(presets::kMediumSpace);
+  for (int i = 0; i < kParameterCount; ++i) {
+    const auto p = static_cast<Parameter>(i);
+    const double previous = fixture.reverb.GetParameter(p);
+    for (double value : {-1., 2., std::numeric_limits<double>::infinity(),
+                         std::numeric_limits<double>::quiet_NaN()}) {
+      fixture.reverb.SetParameter(p, value);
+      Check(fixture.reverb.GetParameter(p) == previous,
+            "invalid normalized parameter leaves DSP unchanged");
+    }
+  }
+}
+
 void TestFilters() {
   for (double cutoff : {20., 400., 1000., 20000.}) {
     Lp1 pos, neg;
@@ -921,6 +976,8 @@ void TestStagingAllocationFailure() {
 
 int main() {
   cloudseed::FastSin::Init();
+  TestLowerRates();
+  TestInvalidParameters();
   TestFilters();
   TestOnePoleBlockForms();
   TestDarkPlateShelves();

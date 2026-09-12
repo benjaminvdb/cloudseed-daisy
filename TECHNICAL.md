@@ -831,7 +831,8 @@ and was still wrong about what the successor's number meant.
 - **No worst-case timing bound.** See [Measured performance](#measured-performance).
   The evidence is a finite set of observed maxima plus a runtime guard.
 - **The current build is unmeasured on hardware.** The next capture should be
-  taken with image `c9201ad4` and should include Dark Plate, which has never run
+  taken with the image CRC produced by the current build and should include
+  Dark Plate, which has never run
   on the module. Modeled expectation for it: a callback near 45%, from its
   section costs at Through the Looking Glass and its 362 copies.
 - **The TCM contention knob is untested.** `CLOUDSEED_AHBS_INITCOUNT` (2 to 4)
@@ -851,6 +852,10 @@ and was still wrong about what the successor's number meant.
 - **Sixteen-bit delay storage** would halve the memory traffic of the ring paths
   and add quantization noise in feedback paths. Not attempted; the reference is
   double precision.
+
+The measurements above remain historical. The current make integration
+enforces `-ffp-contract=off` after libDaisy assigns its C++ flags; a fresh
+hardware capture is needed to measure the resulting image.
 
 ## Document history
 

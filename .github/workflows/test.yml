@@ -27,6 +27,12 @@ jobs:
           ref: 13a625e00ec47db98b158a17e309d2cdaebb57ed
           path: CloudSeed
 
+      - name: Build integration
+        run: LIBDAISY_DIR=$PWD/libDaisy bash test/build.sh
+
+      - name: WAV renderer
+        run: python3 test/render.py
+
       - name: Regression
         run: bash test/regression.sh
 

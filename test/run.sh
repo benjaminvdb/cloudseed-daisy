@@ -19,7 +19,7 @@ python3 "$HERE/verify_presets.py" "$CLOUDSEED"
 python3 "$HERE/prepare_reference.py" "$CLOUDSEED" "$WORK/ref"
 
 for LINES in 4 12; do
-  "${CXX:-g++}" -O2 -std=c++14 -D__forceinline=inline \
+  "${CXX:-g++}" -O2 -ffp-contract=off -std=c++14 -D__forceinline=inline \
     -include cmath -include cstring -include cstdlib \
     -DCLOUDSEED_MAX_LINES="$LINES" -I "$WORK/ref" -I "$HERE/../src" \
     "$WORK"/ref/AudioLib/*.cpp "$WORK"/ref/FastSin.cpp \

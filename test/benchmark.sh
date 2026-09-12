@@ -8,7 +8,7 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 DSP_ROOT=${CLOUDSEED_DSP_ROOT:-$HERE/..}
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
-"${CXX:-g++}" -O2 -std=c++14 -Wall -Wextra \
+"${CXX:-g++}" -O2 -ffp-contract=off -std=c++14 -Wall -Wextra \
   -I "$DSP_ROOT/src" "$HERE/benchmark.cpp" "$DSP_ROOT"/src/cloudseed/*.cpp \
   -o "$WORK/benchmark"
 "$WORK/benchmark" "$@"

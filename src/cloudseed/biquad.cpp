@@ -36,7 +36,12 @@ void Biquad::SetQ(double value) {
 }
 
 void Biquad::Update() {
-  const double omega = 2 * M_PI * frequency / sample_rate_;
+  // Presets specify up to 20 kHz even at lower audio rates. Above Nyquist
+  // the cookbook's sin(omega) can be negative, moving poles outside the
+  // unit circle. Keep the requested frequency for a later rate change.
+  const double hz = frequency >= sample_rate_ * 0.5
+                        ? sample_rate_ * 0.499 : frequency;
+  const double omega = 2 * M_PI * hz / sample_rate_;
   const double sin_omega = trig::Sin(omega);
   const double cos_omega = trig::Cos(omega);
   const double gain = gain_;

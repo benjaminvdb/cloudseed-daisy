@@ -8,6 +8,7 @@
 namespace cloudseed {
 
 bool ReverbController::Init(int sample_rate, MemoryPool& pool) {
+  if (sample_rate <= 0) return false;
   utils::ResetModPhaseSequence();
   sample_rate_ = sample_rate;
   for (int i = 0; i < kParameterCount; i++) parameters_[i] = 0.0;
@@ -153,7 +154,8 @@ double ReverbController::GetScaledParameter(Parameter param) const {
 
 void ReverbController::SetParameter(Parameter param, double value) {
   const int idx = static_cast<int>(param);
-  if (idx < 0 || idx >= kParameterCount) return;
+  if (idx < 0 || idx >= kParameterCount || !isfinite(value) ||
+      value < 0.0 || value > 1.0) return;
   parameters_[idx] = value;
   const double scaled = GetScaledParameter(param);
   if (param == Parameter::InputMix)
@@ -162,7 +164,7 @@ void ReverbController::SetParameter(Parameter param, double value) {
   channel_r_.SetParameter(param, scaled);
 }
 
-void ReverbController::LoadPreset(const double* values) {
+void ReverbController::LoadPreset(const double* values, bool place_buffers) {
   // Placed buffers are sized for the previous preset and would limit the
   // delays of this one while they are set: start from the Init() memory.
   channel_l_.UseHomeMemory();
@@ -170,16 +172,16 @@ void ReverbController::LoadPreset(const double* values) {
   for (int i = 0; i < kParameterCount; i++) {
     SetParameter(static_cast<Parameter>(i), values[i]);
   }
-  PlaceBuffers();
+  if (place_buffers) PlaceBuffers();
 }
 
-void ReverbController::LoadPreset(const float* values) {
+void ReverbController::LoadPreset(const float* values, bool place_buffers) {
   channel_l_.UseHomeMemory();
   channel_r_.UseHomeMemory();
   for (int i = 0; i < kParameterCount; i++) {
     SetParameter(static_cast<Parameter>(i), static_cast<double>(values[i]));
   }
-  PlaceBuffers();
+  if (place_buffers) PlaceBuffers();
 }
 
 void ReverbController::AddFastPool(float* base, size_t floats) {

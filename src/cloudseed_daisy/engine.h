@@ -127,6 +127,8 @@ struct ProfileReport {
 
 class Engine {
  public:
+  // One Engine per application: the DSP, pools and transport are shared
+  // statically. Call Init once, before audio starts.
   static constexpr int kMaxPrograms = 32;
 
   struct Config {
@@ -134,21 +136,26 @@ class Engine {
     const Program* programs = nullptr;
     int program_count = 0;
     // The audio configuration of the Seed. The delay memory is sized for
-    // CLOUDSEED_SAMPLE_RATE at build time; Init() fails for a higher rate.
+    // CLOUDSEED_SAMPLE_RATE at build time; Init() requires a positive whole
+    // number of Hz no higher than that rate.
     // Process() renders in chunks of cloudseed::kMaxBlockSize (48) samples:
-    // use that block size, or a divisor or multiple of it.
+    // use that block size, or a divisor or multiple of it, fixed for every
+    // callback. Its cycle period must fit a 32-bit counter.
     float sample_rate = 48000.f;
     size_t block_size = cloudseed::kMaxBlockSize;
     // The wet signal fades out and back in around a program change.
+    // Finite and nonnegative; zero switches without a fade. Init rejects a
+    // duration whose per-sample float step cannot move unity toward zero.
     float fade_seconds = 0.01f;
     // The share of the block period a block may take before the engine
     // stops the program and main reduces its line count. What is left
     // covers libDaisy's sample conversions, interrupt overhead and main.
-    float cpu_budget = 0.9f;
+    float cpu_budget = 0.9f;  // finite, greater than zero and at most one
     // Called with the reverb right after every program load, while main
     // owns it: for the parameters the application fixes or controls itself
     // (e.g. DryOut 0 when the application mixes the dry signal, or
-    // CutoffEnabled 1 when a control drives the cutoff).
+    // CutoffEnabled 1 when a control drives the cutoff). Delay geometry may
+    // be changed here: placement and staging follow the hook.
     void (*on_program_loaded)(cloudseed::ReverbController& reverb,
                               void* context) = nullptr;
     void* context = nullptr;
@@ -156,8 +163,9 @@ class Engine {
 
   // Main, before StartAudio(): initializes the delay memory in every
   // memory, the reverb, the staging and its transport, and the load meter.
-  // Returns false when the delay memory does not fit the sample rate or
-  // there are too many programs. The SDRAM must be initialized (the Seed's
+  // Returns false for invalid config fields, null presets/names, preset
+  // values outside finite 0..1, or insufficient delay memory.
+  // The SDRAM must be initialized (the Seed's
   // Init() does that).
   bool Init(const Config& config);
 
@@ -190,8 +198,13 @@ class Engine {
   // Sets a parameter (a normalized 0..1 value) when the callback owns the
   // reverb and the value moved by more than threshold since the last value
   // applied (or a program was loaded since). Returns whether it was applied.
-  // A threshold keeps a control's noise from recomputing the delay lines
-  // every block.
+  // Supports InputMix, HighPass, LowPass, DiffusionFeedback, LineDecay,
+  // LateDiffusionFeedback, the five Post* tone parameters, the four output
+  // gains and the five filter-enable switches. All other parameters require
+  // a preset or on_program_loaded hook; changing their geometry while the
+  // transport owns memory is unsafe. They return false in every build.
+  // Non-finite/out-of-range values and non-finite/negative thresholds also
+  // return false. A threshold avoids unnecessary coefficient recomputation.
   bool SetParameter(cloudseed::Parameter parameter, double value,
                     float threshold = 0.f);
 
@@ -202,7 +215,8 @@ class Engine {
   // each) with the program fade applied, and returns true. Returns false
   // without touching them when the reverb is being loaded or recovered: the
   // application then passes the dry signal alone. Call once per callback
-  // with the callback's block.
+  // with the callback's block. A size different from Config::block_size
+  // returns false without touching the output or DSP state.
   bool Process(const float* in_l, const float* in_r, float* wet_l,
                float* wet_r, size_t size);
 

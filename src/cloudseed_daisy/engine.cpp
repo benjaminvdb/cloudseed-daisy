@@ -1,6 +1,7 @@
 #include "engine.h"
 
 #include <math.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -104,8 +105,8 @@ alignas(32) float CLOUDSEED_D2_SRAM d2_pool[kD2PoolFloats];
 
 // The staging of the delay memory in the tightly coupled memories, and its
 // transport: the MDMA on the Seed (its transfer list sits in the D2 SRAM
-// with libDaisy's DMA buffers, outside the data cache; the transport object
-// itself stays in cached memory, see mdma_transport.h), CPU copies on the
+// after libDaisy's DMA buffers and can extend into cacheable memory; each
+// committed segment is cleaned, see mdma_transport.h), CPU copies on the
 // host or when asked for, or the transport a host test names.
 #if CLOUDSEED_STAGING
 #if CLOUDSEED_STAGING == 1 && defined(STM32H750xx)
@@ -266,7 +267,7 @@ void ProfileInit(float sample_rate, size_t block_size) {
   profile_dwt = true;
 #endif
   profile_cycles_per_block = static_cast<uint32_t>(
-      static_cast<float>(daisy::System::GetSysClkFreq()) * block_size /
+      static_cast<double>(daisy::System::GetSysClkFreq()) * block_size /
       sample_rate);
   profile_cycles_per_us = daisy::System::GetSysClkFreq() / 1000000u;
   if (profile_cycles_per_us == 0) profile_cycles_per_us = 1;
@@ -347,13 +348,38 @@ int Engine::line_limit(int program) const {
 }
 
 bool Engine::Init(const Config& config) {
-  config_ = config;
-  if (config_.programs == nullptr || config_.program_count < 1 ||
-      config_.program_count > kMaxPrograms)
+  // Validate before conversions, memory initialization or a program load.
+  if (config.programs == nullptr || config.program_count < 1 ||
+      config.program_count > kMaxPrograms ||
+      !isfinite(config.sample_rate) || config.sample_rate < 1.f ||
+      double(config.sample_rate) > INT_MAX ||
+      config.sample_rate > CLOUDSEED_SAMPLE_RATE ||
+      floor(config.sample_rate) != config.sample_rate ||
+      config.block_size == 0 || config.block_size > INT_MAX ||
+      (config.block_size % cloudseed::kMaxBlockSize != 0 &&
+       cloudseed::kMaxBlockSize % config.block_size != 0) ||
+      !isfinite(config.fade_seconds) || config.fade_seconds < 0.f ||
+      !isfinite(config.cpu_budget) || config.cpu_budget <= 0.f ||
+      config.cpu_budget > 1.f)
     return false;
-  if (config_.sample_rate <= 0.f || config_.block_size == 0) return false;
-  switch_fade_step_ = 1.f / (config_.fade_seconds * config_.sample_rate);
-  if (!(switch_fade_step_ > 0.f)) switch_fade_step_ = 1.f;
+  // DWT profiling uses a 32-bit cycle interval, including in configurations
+  // where the normal audio block is larger than one DSP block.
+  if (double(daisy::System::GetSysClkFreq()) * config.block_size /
+          config.sample_rate > UINT32_MAX)
+    return false;
+  for (int i = 0; i < config.program_count; ++i) {
+    const auto* preset = config.programs[i].preset;
+    if (preset == nullptr || preset->name == nullptr) return false;
+    for (float value : preset->values)
+      if (!isfinite(value) || value < 0.f || value > 1.f) return false;
+  }
+  const double fade_samples = double(config.fade_seconds) * config.sample_rate;
+  const float fade_step = fade_samples <= 1.0 ? 1.f :
+      static_cast<float>(1.0 / fade_samples);
+  // A step too small to move unity would leave the engine fading forever.
+  if (1.f - fade_step == 1.f) return false;
+  config_ = config;
+  switch_fade_step_ = fade_step;
 
   // Nothing may touch the pool before the SDRAM is initialized.
   cloudseed::FastSin::Init();
@@ -494,16 +520,17 @@ bool Engine::LoadProgram(int program) {
 #endif
 #endif
   current_program_ = program;
-  reverb_object.LoadPreset(config_.programs[program].preset->values);
+  // The hook may change delay geometry. Keep full-size home buffers until
+  // it has run, then place once using the final parameters and line cap.
+  reverb_object.LoadPreset(config_.programs[program].preset->values, false);
   if (config_.on_program_loaded != nullptr)
     config_.on_program_loaded(reverb_object, config_.context);
   if (reverb_object.line_count() > line_limits_[program]) {
     reverb_object.SetParameter(Parameter::LineCount,
                         double(line_limits_[program] - 1) /
                             (cloudseed::kPluginLineCount - 1));
-    // Fewer lines: place the delay memory of the lines that remain.
-    reverb_object.PlaceBuffers();
   }
+  reverb_object.PlaceBuffers();
   reverb_object.ClearBuffers();
 #if CLOUDSEED_STAGING
 #ifdef STM32H750xx
@@ -595,6 +622,37 @@ bool Engine::SetParameter(Parameter parameter, double value, float threshold) {
   if (!CallbackOwns(state_.load(std::memory_order_acquire))) return false;
   const int index = static_cast<int>(parameter);
   if (index < 0 || index >= cloudseed::kParameterCount) return false;
+  if (!isfinite(value) || value < 0.0 || value > 1.0 ||
+      !isfinite(threshold) || threshold < 0.f) return false;
+  // A planned transport owns ring memory and sizes its windows for fixed
+  // geometry. In particular, TapGain can enable previously compacted taps;
+  // diffusion switches can clear rings still owned by the MDMA. Only these
+  // coefficient/mixer changes are safe without unplanning and reloading.
+  switch (parameter) {
+    case Parameter::InputMix:
+    case Parameter::HighPass:
+    case Parameter::LowPass:
+    case Parameter::DiffusionFeedback:
+    case Parameter::LineDecay:
+    case Parameter::LateDiffusionFeedback:
+    case Parameter::PostLowShelfGain:
+    case Parameter::PostLowShelfFrequency:
+    case Parameter::PostHighShelfGain:
+    case Parameter::PostHighShelfFrequency:
+    case Parameter::PostCutoffFrequency:
+    case Parameter::DryOut:
+    case Parameter::PredelayOut:
+    case Parameter::EarlyOut:
+    case Parameter::MainOut:
+    case Parameter::HiPassEnabled:
+    case Parameter::LowPassEnabled:
+    case Parameter::LowShelfEnabled:
+    case Parameter::HighShelfEnabled:
+    case Parameter::CutoffEnabled:
+      break;
+    default:
+      return false;
+  }
   if (has_last_value_[index] &&
       fabs(value - last_value_[index]) <= static_cast<double>(threshold))
     return false;
@@ -619,6 +677,9 @@ void Engine::SetFrozen(bool frozen) {
 
 bool Engine::Process(const float* in_l, const float* in_r, float* wet_l,
                      float* wet_r, size_t size) {
+  // The feedback history assumes a constant DSP block size and the load
+  // meter is scaled to the configured callback period.
+  if (size != config_.block_size) return false;
   if (!block_open_) BeginBlock();
   block_samples_ = size;
   const State current_state = state_.load(std::memory_order_acquire);
