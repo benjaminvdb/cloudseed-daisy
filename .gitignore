@@ -1,0 +1,14 @@
+# Build output of the examples and of the reference firmware's Makefile
+build/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+
+# Editors
+.vscode/
+.idea/
+*~

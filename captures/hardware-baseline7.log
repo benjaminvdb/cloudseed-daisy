@@ -1,0 +1,291 @@
+ input=0.2 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.4 linefilt=0.0 out=0.8 ctrl=0.1 param=0.0 clip$$ input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=599 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 599 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=129 failures=0 stack_free=17656 mdma_lists=8001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.6% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=599 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 599 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=131 failures=0 stack_free=17656 mdma_lists=9001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.5% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=599 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 599 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=127 failures=0 stack_free=17656 mdma_lists=10001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.5% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=599 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 599 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=128 failures=0 stack_free=17656 mdma_lists=11001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/98 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.5% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=832 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 832 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=130 failures=0 stack_free=17656 mdma_lists=12001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.2% max=17.5% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=955 decay=632 tone=758 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=0 955 630 758 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=126 failures=0 stack_free=17656 mdma_lists=13001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.8% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=632 tone=777 freeze=0 updates=17 overloads=0 blocks=1000/1000
+controls pots=0 773 630 777 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=127 failures=0 stack_free=17656 mdma_lists=14001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/98 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=18.0% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=632 tone=1000 freeze=0 updates=184 overloads=0 blocks=1000/1000
+controls pots=0 773 630 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=130 failures=0 stack_free=17656 mdma_lists=15001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=18.7% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=694 tone=1000 freeze=0 updates=49 overloads=0 blocks=1000/1000
+controls pots=0 773 693 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=133 failures=0 stack_free=17656 mdma_lists=16001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.5% max=18.8% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.2 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=981 tone=1000 freeze=0 updates=207 overloads=0 blocks=1000/1000
+controls pots=0 773 980 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=128 failures=0 stack_free=17656 mdma_lists=17001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=18.7% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=1000 tone=1000 freeze=0 updates=17 overloads=0 blocks=1000/1000
+controls pots=0 773 1000 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=126 failures=0 stack_free=17656 mdma_lists=18001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.7% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=1000 tone=742 freeze=0 updates=168 overloads=0 blocks=1000/1000
+controls pots=0 773 1000 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=126 failures=0 stack_free=17656 mdma_lists=19001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=18.7% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=943 tone=742 freeze=0 updates=47 overloads=0 blocks=1000/1000
+controls pots=0 773 942 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=128 failures=0 stack_free=17656 mdma_lists=20001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+load program=0 lines=3 mixed=0 avg=17.3% max=17.6% | input=0.6 predelay=0.7 taps=1.8 early=2.2 linemix=0.5 linedelay=0.9 linediff=4.3 linefilt=0.9 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.3 wait=0.0 other=0.3 | mix=773 decay=943 tone=742 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=122 773 941 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=126 failures=0 stack_free=17656 mdma_lists=21001 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=603 list=98/99 us timed=1000 late=0 stale=0
+program 1 "Medium Space" lines=3 limit=3 early=7 late=5 taps=26 predelay=0 image=bbb2b85b
+  mod=eld interp=1 filters=-lL-c latetap=1 streams=83 sdram=0 placed=416+0KB unplaced=0 clock=480MHz
+  staging=mdma sets=1 staged=52 unstaged=2 taps=50 copies<=252 tcm=30/87KB itcm=ok
+load program=0 lines=3 mixed=1 avg=20.2% max=22.8% | input=0.5 predelay=0.7 taps=2.1 early=2.4 linemix=0.5 linedelay=0.9 linediff=5.1 linefilt=1.7 out=0.7 ctrl=0.1 param=0.0 clip=1.2 stage=2.6 wait=0.0 other=0.3 | mix=841 decay=943 tone=742 freeze=0 updates=2 overloads=0 blocks=958/1000
+controls pots=188 841 941 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=153 failures=0 stack_free=17656 mdma_lists=21960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=116/118 us timed=959 late=1 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.6% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=1000 decay=943 tone=742 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=188 1000 941 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=158 failures=0 stack_free=17656 mdma_lists=22960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/118 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.7% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=738 decay=943 tone=742 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=188 738 942 742 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=159 failures=0 stack_free=17656 mdma_lists=23960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/119 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.9% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=943 tone=764 freeze=0 updates=19 overloads=0 blocks=1000/1000
+controls pots=188 734 941 764 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=153 failures=0 stack_free=17656 mdma_lists=24960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/119 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.5% max=20.9% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=943 tone=1000 freeze=0 updates=198 overloads=0 blocks=1000/1000
+controls pots=188 734 941 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=154 failures=0 stack_free=17656 mdma_lists=25960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/118 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.6% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=943 tone=1000 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=188 734 942 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=163 failures=0 stack_free=17656 mdma_lists=26960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/119 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=21.8% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=1000 tone=1000 freeze=0 updates=45 overloads=0 blocks=1000/1000
+controls pots=188 734 1000 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=154 failures=0 stack_free=17656 mdma_lists=27960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/119 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.7% max=21.9% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.2 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=680 tone=1000 freeze=0 updates=227 overloads=0 blocks=1000/1000
+controls pots=188 734 678 1000 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=159 failures=0 stack_free=17656 mdma_lists=28960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/118 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.5% max=20.9% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=734 decay=680 tone=661 freeze=0 updates=234 overloads=0 blocks=1000/1000
+controls pots=188 734 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=159 failures=0 stack_free=17656 mdma_lists=29960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/118 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.6% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=741 decay=680 tone=661 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=188 741 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=154 failures=0 stack_free=17656 mdma_lists=30960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/119 us timed=1000 late=0 stale=0
+load program=1 lines=3 mixed=0 avg=20.4% max=20.7% | input=0.6 predelay=0.7 taps=2.2 early=2.6 linemix=0.5 linedelay=0.9 linediff=5.4 linefilt=1.8 out=0.8 ctrl=0.1 param=0.0 clip=1.2 stage=2.7 wait=0.0 other=0.3 | mix=1000 decay=680 tone=661 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=183 1000 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=152 failures=0 stack_free=17656 mdma_lists=31960 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=118/118 us timed=1000 late=0 stale=0
+program 2 "Noise in the Hallway" lines=8 limit=8 early=3 late=1 taps=1 predelay=0 image=bbb2b85b
+  mod=--- interp=1 filters=-l-Hc latetap=0 streams=51 sdram=0 placed=402+93KB unplaced=0 clock=480MHz
+  staging=mdma sets=1 staged=40 unstaged=2 taps=0 copies<=116 tcm=15/87KB itcm=ok
+load program=1 lines=3 mixed=1 avg=18.9% max=20.7% | input=0.5 predelay=0.7 taps=1.5 early=1.6 linemix=0.9 linedelay=1.6 linediff=3.5 linefilt=2.7 out=1.0 ctrl=0.1 param=0.0 clip=1.2 stage=2.1 wait=0.0 other=0.3 | mix=1000 decay=680 tone=661 freeze=0 updates=2 overloads=0 blocks=967/1000
+controls pots=306 1000 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=78 failures=0 stack_free=17656 mdma_lists=32928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=95/118 us timed=968 late=1 stale=0
+load program=2 lines=8 mixed=0 avg=16.8% max=17.0% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=1000 decay=680 tone=661 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=306 1000 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=78 failures=0 stack_free=17656 mdma_lists=33928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=16.8% max=17.0% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=869 decay=680 tone=661 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=306 869 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=80 failures=0 stack_free=17656 mdma_lists=34928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=16.8% max=17.0% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=763 decay=680 tone=661 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=306 763 678 661 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=80 failures=0 stack_free=17656 mdma_lists=35928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=16.8% max=17.2% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=763 decay=680 tone=784 freeze=0 updates=102 overloads=0 blocks=1000/1000
+controls pots=306 763 678 784 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=78 failures=0 stack_free=17656 mdma_lists=36928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=16.9% max=17.3% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.1 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=763 decay=680 tone=714 freeze=0 updates=375 overloads=0 blocks=1000/1000
+controls pots=306 763 678 714 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=78 failures=0 stack_free=17656 mdma_lists=37928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=16.9% max=18.2% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.4 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=763 decay=649 tone=545 freeze=0 updates=153 overloads=0 blocks=1000/1000
+controls pots=306 763 648 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=80 failures=0 stack_free=17656 mdma_lists=38928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+load program=2 lines=8 mixed=0 avg=17.2% max=20.3% | input=0.6 predelay=0.7 taps=0.6 early=0.5 linemix=1.5 linedelay=2.5 linediff=1.4 linefilt=4.0 out=1.3 ctrl=0.1 param=0.3 clip=1.2 stage=1.5 wait=0.0 other=0.3 | mix=763 decay=336 tone=545 freeze=0 updates=255 overloads=0 blocks=1000/1000
+controls pots=306 763 335 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=80 failures=0 stack_free=17656 mdma_lists=39928 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=738 list=64/64 us timed=1000 late=0 stale=0
+program 3 "Hyperplane" lines=9 limit=9 early=4 late=8 taps=21 predelay=0 image=bbb2b85b
+  mod=eld interp=0 filters=hlLHc latetap=1 streams=204 sdram=0 placed=445+117KB unplaced=0 clock=480MHz
+  staging=mdma sets=1 staged=172 unstaged=2 taps=40 copies<=592 tcm=76/87KB itcm=ok
+load program=2 lines=8 mixed=1 avg=27.3% max=55.0% | input=0.7 predelay=0.7 taps=0.9 early=0.8 linemix=1.4 linedelay=2.6 linediff=8.1 linefilt=4.8 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=3.1 wait=0.0 other=0.3 | mix=763 decay=336 tone=545 freeze=0 updates=3 overloads=0 blocks=980/1000
+controls pots=422 763 335 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=383 failures=0 stack_free=16612 mdma_lists=40909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=140/314 us timed=981 late=1 stale=0
+load program=3 lines=9 mixed=0 avg=51.0% max=51.5% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=769 decay=336 tone=545 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=422 769 335 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=406 failures=0 stack_free=16612 mdma_lists=41909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/314 us timed=1000 late=0 stale=0
+load program=3 lines=9 mixed=0 avg=51.0% max=51.5% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=1000 decay=336 tone=545 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=422 1000 335 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=391 failures=0 stack_free=16612 mdma_lists=42909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/315 us timed=1000 late=0 stale=0
+load program=3 lines=9 mixed=0 avg=51.0% max=51.5% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=910 decay=336 tone=545 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=422 910 335 545 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=387 failures=0 stack_free=16612 mdma_lists=43909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/314 us timed=1000 late=0 stale=0
+load program=3 lines=9 mixed=0 avg=51.0% max=51.8% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=910 decay=336 tone=791 freeze=0 updates=200 overloads=0 blocks=1000/1000
+controls pots=422 910 335 791 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=406 failures=0 stack_free=16612 mdma_lists=44909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/314 us timed=1000 late=0 stale=0
+load program=3 lines=9 mixed=0 avg=51.2% max=55.1% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.1 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=910 decay=473 tone=855 freeze=0 updates=163 overloads=0 blocks=1000/1000
+controls pots=422 910 472 855 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=389 failures=0 stack_free=16612 mdma_lists=45909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/314 us timed=1000 late=0 stale=0
+load program=3 lines=9 mixed=0 avg=51.0% max=52.8% | input=0.9 predelay=0.7 taps=1.8 early=1.5 linemix=1.6 linedelay=2.9 linediff=24.0 linefilt=6.9 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=7.0 wait=0.0 other=0.3 | mix=910 decay=532 tone=855 freeze=0 updates=52 overloads=0 blocks=1000/1000
+controls pots=465 910 531 855 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=385 failures=0 stack_free=16612 mdma_lists=46909 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=313/314 us timed=1000 late=0 stale=0
+program 4 "Rubi-Ka Fields" lines=4 limit=4 early=7 late=6 taps=26 predelay=0 image=bbb2b85b
+  mod=eld interp=0 filters=----c latetap=1 streams=104 sdram=9 placed=445+207KB unplaced=4 clock=480MHz
+  staging=mdma sets=1 staged=72 unstaged=2 taps=50 copies<=312 tcm=38/87KB itcm=ok
+load program=3 lines=9 mixed=1 avg=24.9% max=51.3% | input=0.3 predelay=0.7 taps=2.0 early=2.4 linemix=0.7 linedelay=1.3 linediff=8.5 linefilt=1.5 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=916 decay=532 tone=855 freeze=0 updates=2 overloads=0 blocks=956/1000
+controls pots=484 916 531 855 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=196 failures=0 stack_free=16612 mdma_lists=47866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=164/314 us timed=957 late=1 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.8% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=532 tone=855 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 1000 531 855 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=192 failures=0 stack_free=16612 mdma_lists=48866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=576 decay=532 tone=855 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 576 531 855 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=194 failures=0 stack_free=16612 mdma_lists=49866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.6% max=24.0% | input=0.3 predelay=0.7 taps=2.2 early=2.6 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.1 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=576 decay=532 tone=446 freeze=0 updates=319 overloads=0 blocks=1000/1000
+controls pots=484 576 531 446 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=198 failures=0 stack_free=16612 mdma_lists=50866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.7% max=27.2% | input=0.3 predelay=0.7 taps=2.2 early=2.6 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.2 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=576 decay=315 tone=441 freeze=0 updates=168 overloads=0 blocks=1000/1000
+controls pots=484 576 314 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=193 failures=0 stack_free=16612 mdma_lists=51866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.7% max=27.2% | input=0.3 predelay=0.7 taps=2.2 early=2.6 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.2 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=576 decay=91 tone=441 freeze=0 updates=152 overloads=0 blocks=1000/1000
+controls pots=484 576 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=196 failures=0 stack_free=16612 mdma_lists=52866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=682 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 682 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=196 failures=0 stack_free=16612 mdma_lists=53866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.8% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=809 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 809 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=195 failures=0 stack_free=16612 mdma_lists=54866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.8% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=949 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 949 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=208 failures=0 stack_free=16612 mdma_lists=55866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=197 failures=0 stack_free=16612 mdma_lists=56866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.8% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=195 failures=0 stack_free=16612 mdma_lists=57866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=195 failures=0 stack_free=16612 mdma_lists=58866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=484 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=192 failures=0 stack_free=16612 mdma_lists=59866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+load program=4 lines=4 mixed=0 avg=23.4% max=23.7% | input=0.3 predelay=0.7 taps=2.2 early=2.5 linemix=0.7 linedelay=1.3 linediff=8.1 linefilt=1.2 out=0.9 ctrl=0.1 param=0.0 clip=1.2 stage=3.4 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=509 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=194 failures=0 stack_free=16612 mdma_lists=60866 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=1403 list=156/158 us timed=1000 late=0 stale=0
+program 5 "Through the Looking Glass" lines=8 limit=8 early=8 late=8 taps=50 predelay=0 image=bbb2b85b
+  mod=eld interp=1 filters=-l--c latetap=1 streams=222 sdram=52 placed=444+226KB unplaced=42 clock=480MHz
+  staging=mdma sets=1 staged=162 unstaged=2 taps=98 copies<=678 tcm=83/87KB itcm=ok
+load program=4 lines=4 mixed=1 avg=38.9% max=51.2% | input=0.4 predelay=0.7 taps=2.9 early=2.7 linemix=1.1 linedelay=2.0 linediff=16.5 linefilt=2.1 out=1.1 ctrl=0.1 param=0.0 clip=1.2 stage=5.6 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=2 overloads=0 blocks=957/1000
+controls pots=632 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=421 failures=0 stack_free=16612 mdma_lists=61824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=298/391 us timed=958 late=1 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=48.5% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.4 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=632 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=434 failures=0 stack_free=16612 mdma_lists=62824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/391 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=48.2% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=1000 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=632 1000 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=432 failures=0 stack_free=16612 mdma_lists=63824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/391 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.8% max=48.2% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=932 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=632 932 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=427 failures=0 stack_free=16612 mdma_lists=64824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/392 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=48.4% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=704 decay=91 tone=441 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=632 704 90 441 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=424 failures=0 stack_free=16612 mdma_lists=65824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/391 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=48.4% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=704 decay=91 tone=195 freeze=0 updates=209 overloads=0 blocks=1000/1000
+controls pots=632 704 90 195 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=421 failures=0 stack_free=16612 mdma_lists=66824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/392 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=49.4% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=705 decay=89 tone=35 freeze=0 updates=138 overloads=0 blocks=1000/1000
+controls pots=632 705 88 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=423 failures=0 stack_free=16612 mdma_lists=67824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/391 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=48.0% max=51.5% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.1 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=705 decay=1 tone=35 freeze=0 updates=74 overloads=0 blocks=1000/1000
+controls pots=632 705 0 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=426 failures=0 stack_free=16612 mdma_lists=68824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/390 us timed=1000 late=0 stale=0
+load program=5 lines=8 mixed=0 avg=47.9% max=48.2% | input=0.6 predelay=0.7 taps=3.5 early=2.9 linemix=1.4 linedelay=2.6 linediff=22.9 linefilt=2.3 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=7.3 wait=0.0 other=0.3 | mix=704 decay=1 tone=35 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=632 704 0 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=426 failures=0 stack_free=16612 mdma_lists=69824 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=385/390 us timed=1000 late=0 stale=0
+program 6 "The 90s Are Back" lines=9 limit=9 early=5 late=0 taps=1 predelay=0 image=bbb2b85b
+  mod=eld interp=1 filters=-l-Hc latetap=1 streams=42 sdram=11 placed=399+219KB unplaced=7 clock=480MHz
+  staging=mdma sets=1 staged=30 unstaged=2 taps=0 copies<=86 tcm=11/87KB itcm=ok
+load program=5 lines=8 mixed=1 avg=30.9% max=48.2% | input=0.5 predelay=0.7 taps=1.8 early=2.2 linemix=1.4 linedelay=2.6 linediff=9.3 linefilt=3.7 out=1.3 ctrl=0.1 param=0.0 clip=1.2 stage=3.6 wait=0.0 other=0.3 | mix=705 decay=1 tone=35 freeze=0 updates=2 overloads=0 blocks=946/1000
+controls pots=771 705 0 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=61 failures=0 stack_free=16612 mdma_lists=70771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=197/391 us timed=947 late=1 stale=0
+load program=6 lines=9 mixed=0 avg=17.8% max=18.1% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.6 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=725 decay=1 tone=35 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=771 725 0 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=58 failures=0 stack_free=16612 mdma_lists=71771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/57 us timed=1000 late=0 stale=0
+load program=6 lines=9 mixed=0 avg=17.8% max=18.0% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.6 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=923 decay=1 tone=35 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=771 923 0 35 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=58 failures=0 stack_free=16612 mdma_lists=72771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/57 us timed=1000 late=0 stale=0
+load program=6 lines=9 mixed=0 avg=17.8% max=18.1% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.6 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=1000 decay=1 tone=52 freeze=0 updates=15 overloads=0 blocks=1000/1000
+controls pots=771 1000 0 52 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=58 failures=0 stack_free=16612 mdma_lists=73771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/57 us timed=1000 late=0 stale=0
+load program=6 lines=9 mixed=0 avg=17.8% max=18.3% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.6 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=1000 decay=1 tone=280 freeze=0 updates=187 overloads=0 blocks=1000/1000
+controls pots=771 1000 0 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=59 failures=0 stack_free=16612 mdma_lists=74771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/56 us timed=1000 late=0 stale=0
+load program=6 lines=9 mixed=0 avg=18.3% max=21.6% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.7 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.3 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=1000 decay=443 tone=280 freeze=0 updates=338 overloads=0 blocks=1000/1000
+controls pots=771 1000 442 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=59 failures=0 stack_free=16612 mdma_lists=75771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/56 us timed=1000 late=0 stale=0
+load program=6 lines=9 mixed=0 avg=17.8% max=19.3% | input=0.6 predelay=0.7 taps=0.6 early=1.8 linemix=1.6 linedelay=2.9 linediff=0.0 linefilt=4.8 out=1.4 ctrl=0.1 param=0.0 clip=1.2 stage=1.1 wait=0.0 other=0.3 | mix=1000 decay=451 tone=280 freeze=0 updates=7 overloads=0 blocks=1000/1000
+controls pots=774 1000 449 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=60 failures=0 stack_free=16612 mdma_lists=76771 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=55/57 us timed=1000 late=0 stale=0
+program 7 "Dull Echoes" lines=12 limit=12 early=4 late=0 taps=18 predelay=3360 image=bbb2b85b
+  mod=eld interp=1 filters=-l--c latetap=0 streams=66 sdram=0 placed=419+93KB unplaced=0 clock=480MHz
+  staging=mdma sets=1 staged=36 unstaged=0 taps=34 copies<=172 tcm=20/87KB itcm=ok
+load program=6 lines=9 mixed=1 avg=19.2% max=22.5% | input=0.5 predelay=0.3 taps=1.5 early=1.5 linemix=2.0 linedelay=3.6 linediff=0.0 linefilt=3.7 out=1.6 ctrl=0.1 param=0.0 clip=1.2 stage=1.7 wait=0.0 other=0.3 | mix=1000 decay=451 tone=280 freeze=0 updates=2 overloads=0 blocks=975/1000
+controls pots=841 1000 449 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=106 failures=0 stack_free=16612 mdma_lists=77747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=77/81 us timed=976 late=1 stale=0
+load program=7 lines=12 mixed=0 avg=19.3% max=19.5% | input=0.6 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=0.0 linefilt=3.5 out=1.7 ctrl=0.1 param=0.0 clip=1.2 stage=1.8 wait=0.0 other=0.3 | mix=1000 decay=450 tone=280 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=841 1000 449 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=106 failures=0 stack_free=16612 mdma_lists=78747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=81/81 us timed=1000 late=0 stale=0
+load program=7 lines=12 mixed=0 avg=19.3% max=19.6% | input=0.6 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=0.0 linefilt=3.5 out=1.7 ctrl=0.1 param=0.0 clip=1.2 stage=1.8 wait=0.0 other=0.3 | mix=498 decay=451 tone=280 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=841 498 449 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=104 failures=0 stack_free=16612 mdma_lists=79747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=81/81 us timed=1000 late=0 stale=0
+load program=7 lines=12 mixed=0 avg=19.5% max=23.2% | input=0.6 predelay=0.3 taps=1.7 early=1.5 linemix=2.2 linedelay=3.9 linediff=0.0 linefilt=3.5 out=1.7 ctrl=0.1 param=0.1 clip=1.2 stage=1.8 wait=0.0 other=0.2 | mix=497 decay=284 tone=280 freeze=0 updates=131 overloads=0 blocks=1000/1000
+controls pots=841 497 283 280 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=105 failures=0 stack_free=16612 mdma_lists=80747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=81/81 us timed=1000 late=0 stale=0
+load program=7 lines=12 mixed=0 avg=19.4% max=22.7% | input=0.6 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=0.0 linefilt=3.5 out=1.7 ctrl=0.1 param=0.1 clip=1.2 stage=1.8 wait=0.0 other=0.2 | mix=497 decay=252 tone=0 freeze=0 updates=227 overloads=0 blocks=1000/1000
+controls pots=841 497 250 0 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=109 failures=0 stack_free=16612 mdma_lists=81747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=81/81 us timed=1000 late=0 stale=0
+load program=7 lines=12 mixed=0 avg=19.3% max=19.5% | input=0.6 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=0.0 linefilt=3.5 out=1.7 ctrl=0.1 param=0.0 clip=1.2 stage=1.8 wait=0.0 other=0.2 | mix=497 decay=252 tone=0 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=841 497 250 0 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=105 failures=0 stack_free=16612 mdma_lists=82747 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=81/81 us timed=1000 late=0 stale=0
+program 8 "Chorus Delay" lines=12 limit=12 early=4 late=3 taps=18 predelay=3360 image=bbb2b85b
+  mod=eld interp=0 filters=----c latetap=1 streams=138 sdram=33 placed=431+217KB unplaced=23 clock=480MHz
+  staging=mdma sets=1 staged=108 unstaged=0 taps=34 copies<=388 tcm=49/87KB itcm=ok
+load program=7 lines=12 mixed=1 avg=21.2% max=37.3% | input=0.5 predelay=0.3 taps=1.6 early=1.4 linemix=2.0 linedelay=3.6 linediff=1.4 linefilt=3.4 out=1.6 ctrl=0.1 param=0.0 clip=1.1 stage=2.0 wait=0.0 other=0.2 | mix=497 decay=252 tone=0 freeze=0 updates=2 overloads=0 blocks=941/1000
+controls pots=946 497 250 0 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=262 failures=0 stack_free=16612 mdma_lists=83689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=99/236 us timed=942 late=1 stale=0
+load program=8 lines=12 mixed=0 avg=34.0% max=35.0% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.7 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=252 tone=0 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=952 497 250 0 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=256 failures=0 stack_free=16612 mdma_lists=84689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.8% max=34.2% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=252 tone=0 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=952 497 250 0 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=252 failures=0 stack_free=16612 mdma_lists=85689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=37.1% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.1 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=238 tone=350 freeze=0 updates=289 overloads=0 blocks=1000/1000
+controls pots=952 497 237 350 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=261 failures=0 stack_free=16612 mdma_lists=86689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=34.2% max=37.8% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.2 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.3 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=551 tone=350 freeze=0 updates=247 overloads=0 blocks=1000/1000
+controls pots=952 497 550 350 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=260 failures=0 stack_free=16612 mdma_lists=87689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=229/237 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=34.0% max=37.7% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.2 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.1 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=667 tone=469 freeze=0 updates=192 overloads=0 blocks=1000/1000
+controls pots=952 497 666 469 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=253 failures=0 stack_free=16612 mdma_lists=88689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=34.4% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=667 tone=778 freeze=0 updates=235 overloads=0 blocks=1000/1000
+controls pots=952 497 666 778 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=262 failures=0 stack_free=16612 mdma_lists=89689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/237 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.8% max=34.3% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=667 tone=778 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=1000 497 666 778 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=257 failures=0 stack_free=16612 mdma_lists=90689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.8% max=35.4% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.2 | mix=497 decay=667 tone=778 freeze=0 updates=1 overloads=0 blocks=1000/1000
+controls pots=1000 497 666 778 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=256 failures=0 stack_free=16612 mdma_lists=91689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=34.2% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.3 | mix=697 decay=667 tone=778 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=1000 697 666 778 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=262 failures=0 stack_free=16612 mdma_lists=92689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/237 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=34.3% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.3 | mix=697 decay=667 tone=891 freeze=0 updates=88 overloads=0 blocks=1000/1000
+controls pots=1000 697 666 891 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=257 failures=0 stack_free=16612 mdma_lists=93689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=34.3% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.3 | mix=697 decay=667 tone=891 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=1000 697 666 891 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=252 failures=0 stack_free=16612 mdma_lists=94689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/237 us timed=1000 late=0 stale=0
+load program=8 lines=12 mixed=0 avg=33.9% max=34.2% | input=0.3 predelay=0.3 taps=1.7 early=1.5 linemix=2.1 linedelay=3.9 linediff=12.2 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.2 stage=4.3 wait=0.0 other=0.3 | mix=697 decay=667 tone=891 freeze=0 updates=0 overloads=0 blocks=1000/1000
+controls pots=1000 697 666 891 cv1=1(raw 999) cv2=1(raw 999)
+staging copies=257 failures=0 stack_free=16612 mdma_lists=95689 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=2432 list=230/236 us timed=1000 late=0 stale=0

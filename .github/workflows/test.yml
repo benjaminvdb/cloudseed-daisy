@@ -1,0 +1,78 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  host:
+    name: Host suites
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout libDaisy (headers for the engine and MDMA suites)
+        uses: actions/checkout@v4
+        with:
+          repository: electro-smith/libDaisy
+          ref: cc146d5065dd8286078a662e2830bf820c37a612
+          path: libDaisy
+          submodules: recursive
+
+      - name: Checkout Cloud Seed (the fidelity reference)
+        uses: actions/checkout@v4
+        with:
+          repository: ValdemarOrn/CloudSeed
+          ref: 13a625e00ec47db98b158a17e309d2cdaebb57ed
+          path: CloudSeed
+
+      - name: Regression
+        run: bash test/regression.sh
+
+      - name: Engine
+        run: LIBDAISY_DIR=$PWD/libDaisy bash test/engine.sh
+
+      - name: MDMA transport
+        run: LIBDAISY_DIR=$PWD/libDaisy bash test/mdma.sh
+
+      - name: Trigonometry
+        run: bash test/trig.sh
+
+      - name: Fidelity against the reference
+        run: bash test/run.sh CloudSeed
+
+      - name: Stress
+        run: bash test/benchmark.sh --stress
+
+  firmware:
+    name: Daisy Seed example
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout libDaisy
+        uses: actions/checkout@v4
+        with:
+          repository: electro-smith/libDaisy
+          ref: cc146d5065dd8286078a662e2830bf820c37a612
+          path: libDaisy
+          submodules: recursive
+
+      - name: Set up ARM toolchain
+        uses: carlosperate/arm-none-eabi-gcc-action@v1
+        with:
+          release: "12.2.Rel1"
+
+      - name: Build libDaisy
+        run: make -C libDaisy -j -s
+
+      - name: Build the example
+        run: make -C examples/seed -s LIBDAISY_DIR=$PWD/libDaisy
+
+      - name: Upload the image
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudseed_seed-${{ github.sha }}
+          path: examples/seed/build/cloudseed_seed.bin
