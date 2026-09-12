@@ -46,38 +46,38 @@ note left ringing — and then that phrase through one program. One gain is
 applied to all ten, so a program that is louder than another sounds louder here
 too, and the programs run at their own dry/wet balance.
 
-**Medium Space.** Three delay lines, a two-second tail — the everyday room.
-
-https://github.com/user-attachments/assets/9cf6fa96-1c63-4339-9804-9893a17e9734
-
-**Through the Looking Glass.** Twelve delay lines and twenty-six seconds of
-tail: the largest program, and the one the CPU budget was built for.
-
-https://github.com/user-attachments/assets/b8815225-e07d-4579-9295-8e0e1b878c90
-
 **Chorus Delay.** Twelve lines used as modulated echoes rather than as a room.
 
 https://github.com/user-attachments/assets/058be392-9ca3-4e4f-8664-725a7e5d4507
 
 <details>
-<summary><b>The other seven programs</b></summary>
+<summary><b>The other nine programs</b></summary>
 
 **Small Room.** Three lines, a one-second tail.
 
 https://github.com/user-attachments/assets/12d6ba9e-c94d-4374-8ac6-474f61f2979b
 
+**Medium Space.** Three lines, a two-second tail — the everyday room.
+
+https://github.com/user-attachments/assets/9cf6fa96-1c63-4339-9804-9893a17e9734
+
 **Noise in the Hallway.** Eight lines, four seconds, close and narrow.
 
 https://github.com/user-attachments/assets/18685d83-567d-4f5c-9182-3d9e9445b6f1
 
-**Hyperplane.** Nine lines and twenty-two seconds, the widest of the nine
-factory programs.
+**Hyperplane.** Nine lines and twenty-two seconds, the widest of the nine factory
+programs.
 
 https://github.com/user-attachments/assets/781e48a0-3076-4c11-8cc1-859831ceda39
 
 **Rubi-Ka Fields.** Four lines, fourteen seconds.
 
 https://github.com/user-attachments/assets/01ae1c47-2390-4872-a9eb-b4f5a7e8134e
+
+**Through the Looking Glass.** Twelve lines and twenty-six seconds of tail: the largest program, and
+the one the CPU budget was built for.
+
+https://github.com/user-attachments/assets/b8815225-e07d-4579-9295-8e0e1b878c90
 
 **The 90s Are Back.** Nine lines, four seconds.
 
@@ -92,23 +92,6 @@ https://github.com/user-attachments/assets/7cc55168-2b4a-4b64-9559-0f159aba8b85
 https://github.com/user-attachments/assets/e8208ab8-9eb2-41cf-bf61-d0b1e594856c
 
 </details>
-
-The tail is the time from the last note until the reverb is 60 dB below where
-it started; the width is how far the two channels have come apart (0 is mono,
-1 is uncorrelated). Both are measured from these renders.
-
-| Program | Lines | Tail | Width |
-|---|---:|---:|---:|
-| Small Room | 3 | 1 s | 0.31 |
-| Medium Space | 3 | 2 s | 0.69 |
-| Noise in the Hallway | 8 | 4 s | 0.72 |
-| Hyperplane | 9 | 22 s | 0.98 |
-| Rubi-Ka Fields | 4 | 14 s | 0.93 |
-| Through the Looking Glass | 12 | 26 s | 0.92 |
-| The 90s Are Back | 9 | 4 s | 0.89 |
-| Dull Echoes | 12 | 1 s | 0.94 |
-| Chorus Delay | 12 | 10 s | 0.92 |
-| Dark Plate | 12 | 14 s | 0.99 |
 
 [`demo/`](demo/) holds the renderer, the CC0 sources and the script that builds
 every clip: `demo/make_demos.sh`.
