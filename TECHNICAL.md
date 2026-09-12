@@ -19,15 +19,15 @@ Every quantitative claim below carries one of these labels.
 | **Modeled** | Calculated from an explicit model. Not an observation. |
 | **Unmeasured** | Believed, but with no evidence of either kind. Stated as such wherever it appears. |
 
-> **The current build has not run on hardware.** The most recent capture
-> (`captures/hardware-baseline8.log`) measures image `623fe82a`, which predates
-> the tenth program and the corrections made in the final audit. Everything
-> under [Measured performance](#measured-performance) describes that image. The
+> **The current build has not run on hardware.** The most recent hardware
+> capture measures image `623fe82a`, which predates the tenth program and the
+> corrections made in the final audit. Everything under
+> [Measured performance](#measured-performance) describes that image. The
 > present code differs from it by one added program, three correctness fixes,
 > one kernel optimization, a linker change, the round-11 changes (the
 > transport inlined into the list builder, the one-pole filters without
-> floating-point compares) and the extraction into this library (the
-> firmware's callback and main-loop logic became the engine), and is
+> floating-point compares) and the split into this library (the callback and
+> main-loop logic of the reference firmware became the engine), and is
 > host-verified only.
 
 ## Contents
@@ -532,7 +532,7 @@ segment commit costs about 1.5 µs. Every program pays 3 to 5 points for it.
 
 ## Measured performance
 
-From `captures/hardware-baseline8.log`, image `623fe82a`, 480 MHz, 125 complete
+From the eighth hardware capture, image `623fe82a`, 480 MHz, 125 complete
 one-second reports, no overload, no staging failure, no MDMA error. Values are
 the mean of the interval averages over unmixed intervals, and the largest single
 block in any of them. Recomputed independently from the log for this document.
@@ -869,16 +869,16 @@ reasoning is not.
 | `AUDIT.md`, `AUDIT_VALIDATION.txt` | Final audit, 6 findings, independent re-analysis of capture 8 | [Defects](#defects-found-and-corrected), [Verification](#verification) |
 | `REVIEW_VALIDATION.txt`, `STAGING_VALIDATION.txt` | Test transcripts for their reviews | [Verification](#verification) |
 
-The raw hardware captures are kept in `captures/` and committed with this
-repository: they are the evidence behind every measured figure here.
-`captures/serial.log` is the first profiling capture, taken before the staging
-existed; `captures/hardware-baseline3.log` through `8.log` measure the builds
-of rounds 5 through 9. The captures of the first two sessions were not
-retained.
+The raw hardware captures behind the measured figures here are the serial logs
+of the profiling builds of rounds 5 through 9, taken on the reference module.
+They are not committed to this repository; each is identified by the `image=`
+CRC-32 its profiling build printed, and the figures under [Measured
+performance](#measured-performance) come from the eighth, image `623fe82a`.
 
-**The repository split (2026-09-12).** The code and this document were
-extracted from the Löwenzahnhonig firmware's `src/cloudseed` into this
-library. The firmware's callback and main loop became `Engine`
+**The split into this library (2026-09-12).** The code and this document moved
+into a repository of their own. The library had taken shape inside the
+Löwenzahnhonig firmware's `src/cloudseed` while it was being written. The
+firmware's callback and main loop became `Engine`
 (`src/cloudseed_daisy/engine.cpp`): what was module-specific (the pot
 mapping, the equal-power mix, the soft clip, the LED) stayed in the firmware,
 which now uses the library as a submodule; the Seed's system settings (the
