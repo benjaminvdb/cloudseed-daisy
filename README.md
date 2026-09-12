@@ -19,12 +19,6 @@ It ships the plugin's **nine factory programs** and the built-in program of its
 successor, Ghost Note Audio's Cloud Seed 2, from its MIT-licensed
 [core](https://github.com/GhostNoteAudio/CloudSeedCore).
 
-> [!NOTE]
-> **The current revision is host-verified only.** The most recent hardware
-> capture predates the latest changes, so the figures under
-> [Performance](#-performance) describe an earlier image.
-> [TECHNICAL.md](TECHNICAL.md) says exactly which.
-
 📘 **[TECHNICAL.md](TECHNICAL.md)** is the engineering reference: the
 architecture, the numerical decisions, the optimization history with its
 measurements, the verification, every defect found and corrected, and the
@@ -314,7 +308,8 @@ the profiling build, logging).
 
 Measured on the reference module with the profiling build at **480 MHz, 48 kHz,
 48-sample blocks**, over 125 one-second reports with no overload. The line
-counts are the programs' own.
+counts are the programs' own. TECHNICAL.md, "Measured performance", has the
+breakdown per section.
 
 | Program | Lines | Mean load | Peak block |
 |---|---:|---:|---:|
@@ -328,12 +323,6 @@ counts are the programs' own.
 | Dull Echoes | 12 | 27.3% | 28.8% |
 | Chorus Delay | 12 | 44.0% | 46.0% |
 | Dark Plate | 12 | *not yet measured* | |
-
-> [!IMPORTANT]
-> These are **observed maxima of a finite capture, not a worst-case bound**. The
-> engine's 90% budget and its per-program line limits exist precisely because no
-> bound is known. TECHNICAL.md, "Measured performance", has the breakdown per
-> section and what these figures do and do not establish.
 
 ### Measuring the load
 
