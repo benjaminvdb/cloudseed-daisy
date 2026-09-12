@@ -352,17 +352,20 @@ Static, from clean builds with ARM GCC 16.2.0 at the defaults, for the bare Seed
 example and the reference firmware (which adds its own controls, mixing and, in
 the profiling build, logging).
 
-| Resource | Example | Reference default | Reference profiling | Capacity |
-|---|---:|---:|---:|---:|
-| Flash | 109,296 B | 113,420 B | 127,768 B | 131,072 B |
-| DTCM | 106,240 B | 106,240 B | 106,744 B | 131,072 B |
-| AXI SRAM | 487,416 B | 489,280 B | 501,552 B | 524,288 B |
-| D2 SRAM | 293,952 B | 294,272 B | 294,272 B | 294,912 B |
-| SDRAM | 15,974,400 B | 15,974,400 B | 15,974,400 B | 67,108,864 B |
+| Resource | Example | Reference default | Reference profiling | Capacity | Fullest |
+|---|---:|---:|---:|---:|---:|
+| Flash | 109,296 B | 113,420 B | 127,768 B | 131,072 B | 97.5% |
+| DTCM | 106,240 B | 106,240 B | 106,744 B | 131,072 B | 81.4% |
+| AXI SRAM | 487,416 B | 489,280 B | 501,552 B | 524,288 B | 95.7% |
+| D2 SRAM | 293,952 B | 294,272 B | 294,272 B | 294,912 B | 99.8% |
+| SDRAM | 15,974,400 B | 15,974,400 B | 15,974,400 B | 67,108,864 B | 23.8% |
+
+**Fullest** is the largest of the three builds — always the profiling one —
+against the capacity beside it.
 
 - The **DTCM** figure is the engine's objects and the staging memory; the stack
   takes the rest of the DTCM (25 KB, of which the profiling build measured
-  16 KB never used).
+  16 KB never used), so the 19% left is spoken for, not spare.
 - The **ITCM** is entirely staging memory, placed by address, so the linker
   reports it as empty.
 - The **SDRAM** holds the worst-case delay memory of every program at
