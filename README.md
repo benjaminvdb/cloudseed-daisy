@@ -5,7 +5,7 @@ Electro-Smith Daisy Seed.**
 
 [![Tests](https://github.com/benjaminvdb/cloudseed-daisy/actions/workflows/test.yml/badge.svg)](https://github.com/benjaminvdb/cloudseed-daisy/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform: Daisy Seed](https://img.shields.io/badge/platform-Daisy%20Seed%20%C2%B7%20STM32H750-8a2be2.svg)](https://electro-smith.com/products/daisy-seed)
+[![Platform: Daisy Seed](https://img.shields.io/badge/platform-Daisy%20Seed%20%C2%B7%20STM32H750-8a2be2.svg)](https://daisy.audio/products/seed3)
 [![Standard: C++14](https://img.shields.io/badge/C%2B%2B-14-00599c.svg)](#requirements)
 
 [Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) is an open-source reverb
@@ -115,6 +115,7 @@ every clip: `demo/make_demos.sh`.
 - [The kernel without the engine](#-the-kernel-without-the-engine)
 - [Tests](#-tests)
 - [Reference application](#-reference-application)
+- [References](#-references)
 - [License and credits](#-license-and-credits)
 
 ## 🚀 Quick start
@@ -123,9 +124,9 @@ every clip: `demo/make_demos.sh`.
 
 | Requirement | Detail |
 |---|---|
-| 🎛️ **Hardware** | A Daisy Seed (any revision) with its 64 MB SDRAM. The 480 MHz clock needs an STM32H750 of silicon revision V or X, which the library detects. |
+| 🎛️ **Hardware** | A [Daisy Seed](https://daisy.audio/products/seed3) (any revision) with its 64 MB SDRAM. The 480 MHz clock needs an STM32H750 of silicon revision V or X, which the library detects. |
 | 📚 **libDaisy** | [libDaisy](https://github.com/electro-smith/libDaisy), built. Developed against revision `cc146d5065dd8286078a662e2830bf820c37a612`; the tests read its `CpuLoadMeter` and STM32 headers from whatever checkout `LIBDAISY_DIR` names. |
-| 🔨 **Toolchain** | The Arm GNU toolchain (built and tested with GCC 12.2 and 16.2) and GNU make. A C++14 compiler for the host tests. **DaisySP is not needed.** |
+| 🔨 **Toolchain** | The [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (built and tested with GCC 12.2 and 16.2) and GNU make. A C++14 compiler for the host tests. **DaisySP is not needed.** |
 | 🎚️ **Audio** | A block size of 48 samples, or a divisor or multiple of it (see `Engine::Config`). |
 
 ### Add the library
@@ -462,6 +463,24 @@ library's **reference application**: it maps a program selector, a mix, a decay
 and a tone pot and two CV inputs onto the engine, uses this library as a
 submodule, and is the firmware every measurement here was taken from — on its
 module. Its README describes the module.
+
+## 📚 References
+
+| Link | What it is |
+|---|---|
+| [Daisy Seed](https://daisy.audio/products/seed3) | The board: a Cortex-M7 at 480 MHz, 65 MB of SDRAM, 8 MB of flash. |
+| [Daisy documentation](https://docs.daisy.audio/) | Electrosmith's own [hardware](https://docs.daisy.audio/hardware/) and [software](https://docs.daisy.audio/software/) documentation. |
+| [libDaisy](https://github.com/electro-smith/libDaisy) | The hardware library this one builds on, and its [API reference](https://electro-smith.github.io/libDaisy/). |
+| [DaisyExamples](https://github.com/electro-smith/DaisyExamples) | Electrosmith's example firmwares, for the shape of a Daisy project. |
+| [Daisy Web Programmer](https://electro-smith.github.io/Programmer/) | Flashes a `.bin` over USB DFU from the browser. |
+| [Daisy forum](https://forum.electro-smith.com/) | Where Daisy questions get answered. |
+| [Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) | Valdemar Erlingsson's original plugin: the reverb this library ports. |
+| [Cloud Seed 2 core](https://github.com/GhostNoteAudio/CloudSeedCore) | [Ghost Note Audio](https://ghostnoteaudio.uk/)'s successor, where the Dark Plate program comes from. |
+| [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) | The compiler; Arm's [install guide](https://learn.arm.com/install-guides/gcc/arm-gnu) covers every host. |
+
+TECHNICAL.md's [Sources](TECHNICAL.md#sources) has the rest: ST's datasheet,
+reference manual and errata for the STM32H750, the SDRAM's datasheet, and the
+DSP and worst-case-timing references behind the design.
 
 ## 📄 License and credits
 
