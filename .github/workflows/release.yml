@@ -146,6 +146,17 @@ jobs:
       - name: Write the preamble
         run: |
           set -euo pipefail
+
+          # The hardware acceptance record, when this release has one. A
+          # release may record its checklist in the notes instead, so the link
+          # is only offered when the file is actually in the tag.
+          acceptance=""
+          if [ -f "docs/acceptance/$GITHUB_REF_NAME.md" ]; then
+            acceptance="
+          Hardware acceptance for this release: [\`docs/acceptance/$GITHUB_REF_NAME.md\`](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/docs/acceptance/$GITHUB_REF_NAME.md), including the checks it does not cover.
+          "
+          fi
+
           cat > notes.md <<NOTES
           Cloud Seed for the Daisy Seed, version $VERSION.
 
@@ -157,7 +168,7 @@ jobs:
           \`\`\`
 
           See the [README](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/README.md#-quick-start) for the rest, and the [changelog](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/CHANGELOG.md).
-
+          $acceptance
           ### The assets
 
           | File | What it is |
