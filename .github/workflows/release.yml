@@ -156,8 +156,7 @@ jobs:
           git -C lib/cloudseed-daisy checkout $GITHUB_REF_NAME
           \`\`\`
 
-          See the [README](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/README.md#-quick-start)
-          for the rest, and the [changelog](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/CHANGELOG.md).
+          See the [README](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/README.md#-quick-start) for the rest, and the [changelog](https://github.com/benjaminvdb/cloudseed-daisy/blob/$GITHUB_REF_NAME/CHANGELOG.md).
 
           ### The assets
 
