@@ -23,10 +23,11 @@ Note Audio](https://ghostnoteaudio.uk/)'s Cloud Seed 2.
 A project picks it up by including `cloudseed.mk` where it used to include
 libDaisy's core Makefile. DaisySP is not needed.
 
-**The performance figures below come from an older firmware image.** The current
-library is verified on a desktop host and has not run on a Seed yet;
-[`docs/release-acceptance.md`](docs/release-acceptance.md) is the checklist that
-closes that gap, because CI can build this firmware but cannot run it.
+The performance figures below were measured on a Seed, on a build of this
+library that differs from the current source only by its version header and the
+notices. [`docs/release-acceptance.md`](docs/release-acceptance.md) is the
+checklist a release is measured with, since CI can build this firmware but
+cannot run it.
 
 [TECHNICAL.md](TECHNICAL.md) is the engineering reference: the architecture, the
 numerical decisions, the optimization history with its measurements, the
@@ -508,16 +509,20 @@ in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and the full texts are in
 ## 🤖 On the use of AI
 
 I built this library with an AI coding assistant, heavily: the port, the engine,
-the tests and these documents all went through one. I directed the work, read
-the diffs and made the calls, and the result is mine to answer for.
+the tests and these documents all went through one. I've tried to port this
+reverb many times, but didn't succeed. With the latest AI models, I was finally
+able to pull it off. I didn't create this project to show off my DSP wizardry.
+Rather, I think this reverb is amazing and I'm just happy for others to have
+access to it without the hassle I had to go through!
 
-Saying so is worth little on its own, which is why the repository is arranged so
-that you need not take much on trust. The fidelity claim is a test you can run
-against Valdemar Erlingsson's own kernel. So is the bit-identical claim. The
-flash and RAM figures come out of a linker map and are checked in CI.
-TECHNICAL.md labels every quantitative claim as measured, host-verified, static,
-modeled or unmeasured, and the performance table above names the image it came
-from and says plainly that the current code has not run on hardware.
+I won't pretend I can explain every line of it. What I can say is that it is
+checked by things that don't rely on my judgement: the output is compared
+against Valdemar Erlingsson's own kernel, the staged and direct paths are
+compared against each other, the flash and RAM figures come out of a linker map
+in CI, and TECHNICAL.md labels every quantitative claim by how it was
+established. And I flash a build to a Seed and listen to it before I call
+something a release; [docs/release-acceptance.md](docs/release-acceptance.md) is
+that checklist.
 
 If you find something wrong here, an issue is welcome, whoever or whatever wrote
 it.

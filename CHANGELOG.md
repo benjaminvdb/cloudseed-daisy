@@ -53,10 +53,10 @@ firmware has been through other people's projects and boards.
 
 - **The interface is not frozen.** 1.0.0 follows once the first users have had a
   go at it; until then a 0.x minor release may rename or change a call.
-- The performance figures in the README come from reference image `623fe82a`, an
-  earlier firmware. They have not been re-measured on the current code, and Dark
-  Plate has not been measured at all. See
-  [`docs/release-acceptance.md`](docs/release-acceptance.md).
+- The performance figures in the README come from reference image `59d22c54`,
+  the first capture to cover all ten programs. It measured a build of this
+  library differing from this release only by its version header and the
+  notices. See [`docs/release-acceptance.md`](docs/release-acceptance.md).
 - The observed peaks are measurements, not a worst-case timing bound.
 - One `Engine` per application: its DSP, pools and transport are shared static
   storage.
