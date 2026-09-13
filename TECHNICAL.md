@@ -168,6 +168,27 @@ the way a fixed one does, so a frozen tail decays slowly rather than holding
 exactly.[^interp][^allpass] Host-verified: a Medium Space tail held for 1.75 s
 loses 1.49 dB.
 
+Freeze also changes the wet level, by a step that is a property of the program
+and of the number of lines it runs. Muting the input removes the component
+every line carries in common: where `LateStageTap` puts the output tap before
+the delay, each line emits the same early-reflection signal at the same
+instant, so those copies add coherently, while `per_line_gain` is
+`1/sqrt(lines)` - the gain for copies that do not. Held, only each line's own
+recirculating tail is left, which is decorrelated between the lines and adds
+as their square root, so the level drops by up to `sqrt(lines)`. Late
+diffusion scrambles the common signal differently in each line, so the step
+shrinks as the stage count rises and is largest with the tap moved and no
+diffusion at all. Host-verified in the reference firmware's configuration: The
+90s Are Back (9 lines, tap moved, no late diffusion) loses 7.0 to 7.8 dB
+whatever it is fed; Dark Plate (12 lines, four stages) loses 3.8 dB on a
+filtered chord and 11.2 dB on white noise, most of that being the damping loss
+around its loop, which follows the source's spectrum. The eight programs that
+tap after the delay or run six to eight stages stay within a few decibels, and
+several come back slightly *louder*, since unity feedback without the damping
+filters keeps energy the running loop was shedding. A caller that wants the
+level to hold across the gate has to make the step up itself, per program and
+per line count; the reference firmware does so in `src/cloudseed/programs.h`.
+
 The reference firmware mixes the dry signal itself, so `DryOut` is forced to
 zero in the reverb after every load (the engine's load hook) and the tone pot
 always drives the feedback low-pass. Long decays can
