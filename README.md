@@ -390,6 +390,14 @@ the profiling build, logging).
 **Fullest** is the largest of the three builds — always the profiling one —
 against the capacity beside it.
 
+CI measures the example separately with Arm GNU Toolchain **15.3.Rel1**:
+110,392 B of flash by default and 112,320 B with `CLOUDSEED_PROFILE=1`.
+Its RAM figures match the example above, except profiling uses 106,744 B of
+DTCM. [`test/size_budget.txt`](test/size_budget.txt) records those builds'
+ceilings with 4 KB of flash headroom and 512 B per internal RAM region.
+The bare example's profiling build enables counters; it needs the logging
+integration in [release acceptance](docs/release-acceptance.md) to print them.
+
 - The **DTCM** figure is the engine's objects and the staging memory; the stack
   takes the rest of the DTCM (25 KB, of which the profiling build measured
   16 KB never used), so the 19% left is spoken for, not spare.
@@ -544,6 +552,13 @@ and builds the example.
 | [`test/trig.sh`](test/trig.sh) | The port's `sin()`/`cos()` against fdlibm: 8,024,008 values identical. |
 | [`test/run.sh`](test/run.sh) `path/to/CloudSeed` | Fidelity against the plugin's own kernel (a corrected copy of the checkout): 82 to 147 dB below the signal with modulation off. Needs a [CloudSeed](https://github.com/ValdemarOrn/CloudSeed) checkout and Python 3. |
 | [`test/benchmark.sh`](test/benchmark.sh) `[--stress]` | Desktop timings of the direct paths; `--stress` renders two minutes per program frozen and checks every output stays finite. |
+| [`test/release.py`](test/release.py) | Release metadata checks and regression cases for the consumer, memory budget and suite-runner scripts. No Arm compiler needed. |
+| [`test/consumer.sh`](test/consumer.sh) `[ref]` | A throwaway project adds this library as a submodule of a bare clone and builds the selected commit's README code blocks (default `HEAD`). Both documentation and sources must be committed; local edits are excluded. Needs `LIBDAISY_DIR` and the Arm toolchain. |
+| [`test/size.sh`](test/size.sh) `[--update]` | The example's flash and RAM, per region, against [`test/size_budget.txt`](test/size_budget.txt) — the margin before a region overflows, which matters because the defaults leave an application about 960 B of D2 SRAM. Needs `LIBDAISY_DIR` and the Arm toolchain. |
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers running them and what a change to
+the arithmetic has to respect; [SECURITY.md](SECURITY.md) covers reporting a
+vulnerability.
 
 [`test/inventory.cpp`](test/inventory.cpp) prints every program's delay
 buffers, their placement and

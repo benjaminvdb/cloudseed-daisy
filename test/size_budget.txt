@@ -1,0 +1,18 @@
+# The example firmware's static footprint, as a ceiling per build
+# and region (bytes), each the measured figure plus the headroom
+# test/size.sh allows it. --update rewrites this file; a raised
+# figure belongs in the same commit as the change that raised it,
+# and in the README's "Memory and flash" table.
+#
+# Measured with 15.3.1.
+# build   region   max bytes
+default  FLASH     114488
+default  DTCMRAM   106752
+default  SRAM      487928
+default  RAM_D2    294464
+default  SDRAM     15974400
+profile  FLASH     116416
+profile  DTCMRAM   107256
+profile  SRAM      487928
+profile  RAM_D2    294464
+profile  SDRAM     15974400
