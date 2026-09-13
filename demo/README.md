@@ -1,13 +1,13 @@
 # Demo clips
 
 `make_demos.sh` renders one clip per Cloud Seed program into `clips/`, which is
-not committed — the clips are built, not stored.
+not committed: the clips are built, not stored.
 
 Every clip plays the same dry phrase and then that phrase through one program:
 
-- **The same source for all ten**, so the clips compare. A strummed guitar
-  chord for the tone, a snare for the transient, a piano note left ringing, with
-  gaps to hear into.
+- **The same source for all ten**, so the clips compare. A strummed guitar chord
+  for the tone, a snare for the transient, a piano note left ringing, with gaps
+  to hear into.
 - **One gain for all ten**, taken from the loudest program. A program that is
   louder than another sounds louder here too, rather than every clip being
   normalized to the same peak.
@@ -22,8 +22,8 @@ Every clip plays the same dry phrase and then that phrase through one program:
 
 Needs a C++14 compiler and ffmpeg. It builds the renderer, assembles the dry
 phrase, renders all ten programs, sets one common level, draws a card from each
-clip's own waveform, and encodes an MP4 — then decodes what it just encoded and
-lowers the level if the encoder overshot full scale.
+clip's own waveform, and encodes an MP4. It then decodes what it just encoded
+and lowers the level if the encoder overshot full scale.
 
 `render_demo.cpp` is the renderer on its own: it reads a 48 kHz WAV, runs it
 through one program with `cloudseed::ReverbController`, and writes the result

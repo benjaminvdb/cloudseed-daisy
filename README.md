@@ -1,52 +1,43 @@
 # ☁️ cloudseed-daisy 🌼
 
-**Cloud Seed — Valdemar Erlingsson's algorithmic reverb — as a library for the
-Electro-Smith Daisy Seed.**
+cloudseed-daisy runs [Cloud Seed](https://github.com/ValdemarOrn/CloudSeed),
+Valdemar Erlingsson's algorithmic reverb, on the [Electro-Smith Daisy
+Seed](https://daisy.audio/products/seed3).
 
 [![Tests](https://github.com/benjaminvdb/cloudseed-daisy/actions/workflows/test.yml/badge.svg)](https://github.com/benjaminvdb/cloudseed-daisy/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform: Daisy Seed](https://img.shields.io/badge/platform-Daisy%20Seed%20%C2%B7%20STM32H750-8a2be2.svg)](https://daisy.audio/products/seed3)
 [![Standard: C++14](https://img.shields.io/badge/C%2B%2B-14-00599c.svg)](#requirements)
 
-[Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) is an open-source reverb built "for emulating huge, endless spaces
-and modulated echoes" and released as a VST plugin under the MIT license. This
-library ports its C++ kernel to single precision and wraps it in an engine for
-the [Daisy Seed](https://daisy.audio/products/seed3) (STM32H750) that runs the plugin's programs **at their full
-size**: all twelve delay lines of the largest program, with per-block CPU
-measurement and overload recovery. The performance figures below are from an
-earlier reference firmware; the current library still needs a hardware capture.
+Cloud Seed is an MIT-licensed VST plugin built "for emulating huge, endless
+spaces and modulated echoes". This library ports its C++ kernel to single
+precision and wraps it in an engine for the Seed's STM32H750, which runs the
+plugin's programs at their full size: all twelve delay lines of the largest one,
+with per-block CPU measurement and recovery when a block runs over.
 
-It ships the plugin's **nine factory programs** and the built-in program of its
-successor, [Ghost Note Audio](https://ghostnoteaudio.uk/)'s Cloud Seed 2, from
-its MIT-licensed
-[core](https://github.com/GhostNoteAudio/CloudSeedCore).
+Ten programs ship with it. Nine are Cloud Seed's own factory presets; the tenth,
+Dark Plate, comes from the MIT-licensed
+[core](https://github.com/GhostNoteAudio/CloudSeedCore) of its successor, [Ghost
+Note Audio](https://ghostnoteaudio.uk/)'s Cloud Seed 2.
 
-📘 **[TECHNICAL.md](TECHNICAL.md)** is the engineering reference: the
-architecture, the numerical decisions, the optimization history with its
-measurements, the verification, every defect found and corrected, and the
-lessons worth keeping.
+A project picks it up by including `cloudseed.mk` where it used to include
+libDaisy's core Makefile. DaisySP is not needed.
 
-## ✨ Highlights
+**The performance figures below come from an older firmware image.** The current
+library is verified on a desktop host and has not run on a Seed yet;
+[`docs/release-acceptance.md`](docs/release-acceptance.md) is the checklist that
+closes that gap, because CI can build this firmware but cannot run it.
 
-- **Ten programs.** Cloud Seed's nine factory presets plus Cloud Seed 2's
-  Dark Plate.
-- **Twelve-line capacity.** Earlier hardware captures ran the largest program
-  at its full line count. The engine reduces that count if a block exceeds budget.
-- **Bit-identical paths.** Staged and direct processing agree bit for bit, and
-  sit 82 to 147 dB below the plugin's own kernel with modulation off.
-- **Self-protecting.** Every block is measured; a block over budget stops the
-  program, reloads it one delay line lighter, and fades the wet signal back in.
-- **Three-line build integration.** Point a libDaisy Makefile at
-  `cloudseed.mk`; DaisySP is not needed.
-- **Testable on a desktop.** The DSP kernel is platform-neutral and compiles on
-  a C++14 host; the suites run in CI.
+[TECHNICAL.md](TECHNICAL.md) is the engineering reference: the architecture, the
+numerical decisions, the optimization history with its measurements, the
+verification, and every defect found and corrected along the way.
 
 ## 🎧 Hear it
 
-Every clip plays the same dry phrase — a strummed guitar chord, a snare, a piano
-note left ringing — and then that phrase through one program. One gain is
+Every clip plays the same dry phrase, a strummed guitar chord, a snare and a
+piano note left ringing, then that phrase through one program. One gain is
 applied to all ten, so a program that is louder than another sounds louder here
-too, and the programs run at their own dry/wet balance.
+too, and each runs at its own dry/wet balance.
 
 **Chorus Delay.** Twelve lines used as modulated echoes rather than as a room.
 
@@ -59,7 +50,7 @@ https://github.com/user-attachments/assets/058be392-9ca3-4e4f-8664-725a7e5d4507
 
 https://github.com/user-attachments/assets/12d6ba9e-c94d-4374-8ac6-474f61f2979b
 
-**Medium Space.** Three lines, a two-second tail — the everyday room.
+**Medium Space.** Three lines, a two-second tail, the everyday room.
 
 https://github.com/user-attachments/assets/9cf6fa96-1c63-4339-9804-9893a17e9734
 
@@ -67,8 +58,8 @@ https://github.com/user-attachments/assets/9cf6fa96-1c63-4339-9804-9893a17e9734
 
 https://github.com/user-attachments/assets/18685d83-567d-4f5c-9182-3d9e9445b6f1
 
-**Hyperplane.** Nine lines and twenty-two seconds, the widest of the nine factory
-programs.
+**Hyperplane.** Nine lines and twenty-two seconds, the widest of the nine
+factory programs.
 
 https://github.com/user-attachments/assets/781e48a0-3076-4c11-8cc1-859831ceda39
 
@@ -76,8 +67,8 @@ https://github.com/user-attachments/assets/781e48a0-3076-4c11-8cc1-859831ceda39
 
 https://github.com/user-attachments/assets/01ae1c47-2390-4872-a9eb-b4f5a7e8134e
 
-**Through the Looking Glass.** Twelve lines and twenty-six seconds of tail: the largest program, and
-the one the CPU budget was built for.
+**Through the Looking Glass.** Twelve lines and twenty-six seconds of tail. The
+largest program, and the one the CPU budget was built for.
 
 https://github.com/user-attachments/assets/b8815225-e07d-4579-9295-8e0e1b878c90
 
@@ -89,48 +80,31 @@ https://github.com/user-attachments/assets/21e2f431-b878-40fd-b97c-7b5d29611bb7
 
 https://github.com/user-attachments/assets/7cc55168-2b4a-4b64-9559-0f159aba8b85
 
-**Dark Plate.** Twelve lines, fourteen seconds — the program from Cloud Seed 2.
+**Dark Plate.** Twelve lines, fourteen seconds, the program from Cloud Seed 2.
 
 https://github.com/user-attachments/assets/e8208ab8-9eb2-41cf-bf61-d0b1e594856c
 
 </details>
 
-[`demo/`](demo/) holds the renderer, the CC0 sources and the script that builds
-every clip: [`demo/make_demos.sh`](demo/make_demos.sh).
-
-## 📖 Table of contents
-
-- [Hear it](#-hear-it)
-- [Quick start](#-quick-start)
-  - [Requirements](#requirements)
-  - [Add the library](#add-the-library)
-  - [Write the firmware](#write-the-firmware)
-  - [Build and flash](#build-and-flash)
-- [How it works](#-how-it-works)
-- [Repository layout](#-repository-layout)
-- [The engine](#-the-engine)
-  - [The Seed's system settings](#the-seeds-system-settings)
-- [Build options](#-build-options)
-- [Memory and flash](#-memory-and-flash)
-- [Performance](#-performance)
-  - [Measuring the load](#measuring-the-load)
-- [The kernel without the engine](#-the-kernel-without-the-engine)
-- [Versioning](#-versioning)
-- [Tests](#-tests)
-- [Reference application](#-reference-application)
-- [References](#-references)
-- [License and credits](#-license-and-credits)
+[`demo/`](demo/) holds the renderer, the CC0 sources and
+[`demo/make_demos.sh`](demo/make_demos.sh), the script that builds every clip.
 
 ## 🚀 Quick start
 
 ### Requirements
 
-| Requirement | Detail |
-|---|---|
-| 🎛️ **Hardware** | A [Daisy Seed](https://daisy.audio/products/seed3) (any revision) with its 64 MB SDRAM. The 480 MHz clock needs an STM32H750 of silicon revision V or X, which the library detects. |
-| 📚 **libDaisy** | [libDaisy](https://github.com/electro-smith/libDaisy), built. Developed against revision `cc146d5065dd8286078a662e2830bf820c37a612`; the tests read its `CpuLoadMeter` and STM32 headers from whatever checkout `LIBDAISY_DIR` names. |
-| 🔨 **Toolchain** | The [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (built and tested with GCC 12.2 and 16.2) and GNU make. A C++14 compiler for the host tests. **[DaisySP](https://github.com/electro-smith/DaisySP) is not needed.** |
-| 🎚️ **Audio** | A block size of 48 samples, or a divisor or multiple of it (see `Engine::Config`). |
+- A [Daisy Seed](https://daisy.audio/products/seed3), any revision, with its 64
+  MB SDRAM. The 480 MHz clock needs an STM32H750 of silicon revision V or X,
+  which the library detects.
+- A built [libDaisy](https://github.com/electro-smith/libDaisy). Developed
+  against revision `cc146d5065dd8286078a662e2830bf820c37a612`; the tests read
+  its `CpuLoadMeter` and STM32 headers from whatever `LIBDAISY_DIR` names.
+- The [Arm GNU
+  toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
+  and GNU make. Built and tested with GCC 12.2 and 16.2. The host tests need any
+  C++14 compiler.
+- An audio block size of 48 samples, or a divisor or multiple of it (see
+  `Engine::Config`).
 
 ### Add the library
 
@@ -141,13 +115,10 @@ git submodule add https://github.com/benjaminvdb/cloudseed-daisy lib/cloudseed-d
 git -C lib/cloudseed-daisy checkout v0.1.0   # a release, not the branch tip
 ```
 
-Pin it to a [release](https://github.com/benjaminvdb/cloudseed-daisy/releases)
-rather than tracking `main`, and commit the submodule pointer: that is what
-makes a firmware's build reproducible. See [Versioning](#-versioning).
-
-A project's Makefile names its own sources and libDaisy, sets the options it
-wants, and includes `cloudseed.mk` — which adds the library's sources, include
-path and flags, and then includes libDaisy's core Makefile:
+A project's Makefile names its own sources and libDaisy, sets whatever [build
+options](#-build-options) it wants, and includes `cloudseed.mk`, which adds the
+library's sources, include path and flags before including libDaisy's core
+Makefile:
 
 ```make
 TARGET = myreverb
@@ -160,9 +131,9 @@ include lib/cloudseed-daisy/cloudseed.mk
 ### Write the firmware
 
 The firmware hands the engine its programs and its audio configuration, calls it
-from the audio callback, and services it from the main loop. This is the whole
-contract; [`examples/seed/main.cpp`](examples/seed/main.cpp) is the complete
-version:
+from the audio callback, and services it from the main loop. That is the whole
+contract. [`examples/seed/main.cpp`](examples/seed/main.cpp) is the complete
+version of what follows:
 
 ```cpp
 #include "cloudseed_daisy/engine.h"
@@ -223,137 +194,95 @@ int main() {
 make -C examples/seed LIBDAISY_DIR=/path/to/libDaisy
 ```
 
-Flash `examples/seed/build/cloudseed_seed.bin` with the
-[Daisy Web Programmer](https://electro-smith.github.io/Programmer/) or with
-`make program-dfu`.
+Flash `examples/seed/build/cloudseed_seed.bin` with the [Daisy Web
+Programmer](https://electro-smith.github.io/Programmer/) or with `make
+program-dfu`.
 
 ## 🧠 How it works
 
 The delay memory of a twelve-line program is far larger than the Seed's 16 KB
-data cache, and on a bare port the memory system — not the arithmetic — sets the
-cost. The library gets the plugin's largest program under the audio deadline
-with three mechanisms, **all of them transparent to the application**:
+data cache. On a bare port the memory system, not the arithmetic, sets the cost.
+Three mechanisms get the plugin's largest program under the audio deadline, and
+an application sees none of them:
 
 1. **Per-program placement.** Every program's delay buffers are sized for that
-   program and placed in the internal SRAM (448 KB of AXI SRAM and 232 KB of
-   D2 SRAM by default); what does not fit stays in the SDRAM.
+   program and placed in the internal SRAM (448 KB of AXI SRAM and 232 KB of D2
+   SRAM by default). What does not fit stays in the SDRAM.
 2. **Staging in the tightly coupled memories.** For every delay ring the program
    processes, the STM32H750's MDMA copies the window the next block will read
-   into the ITCM and DTCM and copies the block's writes back, streamed through
-   the audio callback — so the kernels run from zero-wait-state memory without
-   wrap checks or cache lines.
-3. **Recovery.** The engine measures every block. A block over the CPU budget
-   stops the program, the main loop reloads it with one delay line fewer, and
-   the wet signal fades back in; a transport fault falls back to the CPU paths.
-   The application only ever sees a `bool` telling it whether the wet signal is
-   valid.
+   into the ITCM and DTCM, then copies the block's writes back, streamed through
+   the audio callback. The kernels run from zero-wait-state memory without wrap
+   checks or cache lines.
+3. **Recovery.** Every block is measured. A block over the CPU budget stops the
+   program; the main loop reloads it one delay line lighter and the wet signal
+   fades back in. A transport fault falls back to the CPU paths. The engine
+   remembers, per program and until reset, the line count at which a program
+   last went over, so revisiting a heavy program does not retry a workload that
+   already failed.
 
-Around that:
-
-- **Fidelity.** The plugin's arithmetic is kept expression for expression, so
-  output is bit-identical between the staged and the direct paths, and within
-  82 to 147 dB of the plugin's own kernel with modulation off.
-- **Playability.** A freeze, and smooth parameter changes.
-- **Observability.** A profiling build reports the load of every section of the
-  callback over USB serial, with the image's CRC-32 so that a log names its
-  build.
-
-## 📁 Repository layout
-
-| Path | Contents |
-|---|---|
-| [`src/cloudseed/`](src/cloudseed/) | The reverb kernel: a platform-neutral port of Cloud Seed's DSP (`ReverbController`), the staging manager (`Staging`), and the programs (`presets.h`). Compiles on any host. |
-| [`src/cloudseed_daisy/`](src/cloudseed_daisy/) | The Daisy Seed layer: the engine (`engine.h`), the MDMA transport, the Seed's system settings (`seed_system.h`). |
-| [`cloudseed.mk`](cloudseed.mk) | The make integration for libDaisy projects. |
-| [`examples/seed/`](examples/seed/) | Cloud Seed on a bare Daisy Seed: the smallest complete firmware. |
-| [`demo/`](demo/) | The demo clips in the README, the renderer that makes them and their CC0 sources. |
-| [`test/`](test/) | The host test suites (see [Tests](#-tests)). |
+The plugin's arithmetic is kept expression for expression through all of this,
+so the staged and direct paths agree bit for bit and both sit 82 to 147 dB below
+the plugin's own kernel with modulation off. Parameter changes are smoothed,
+freeze is supported, and a profiling build reports the load of every section of
+the callback over USB serial.
 
 ## 🧩 The engine
 
-`cloudseed_daisy::Engine`
-([`src/cloudseed_daisy/engine.h`](src/cloudseed_daisy/engine.h)) owns:
+`cloudseed_daisy::Engine` ([`engine.h`](src/cloudseed_daisy/engine.h)) owns the
+reverb and its delay memory, the staging and its transport, the loading of
+programs outside the audio interrupt, and the recovery from overload and
+transport faults.
 
-- the reverb and its delay memory in every memory of the STM32H750,
-- the staging and its transport,
-- the loading of programs outside the audio interrupt,
-- the recovery from overload and transport faults.
+The callback and the main loop share the reverb through one lock-free state. The
+callback owns it while it runs, main owns it while it loads or recovers, and the
+wet signal fades out before a handover and back in afterwards.
 
-The callback and the main loop share the reverb through **one lock-free state**:
-the callback owns it while it runs, main owns it while it loads or recovers, and
-the callback fades the wet signal out before handing over and back in
-afterwards. The engine's header documents every call; this is the shape.
+A callback calls `BeginBlock()` first and `EndBlock()` last. In between it can
+call `RequestProgram()`, `SetParameter()` and `SetFrozen()`, and it calls
+`Process()` to render the wet signal. `Process()` returns false while main owns
+the reverb, which is the application's cue to pass the dry signal through alone.
+The main loop calls `Service()` to do the loading and the recovery, and
+`overloaded()` is what an LED should show. `engine.h` documents every call,
+which parameters `SetParameter()` accepts live, and what `Init()` rejects.
 
-| Call | Context | What it does |
-|---|---|---|
-| `Init(config)` | main, once | The delay memory, the reverb, the staging, the load meter. False for invalid configuration or insufficient delay memory. |
-| `Start(program)` | main, before the audio | Loads the first program. |
-| `BeginBlock()` | callback, first | Starts the block's load measurement and profiling. |
-| `RequestProgram(i)` | callback, every block | Selects the program; a change fades out, main loads, fades in. |
-| `SetParameter(p, value, threshold)` | callback | A supported live control (listed below), applied when the callback owns the reverb and the value moved by more than the threshold; false for invalid values or controls that require reloading. |
-| `SetFrozen(bool)` | callback | Freezes the late reverb: unity feedback, damping bypassed, no new input. |
-| `Process(in_l, in_r, wet_l, wet_r, size)` | callback | Renders the wet signal with the program fade applied; false while a program is loaded or recovered, when the application passes the dry signal alone. Also rejects a size different from the configured block size. |
-| `EndBlock()` | callback, last | Ends the measurement; decides an overload. |
-| `Service()` | main loop | Loads requested programs, reduces overloaded ones, recovers from faults. |
-| `state()`, `program()`, `line_count()`, `line_limit(i)`, `frozen()`, `overloaded()` | any | Status; `overloaded()` is what an LED should show. |
-| `reverb()` | main, inside the load hook | The `ReverbController`, for parameters the application fixes after every load (`Config::on_program_loaded`). |
+Two things are easy to get wrong:
 
-A `Program` is a preset and the late delay lines per channel it runs with. The
-engine remembers, per program and until reset, the line count at which the
-program last exceeded the budget, so revisiting a heavy program does not retry a
-workload that failed.
-
-Use one `Engine` per application: its DSP, pools and transport are shared static
-storage. Configure a finite, positive, whole-number sample rate no higher than
-`CLOUDSEED_SAMPLE_RATE`; the callback block must be a divisor or multiple of 48
-and remain equal to `Config::block_size`. Fade duration must be finite and
-nonnegative, with a step large enough to change a float gain; zero disables the
-fade. CPU budget must be finite and in `(0, 1]`. Program pointers and names must
-be non-null, and every preset value must be finite and in `[0, 1]`.
-
-Live `SetParameter` supports `InputMix`, `HighPass`, `LowPass`,
-`DiffusionFeedback`, `LineDecay`, `LateDiffusionFeedback`, the five `Post*` tone
-parameters, the four output gains, and the five filter-enable switches. Other
-parameters return false: delay lengths, taps (including `TapGain`), stage/line
-counts, diffusion enable switches, modulation, seeds, `LateStageTap`, and
-`Interpolation` require a preset or `on_program_loaded` hook. The hook runs
-before placement and staging, so it can safely change those parameters.
-Invalid values and negative or non-finite thresholds also return false.
-
-**Place the engine and the callback's buffers in the DTCM**
-(`CLOUDSEED_DAISY_DTCM`): it is neither cached nor subject to wait states, and
-the delay-memory streams evict everything else from the data cache. libDaisy's
-start-up code does not clear that section; the engine does, before any object
-placed there is constructed.
+- Use one `Engine` per application. Its DSP, pools and transport are shared
+  static storage.
+- Place the engine and the callback's buffers in the DTCM
+  (`CLOUDSEED_DAISY_DTCM`). It is neither cached nor subject to wait states, and
+  the delay-memory streams evict everything else from the data cache. libDaisy's
+  start-up code does not clear that section, so the engine clears it before any
+  object placed there is constructed.
 
 ### The Seed's system settings
 
-[`src/cloudseed_daisy/seed_system.h`](src/cloudseed_daisy/seed_system.h) holds
-the settings the engine's performance
-was measured with, as functions an application calls after `DaisySeed::Init()`.
-**None of them is specific to the reverb.**
+[`seed_system.h`](src/cloudseed_daisy/seed_system.h) holds the settings the
+performance above was measured with, as functions to call after
+`DaisySeed::Init()`. None of them is specific to the reverb.
 
-- **`SupportsBoost()`** — whether the silicon takes the 480 MHz clock (revision
-  V or X of the STM32H750; ST's errata ES0392 limits older revisions to
-  400 MHz), for `DaisySeed::Init(boost)`.
-- **`ConfigureSdramRefresh()`** — libDaisy's driver refreshes the Seed's
-  AS4C16M32MSA SDRAM 2.6 times too slowly for its datasheet (8192 rows per
-  64 ms at the 100 MHz SDRAM clock). This is a *retention risk for any firmware
-  that uses the SDRAM*, not a performance setting.
-- **`SetSdramTiming(datasheet)`** — the part's row and column timings, either
-  the datasheet's (test the memory afterwards, `Engine::TestDelayMemory()`) or
-  libDaisy's conservative ones with the two minima it cuts short corrected.
-- **`ConfigureSramNoWriteAllocate()`** — the internal SRAM as write-back without
-  write allocation, so that sample streams written once and read long after
-  leave through the store buffer instead of fetching their cache lines.
-- **`ConfigureSdramWriteAllocate()`** — the opposite policy for the SDRAM, for
-  firmwares whose SDRAM the CPU alone uses.
+- `SupportsBoost()` reports whether the silicon takes the 480 MHz clock
+  (revision V or X; ST's errata ES0392 limits older revisions to 400 MHz), for
+  `DaisySeed::Init(boost)`.
+- `ConfigureSdramRefresh()` fixes libDaisy's refresh rate for the Seed's
+  AS4C16M32MSA, which its driver refreshes 2.6 times too slowly for the
+  datasheet (8192 rows per 64 ms at the 100 MHz SDRAM clock). This is a
+  retention risk for any firmware that touches the SDRAM, not a performance
+  setting.
+- `SetSdramTiming(datasheet)` picks the part's row and column timings: the
+  datasheet's, in which case test the memory afterwards with
+  `Engine::TestDelayMemory()`, or libDaisy's conservative ones with the two
+  minima it cuts short corrected.
+- `ConfigureSramNoWriteAllocate()` makes the internal SRAM write-back without
+  write allocation, so sample streams written once and read long after leave
+  through the store buffer instead of fetching their cache lines.
+- `ConfigureSdramWriteAllocate()` does the opposite for the SDRAM, for firmwares
+  whose SDRAM the CPU alone uses.
 
 ## 🔧 Build options
 
-Set them in the project's Makefile **before** including `cloudseed.mk`, or on
-the make command line. A changed option rebuilds every object (the options are
-recorded in a build prerequisite).
+Set these in the project's Makefile before including `cloudseed.mk`, or on the
+make command line. A changed option rebuilds every object.
 
 | Option | Default | Effect |
 |---|---:|---|
@@ -369,15 +298,15 @@ recorded in a build prerequisite).
 | `CLOUDSEED_ENGINE_OPT` | `-O2` | Optimization of the engine object (the callback's side of the library). |
 | `CLOUDSEED_STRIP_USB_HOST` | 0 | Keep libDaisy's USB host stack out of the image (11 KB of flash) when the firmware does not use it. |
 
-`cloudseed.mk` compiles every object with `-ffp-contract=off`: the port's
-arithmetic is unfused to match the host-built reference bit for bit, and on the
-Cortex-M7 unfused is faster too (TECHNICAL.md, "Numerical decisions").
+Every object compiles with `-ffp-contract=off`. The port's arithmetic is unfused
+to match the host-built reference bit for bit, and on the Cortex-M7 unfused
+turns out to be faster anyway (TECHNICAL.md, "Numerical decisions").
 
 ## 💾 Memory and flash
 
-Static, from clean builds with ARM GCC 16.2.0 at the defaults, for the bare Seed
-example and the reference firmware (which adds its own controls, mixing and, in
-the profiling build, logging).
+Static figures from clean builds with ARM GCC 16.2.0 at the defaults, for the
+bare Seed example and for the reference firmware, which adds its own controls,
+mixing and, in the profiling build, logging.
 
 | Resource | Example | Reference default | Reference profiling | Capacity | Fullest |
 |---|---:|---:|---:|---:|---:|
@@ -387,137 +316,125 @@ the profiling build, logging).
 | D2 SRAM | 293,952 B | 294,272 B | 294,272 B | 294,912 B | 99.8% |
 | SDRAM | 15,974,400 B | 15,974,400 B | 15,974,400 B | 67,108,864 B | 23.8% |
 
-**Fullest** is the largest of the three builds — always the profiling one —
-against the capacity beside it.
+"Fullest" is the largest of the three builds, always the profiling one, against
+the capacity beside it. The DTCM figure covers the engine's objects and the
+staging memory; the stack takes the remaining 25 KB, of which the profiling
+build measured 15 KB never used, so the 19% left over is spoken for rather than
+spare. The ITCM is entirely staging memory, placed by address, so the linker
+reports it as empty. The SDRAM holds the worst-case delay memory of every
+program at `CLOUDSEED_MAX_LINES`.
 
-CI measures the example separately with Arm GNU Toolchain **15.3.Rel1**:
-110,392 B of flash by default and 112,320 B with `CLOUDSEED_PROFILE=1`.
-Its RAM figures match the example above, except profiling uses 106,744 B of
-DTCM. [`test/size_budget.txt`](test/size_budget.txt) records those builds'
-ceilings with 4 KB of flash headroom and 512 B per internal RAM region.
-The bare example's profiling build enables counters; it needs the logging
-integration in [release acceptance](docs/release-acceptance.md) to print them.
-
-- The **DTCM** figure is the engine's objects and the staging memory; the stack
-  takes the rest of the DTCM (25 KB, of which the profiling build measured
-  16 KB never used), so the 19% left is spoken for, not spare.
-- The **ITCM** is entirely staging memory, placed by address, so the linker
-  reports it as empty.
-- The **SDRAM** holds the worst-case delay memory of every program at
-  `CLOUDSEED_MAX_LINES`.
+CI measures the example separately with Arm GNU Toolchain 15.3.Rel1: 110,392 B
+of flash by default, 112,320 B with `CLOUDSEED_PROFILE=1`, RAM as above except
+for 106,744 B of DTCM when profiling.
+[`test/size_budget.txt`](test/size_budget.txt) records those ceilings, with 4 KB
+of flash headroom and 512 B per internal RAM region.
 
 ## 📊 Performance
 
-Historical measurements from reference image `623fe82a`, at **480 MHz, 48 kHz,
-48-sample blocks**, over 125 one-second reports with no overload. The line
-counts are the programs' own. TECHNICAL.md, "Measured performance", has the
-breakdown per section. These observed peaks are not a worst-case timing bound.
-The current code, including the corrected floating-point build flag, needs a
-fresh hardware capture before these figures can be attributed to it —
-[`docs/release-acceptance.md`](docs/release-acceptance.md) is the checklist a
-release is measured with, since CI can build this firmware but not run it.
+Measured on reference image `59d22c54` at 480 MHz, 48 kHz and 48-sample blocks,
+over the one-second reports in which the program ran unfrozen and its
+configuration did not change: 200 of them, no overload, no staging failure and
+no MDMA error. The line counts are the programs' own. These are observed peaks,
+not a worst-case timing bound. TECHNICAL.md, "Measured performance", has the
+breakdown per section and the number of reports behind each row.
 
 | Program | Lines | Mean load | Peak block |
 |---|---:|---:|---:|
-| Small Room | 3 | 20.1% | 21.6% |
-| Medium Space | 3 | 23.7% | 25.0% |
-| Noise in the Hallway | 8 | 20.1% | 21.2% |
-| Hyperplane | 9 | 56.2% | 59.3% |
-| Rubi-Ka Fields | 4 | 27.7% | 29.1% |
-| Through the Looking Glass | 12 | 80.9% | 84.1% |
-| The 90s Are Back | 9 | 22.7% | 24.3% |
-| Dull Echoes | 12 | 27.3% | 28.8% |
-| Chorus Delay | 12 | 44.0% | 46.0% |
-| Dark Plate | 12 | *not yet measured* | |
+| Small Room | 3 | 19.6% | 21.0% |
+| Medium Space | 3 | 23.2% | 24.6% |
+| Noise in the Hallway | 8 | 19.2% | 21.3% |
+| Hyperplane | 9 | 55.0% | 58.2% |
+| Rubi-Ka Fields | 4 | 27.2% | 28.5% |
+| Through the Looking Glass | 12 | 77.8% | 80.1% |
+| The 90s Are Back | 9 | 21.5% | 23.1% |
+| Dull Echoes | 12 | 25.6% | 27.2% |
+| Chorus Delay | 12 | 42.5% | 44.3% |
+| Dark Plate | 12 | 46.1% | 48.1% |
 
-### Measuring the load
+A program draws a few points less while frozen, since the damping filters are
+bypassed: Dark Plate holds 46.1% running and 40.7% frozen. Nine of the ten
+peaks fall in an interval where a pot was moving and the delay lines were being
+recomputed; Through the Looking Glass reaches its peak without one.
+These figures replace a capture of image `623fe82a`, which predated the tenth
+program and the corrected floating-point build flag and read half a point to
+three points higher.
 
 A profiling build (`CLOUDSEED_PROFILE=1`) counts the cycles of every section of
 the callback with the Cortex-M7's cycle counter and hands the application one
-report per second, which it prints through any sink (`Engine::PrintBuild`,
-`PrintProgramIfChanged`, `PrintReport`; the reference firmware prints over
-libDaisy's USB serial logger).
-
-<details>
-<summary><b>A report, and how to read it</b></summary>
-
-```
-program 5 "Through the Looking Glass" lines=12 limit=12 early=8 late=8 taps=50 predelay=0 image=1588b43c
-  mod=eld interp=1 filters=-l--c latetap=1 streams=222 sdram=48 placed=447+232KB unplaced=36 clock=480MHz
-  staging=mdma staged=234 unstaged=2 taps=98 copies<=894 tcm=76/87KB itcm=ok
-load program=5 lines=12 mixed=0 avg=80.9% max=82.6% | input=0.6 predelay=0.7 taps=3.6 early=3.0 linemix=2.2 linedelay=4.8 linediff=36.5 linefilt=3.5 out=1.8 ctrl=0.1 param=0.0 clip=1.3 stage=13.3 wait=8.6 other=0.3 | freeze=0 updates=0 overloads=0 blocks=1000/1000
-controls=607 722 1 22 1 999 1 999 1 722
-staging copies=564 failures=0 stack_free=16332 segments=406888 mdma_errors=0 mdma_status=0x0 mdma_maxpolls=3208 list=712/726 us timed=1000 late=2714 stale=1000
-```
-
-| Line | What it carries |
-|---|---|
-| `program` | The loaded program's workload — stages, taps, filters, delay-memory streams, where its memory was placed, what the staging serves — and the image's CRC-32, which `make` prints at the end of every build. |
-| `load` | The callback's load (`avg` and the worst block, as the overload guard sees it) and the share of the block time of every section, as a percentage of a second's block time. |
-| `controls` | The values the application handed in with `SetProfileControls()`. |
-| `staging` | The transport's copies per block, its faults, the stack never used, and the MDMA's segments, errors and list timings. |
-
+report per second to print through any sink (`Engine::PrintBuild`,
+`PrintProgramIfChanged`, `PrintReport`). Each report carries the image's CRC-32,
+which `make` prints at the end of every build, so a log names its own firmware.
 TECHNICAL.md explains every field.
-
-</details>
 
 ## 📦 The kernel without the engine
 
 `cloudseed::ReverbController`
-([`src/cloudseed/reverb_controller.h`](src/cloudseed/reverb_controller.h)) is
-the reverb
-itself:
-
-- parameters as the plugin's normalized 0..1 values (`Parameter`, `presets.h`),
-- stereo processing in blocks of up to 48 samples,
-- freeze,
-- placement of its delay memory in caller-provided pools.
-
-It takes its delay memory from a `MemoryPool` the caller fills, has **no
-dependency on libDaisy**, and compiles and runs on a desktop host — which is how
+([`reverb_controller.h`](src/cloudseed/reverb_controller.h)) is the reverb by
+itself: parameters as the plugin's normalized 0..1 values, stereo processing in
+blocks of up to 48 samples, freeze, and placement of its delay memory in
+caller-provided pools. It takes that memory from a `MemoryPool` the caller
+fills, has no dependency on libDaisy, and runs on a desktop host, which is how
 its tests work.
 
-`Staging` ([`src/cloudseed/staging.h`](src/cloudseed/staging.h)) is the staging
-manager, a template on a
-transport type, so that another STM32H7 board or another DMA can supply its own;
-[`test/queued_transport.h`](test/queued_transport.h) is the smallest one.
+`Staging` ([`staging.h`](src/cloudseed/staging.h)) is the staging manager. It is
+a template on a transport type, so another STM32H7 board or another DMA can
+supply its own; [`test/queued_transport.h`](test/queued_transport.h) is the
+smallest one there is.
+
+## 🧪 Tests
+
+The host suites need a C++14 compiler, Python 3, GNU make and git.
+[`test/all.sh`](test/all.sh) runs them all; pass a CloudSeed checkout to include
+the fidelity suite. The [GitHub workflow](.github/workflows/test.yml) runs the
+suites and builds the example on every push.
+
+Between them the suites hold the DSP and the staging to bit-identical output
+between the staged and direct paths, under ASan and UBSan, across block sizes,
+wraps, partial and failed staging, freezes, reloads and every program. The
+engine's overload detection and recovery are tested against libDaisy's own
+`CpuLoadMeter` on a deterministic clock, the MDMA transport at register level
+against a stub channel, and the port's `sin()` and `cos()` against fdlibm over
+8,024,008 values, all identical. One suite builds the quick start above as a
+real submodule consumer, so drift between this page and the library fails
+loudly; another, given a CloudSeed checkout, compares the whole kernel against
+the plugin's own.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) lists each suite, what it needs and what a
+change to the arithmetic has to respect. [SECURITY.md](SECURITY.md) covers
+reporting a vulnerability.
+
+[`test/inventory.cpp`](test/inventory.cpp) is not a test but is useful anyway:
+it prints every program's delay buffers, their placement and the staging plan.
+
+```sh
+g++ -O2 -ffp-contract=off -std=c++14 -I src test/inventory.cpp src/cloudseed/*.cpp
+```
 
 ## 🏷️ Versioning
 
-**This library is at 0.x.** It is complete and tested, but the interface is
-not frozen: it is out early so that people building on Daisy can put it in a
-real firmware and say what is wrong with it. A 0.x minor release may rename or
-change a call, and [CHANGELOG.md](CHANGELOG.md) says when one does. 1.0.0
-follows once that feedback has landed, and freezes the interface under the
-rules below. If that is not a trade you want, pin a tag and upgrade
-deliberately — which is the advice either way.
+The library is at **0.x**: complete and tested, but not frozen. It is out early
+so that people building on Daisy can put it in real firmware and say what is
+wrong with it, and a 0.x minor release may rename or change a call to act on
+that. [CHANGELOG.md](CHANGELOG.md) says when one does, and 1.0.0 follows once
+that feedback has landed.
 
-[Semantic versioning](https://semver.org/spec/v2.0.0.html), over the
-**documented interface**: the engine
-([`engine.h`](src/cloudseed_daisy/engine.h)), the reverb
-([`reverb_controller.h`](src/cloudseed/reverb_controller.h)), the programs
-([`presets.h`](src/cloudseed/presets.h)), the system settings
-([`seed_system.h`](src/cloudseed_daisy/seed_system.h)) and the build options
-`cloudseed.mk` accepts. Anything an application cannot reach — a private
-member, a detail of the staging, the layout of an internal buffer — is not
-covered.
+So pin a [release](https://github.com/benjaminvdb/cloudseed-daisy/releases)
+rather than tracking `main`, and commit the submodule pointer. That is what
+makes a firmware's build reproducible, and it is the right advice at 1.x too.
 
-| Release | May change |
-|---|---|
-| **Patch** (x.y.Z) | Defects, documentation, tests. Not the interface, and not the sound, unless the old sound was the defect. |
-| **Minor** (x.Y.0) | From 1.0.0 on: additions only — new calls, new options, new programs, new parameters accepted by `SetParameter` — and existing firmware keeps compiling and sounding the same. **Below 1.0.0 a minor release may also change or remove something**, with the change named in the changelog. |
-| **Major** (X.0.0) | Anything: a removed or renamed call, a changed signature or default, a removed build option, a raised minimum toolchain, a changed program. |
+From 1.0.0, [semantic versioning](https://semver.org/spec/v2.0.0.html) applies
+over the documented interface: [`engine.h`](src/cloudseed_daisy/engine.h),
+[`reverb_controller.h`](src/cloudseed/reverb_controller.h),
+[`presets.h`](src/cloudseed/presets.h),
+[`seed_system.h`](src/cloudseed_daisy/seed_system.h) and the build options
+`cloudseed.mk` accepts. Anything an application cannot reach, such as a private
+member or the layout of an internal buffer, is outside it, and so are the CPU
+and memory figures, which move with the compiler. It is a source promise rather
+than an ABI one; the library is compiled into your image.
 
-From 1.0.0 this is a **source** promise: a firmware that builds against 1.0.0
-builds against any later 1.x without edits. It is not an ABI promise — the library is
-compiled into your image, and there is nothing to link against separately.
-Measured CPU load and memory figures are not part of the interface either;
-they move with the compiler, and the README's tables say what they were
-measured with.
-
-The version is in
-[`src/cloudseed_daisy/version.h`](src/cloudseed_daisy/version.h), as macros,
-so a firmware that supports more than one release can ask:
+The version lives in [`version.h`](src/cloudseed_daisy/version.h) as macros, so
+firmware that supports more than one release can ask:
 
 ```cpp
 #include "cloudseed_daisy/version.h"
@@ -528,78 +445,58 @@ so a firmware that supports more than one release can ask:
 ```
 
 `engine.h` includes it, and the release workflow refuses a tag that disagrees
-with it. [CHANGELOG.md](CHANGELOG.md) records what each release changed.
+with it.
 
 Found something, or want something? [Open an
-issue](https://github.com/benjaminvdb/cloudseed-daisy/issues/new/choose) —
-while the library is at 0.x that feedback is what 1.0.0 is waiting on.
+issue](https://github.com/benjaminvdb/cloudseed-daisy/issues/new/choose). While
+the library is at 0.x that feedback is what 1.0.0 is waiting on, and
 [CONTRIBUTING.md](CONTRIBUTING.md) covers sending a change.
 
-## 🧪 Tests
+## 📁 Repository layout
 
-The host suites need a C++14 compiler, Python 3, GNU make and git;
-**[`test/all.sh`](test/all.sh) runs them
-all** (pass a CloudSeed checkout to include fidelity), and the [GitHub workflow](.github/workflows/test.yml) runs the suites
-and builds the example.
-
-| Suite | What it establishes |
-|---|---|
-| [`test/build.sh`](test/build.sh) | Expanded libDaisy compiler recipes retain the numerical flags across four build configurations. Needs `LIBDAISY_DIR`. |
-| [`test/render.py`](test/render.py) | WAV decoding, malformed files, CLI validation and output failures under ASan and UBSan. |
-| [`test/regression.sh`](test/regression.sh) | The DSP and the staging under ASan and UBSan: bit-identical output between staged and direct paths across block sizes, wraps, partial and failed staging, freezes and reloads; the filters and lower sample rates; invalid parameters; every program; both kernel families at 4 and 12 lines. |
-| [`test/engine.sh`](test/engine.sh) | The engine's callback and main-loop sides with the real DSP and libDaisy's `CpuLoadMeter` on a deterministic clock: overload detection and recovery, per-program limits, the selector handoff without main, transport failures and unfinished aborts, parameter thresholds and safety, configuration validation, geometry hooks, fixed callback sizes, the profiling mailbox. Needs `LIBDAISY_DIR`. |
-| [`test/mdma.sh`](test/mdma.sh) | The MDMA transport at register level against a stub channel: descriptors and links, timing paths, bounded aborts, the unexpectedly enabled channel. Needs `LIBDAISY_DIR`. |
-| [`test/trig.sh`](test/trig.sh) | The port's `sin()`/`cos()` against fdlibm: 8,024,008 values identical. |
-| [`test/run.sh`](test/run.sh) `path/to/CloudSeed` | Fidelity against the plugin's own kernel (a corrected copy of the checkout): 82 to 147 dB below the signal with modulation off. Needs a [CloudSeed](https://github.com/ValdemarOrn/CloudSeed) checkout and Python 3. |
-| [`test/benchmark.sh`](test/benchmark.sh) `[--stress]` | Desktop timings of the direct paths; `--stress` renders two minutes per program frozen and checks every output stays finite. |
-| [`test/release.py`](test/release.py) | Release metadata checks and regression cases for the consumer, memory budget and suite-runner scripts. No Arm compiler needed. |
-| [`test/consumer.sh`](test/consumer.sh) `[ref]` | A throwaway project adds this library as a submodule of a bare clone and builds the selected commit's README code blocks (default `HEAD`). Both documentation and sources must be committed; local edits are excluded. Needs `LIBDAISY_DIR` and the Arm toolchain. |
-| [`test/size.sh`](test/size.sh) `[--update]` | The example's flash and RAM, per region, against [`test/size_budget.txt`](test/size_budget.txt) — the margin before a region overflows, which matters because the defaults leave an application about 960 B of D2 SRAM. Needs `LIBDAISY_DIR` and the Arm toolchain. |
-
-[CONTRIBUTING.md](CONTRIBUTING.md) covers running them and what a change to
-the arithmetic has to respect; [SECURITY.md](SECURITY.md) covers reporting a
-vulnerability.
-
-[`test/inventory.cpp`](test/inventory.cpp) prints every program's delay
-buffers, their placement and
-the staging plan:
-
-```sh
-g++ -O2 -ffp-contract=off -std=c++14 -I src test/inventory.cpp src/cloudseed/*.cpp
-```
+- [`src/cloudseed/`](src/cloudseed/) is the reverb kernel: a platform-neutral
+  port of Cloud Seed's DSP (`ReverbController`), the staging manager (`Staging`)
+  and the programs (`presets.h`). Compiles on any host.
+- [`src/cloudseed_daisy/`](src/cloudseed_daisy/) is the Daisy Seed layer: the
+  engine, the MDMA transport, the Seed's system settings.
+- [`cloudseed.mk`](cloudseed.mk) is the make integration for libDaisy projects.
+- [`examples/seed/`](examples/seed/) is Cloud Seed on a bare Daisy Seed, the
+  smallest complete firmware.
+- [`demo/`](demo/) is the clips above, the renderer and their CC0 sources.
+- [`test/`](test/) is the host test suites.
 
 ## 🎹 Reference application
 
-This library took shape inside the [Löwenzahnhonig firmware](https://github.com/wgd-modular/loewenzahnhonig-firmware) and now lives on its
-own. That firmware's Cloud Seed build (`src/cloudseed` there) is the library's
-**reference application**: it maps a program selector, a mix, a decay and a
-tone pot and two CV inputs onto the engine, uses this library as a submodule,
-and is the firmware every measurement here was taken from — on its module. Its
-README describes the module.
+This library took shape inside the [Löwenzahnhonig
+firmware](https://github.com/wgd-modular/loewenzahnhonig-firmware) and now lives
+on its own. That firmware's Cloud Seed build is the library's reference
+application: it maps a program selector, a mix, a decay and a tone pot and two
+CV inputs onto the engine, uses this library as a submodule, and is the firmware
+every measurement here was taken from, on its module. Its README describes the
+module.
 
-## 📚 References
+## 📚 Further reading
 
-| Link | What it is |
-|---|---|
-| [Daisy Seed](https://daisy.audio/products/seed3) | The board: a Cortex-M7 at 480 MHz, 65 MB of SDRAM, 8 MB of flash. |
-| [Daisy documentation](https://docs.daisy.audio/) | Electrosmith's own [hardware](https://docs.daisy.audio/hardware/) and [software](https://docs.daisy.audio/software/) documentation. |
-| [libDaisy](https://github.com/electro-smith/libDaisy) | The hardware library this one builds on, and its [API reference](https://electro-smith.github.io/libDaisy/). |
-| [DaisyExamples](https://github.com/electro-smith/DaisyExamples) | Electrosmith's example firmwares, for the shape of a Daisy project. |
-| [Daisy Web Programmer](https://electro-smith.github.io/Programmer/) | Flashes a `.bin` over USB DFU from the browser. |
-| [Daisy forum](https://forum.electro-smith.com/) | Where Daisy questions get answered. |
-| [Cloud Seed](https://github.com/ValdemarOrn/CloudSeed) | Valdemar Erlingsson's original plugin: the reverb this library ports. |
-| [Cloud Seed 2 core](https://github.com/GhostNoteAudio/CloudSeedCore) | [Ghost Note Audio](https://ghostnoteaudio.uk/)'s successor, where the Dark Plate program comes from. |
-| [Arm GNU toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) | The compiler; Arm's [install guide](https://learn.arm.com/install-guides/gcc/arm-gnu) covers every host. |
-
-TECHNICAL.md's [Sources](TECHNICAL.md#sources) has the rest: ST's datasheet,
-reference manual and errata for the STM32H750, the SDRAM's datasheet, and the
-DSP and worst-case-timing references behind the design.
+- [Daisy documentation](https://docs.daisy.audio/), Electrosmith's own
+  [hardware](https://docs.daisy.audio/hardware/) and
+  [software](https://docs.daisy.audio/software/) pages, and the [Daisy
+  forum](https://forum.electro-smith.com/), where Daisy questions get answered.
+- [libDaisy](https://github.com/electro-smith/libDaisy) and its [API
+  reference](https://electro-smith.github.io/libDaisy/);
+  [DaisyExamples](https://github.com/electro-smith/DaisyExamples) for the shape
+  of a Daisy project.
+- [Cloud Seed](https://github.com/ValdemarOrn/CloudSeed), the original plugin,
+  and the [Cloud Seed 2 core](https://github.com/GhostNoteAudio/CloudSeedCore)
+  that Dark Plate comes from.
+- TECHNICAL.md's [Sources](TECHNICAL.md#sources) has the rest: ST's datasheet,
+  reference manual and errata for the STM32H750, the SDRAM's datasheet, and the
+  DSP and worst-case-timing references behind the design.
 
 ## 📄 License and credits
 
-MIT, see [LICENSE](LICENSE). The work by others this library contains is
-listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and the full texts
-are in [`src/cloudseed/license.txt`](src/cloudseed/license.txt).
+MIT, see [LICENSE](LICENSE). The work by others this library contains is listed
+in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and the full texts are in
+[`src/cloudseed/license.txt`](src/cloudseed/license.txt).
 
 | Component | Attribution |
 |---|---|
@@ -607,3 +504,20 @@ are in [`src/cloudseed/license.txt`](src/cloudseed/license.txt).
 | The Dark Plate program | Adapted from [Cloud Seed 2's core](https://github.com/GhostNoteAudio/CloudSeedCore), © 2024 Ghost Note Engineering Ltd, MIT License. |
 | SHA-256 | Olivier Gay, Modified BSD License. |
 | Trigonometry | fdlibm-derived; retains Sun Microsystems' notice. |
+
+## 🤖 On the use of AI
+
+I built this library with an AI coding assistant, heavily: the port, the engine,
+the tests and these documents all went through one. I directed the work, read
+the diffs and made the calls, and the result is mine to answer for.
+
+Saying so is worth little on its own, which is why the repository is arranged so
+that you need not take much on trust. The fidelity claim is a test you can run
+against Valdemar Erlingsson's own kernel. So is the bit-identical claim. The
+flash and RAM figures come out of a linker map and are checked in CI.
+TECHNICAL.md labels every quantitative claim as measured, host-verified, static,
+modeled or unmeasured, and the performance table above names the image it came
+from and says plainly that the current code has not run on hardware.
+
+If you find something wrong here, an issue is welcome, whoever or whatever wrote
+it.

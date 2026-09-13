@@ -1,19 +1,19 @@
 # Release acceptance
 
 CI builds this library's firmware but cannot run it: no hosted runner has a
-Daisy Seed, and what matters most here — SDRAM timing and refresh, the MDMA's
-contention with the CPU for the TCMs, the cache policies, the audio deadline —
-is exactly what a build cannot show and an emulator would only pretend to.
-Renode can map the SDRAM as a region; it cannot tell you that the part retains
-its rows or that a block met its deadline.
+Daisy Seed, and what matters most here (SDRAM timing and refresh, the MDMA's
+contention with the CPU for the TCMs, the cache policies, the audio deadline) is
+exactly what a build cannot show and an emulator would only pretend to. Renode
+can map the SDRAM as a region; it cannot tell you that the part retains its rows
+or that a block met its deadline.
 
 So the hardware evidence for a release is a checklist, run once on a board and
 recorded with the release. Copy the template below into the release notes, or
 into `docs/acceptance/vX.Y.Z.md`, with the figures filled in. An unfilled
-checklist is the honest outcome too — it says the release was not measured.
+checklist is the honest outcome too: it says the release was not measured.
 
-A profiling application can report most of these figures. Building the bare
-Seed example with this flag enables the counters:
+A profiling application can report most of these figures. Building the bare Seed
+example with this flag enables the counters:
 
 ```sh
 make -C examples/seed LIBDAISY_DIR=/path/to/libDaisy CLOUDSEED_PROFILE=1
@@ -28,11 +28,11 @@ application linked in the README, or instrument your application as follows:
 - After configuring SDRAM and before `engine.Init()`, call
   `Engine::TestDelayMemory()` and record its result. It overwrites the delay
   pool; calling it after initialization corrupts the reverb's memory.
-- After starting the engine, call `engine.PrintBuild(Print)` once. In the
-  main loop, call `engine.PrintProgramIfChanged(Print)` and take reports with
+- After starting the engine, call `engine.PrintBuild(Print)` once. In the main
+  loop, call `engine.PrintProgramIfChanged(Print)` and take reports with
   `cloudseed_daisy::ProfileReport report; if (engine.TakeReport(&report))
-  engine.PrintReport(report, Print);`. Keep these calls outside the callback
-  and inside `#if CLOUDSEED_PROFILE`.
+  engine.PrintReport(report, Print);`. Keep these calls outside the callback and
+  inside `#if CLOUDSEED_PROFILE`.
 
 The `image=` field is the profiling image's CRC-32, which `make` also prints.
 Record that image and its source changes: adding instrumentation changes the
@@ -40,15 +40,15 @@ binary, so its measurements do not identify the uninstrumented release asset.
 `TestDelayMemory()` checks immediate pattern readback; it does not by itself
 establish SDRAM retention over a refresh interval.
 
-Before publishing, also check that private vulnerability reporting is enabled
-in the repository settings: `SECURITY.md` links to that reporting form. The
+Before publishing, also check that private vulnerability reporting is enabled in
+the repository settings: `SECURITY.md` links to that reporting form. The
 workflow creates a draft release; it does not enable repository settings or
 perform hardware acceptance.
 
 ## Template
 
 ```markdown
-# Release acceptance — vX.Y.Z
+# Release acceptance: vX.Y.Z
 
 | | |
 |---|---|

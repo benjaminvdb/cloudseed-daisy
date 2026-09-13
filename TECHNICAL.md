@@ -19,15 +19,13 @@ Every quantitative claim below carries one of these labels.
 | **Modeled** | Calculated from an explicit model. Not an observation. |
 | **Unmeasured** | Believed, but with no evidence of either kind. Stated as such wherever it appears. |
 
-> **The current build has not run on hardware.** The most recent hardware
-> capture measures image `623fe82a`, which predates the tenth program and the
-> corrections made in the final audit. Everything under
-> [Measured performance](#measured-performance) describes that image. The
-> present code differs from it by one added program, three correctness fixes,
-> one kernel optimization, a linker change, the round-11 changes (the
-> transport inlined into the list builder, the one-pole filters without
-> floating-point compares) and the split into this library (the callback and
-> main-loop logic of the reference firmware became the engine), and is
+> **The current build has not run on hardware.** Everything under [Measured
+> performance](#measured-performance) describes image `59d22c54`, the ninth
+> capture, which covers all ten programs. It ran against this library at
+> `3c4a1e0`; the source has changed since only by a version header and the
+> notices, so the signal path and the engine it measured are the present ones.
+> The reference firmware around them has since gained the freeze make-up gain,
+> which adds a multiply per sample to its mix. Everything else here is
 > host-verified only.
 
 ## Contents
@@ -54,17 +52,17 @@ Every quantitative claim below carries one of these labels.
 
 ## Scope and reading order
 
-This is a reference document with explanatory sections, not a tutorial and not
-a how-to guide.[^diataxis] It records the system as it stands and the evidence
+This is a reference document with explanatory sections, not a tutorial and not a
+how-to guide.[^diataxis] It records the system as it stands and the evidence
 behind it. It deliberately does not record proposals that were never
 implemented, nor the intermediate state of any implementation that was later
 replaced.
 
 Read [The system](#the-system) and [Signal flow](#signal-flow) for what the
-firmware is. Read [Real-time architecture](#real-time-architecture) and
-[Memory architecture](#memory-architecture) before changing anything that runs
-in the audio callback. Read [Lessons learned](#lessons-learned) before
-optimizing anything.
+firmware is. Read [Real-time architecture](#real-time-architecture) and [Memory
+architecture](#memory-architecture) before changing anything that runs in the
+audio callback. Read [Lessons learned](#lessons-learned) before optimizing
+anything.
 
 ## The system
 
@@ -73,8 +71,8 @@ STM32H750IB: a Cortex-M7 with a double-precision floating point unit and 16 KB
 each of instruction and data cache.[^device] The reference application is the
 Löwenzahnhonig, a Eurorack module built on the Seed, whose firmware runs the
 core at 480 MHz where the silicon supports it, which is revision V or X only;
-older revisions lack the required operating point and stay at 400
-MHz.[^errata] Every measurement in this document was taken on that module.
+older revisions lack the required operating point and stay at 400 MHz.[^errata]
+Every measurement in this document was taken on that module.
 
 The audio runs in stereo at 48 kHz in blocks of 48 samples, so one callback
 period is 1 ms. That period is the deadline for everything the reverb does.
@@ -91,11 +89,11 @@ period is 1 ms. That period is the deadline for everything the reverb does.
 The reverb is a port of Cloud Seed, Valdemar Erlingsson's algorithmic reverb
 (MIT license), from the plugin's C++ sources.[^legacy] The kernel lives in
 `src/cloudseed/`; the engine in `src/cloudseed_daisy/` owns its memory, its
-staging and its recovery on the Seed; the reference firmware (`cloudseed.cpp`
-in the Löwenzahnhonig repository's `src/cloudseed`) maps the module's controls
-onto the engine. Ten programs ship: the plugin's nine factory programs, and
-one adapted from the MIT-licensed core of its successor, Ghost Note Audio's
-Cloud Seed 2.[^core]
+staging and its recovery on the Seed; the reference firmware (`cloudseed.cpp` in
+the Löwenzahnhonig repository's `src/cloudseed`) maps the module's controls onto
+the engine. Ten programs ship: the plugin's nine factory programs, and one
+adapted from the MIT-licensed core of its successor, Ghost Note Audio's Cloud
+Seed 2.[^core]
 
 | # | Program | Lines per channel | Character |
 |---:|---|---:|---|
@@ -111,18 +109,18 @@ Cloud Seed 2.[^core]
 | 9 | Dark Plate | 12 | Adapted from the successor: no early reflections, 4 interpolated stages per line, 4.8 s decay. |
 
 Line counts are the programs' own (the `Program` table the firmware hands the
-engine), capped by the build's `CLOUDSEED_MAX_LINES` and reducible at runtime
-by the overload guard.
+engine), capped by the build's `CLOUDSEED_MAX_LINES` and reducible at runtime by
+the overload guard.
 
-In the reference firmware, Pot 1 selects the program in ten zones of equal width, with a quarter-zone of
-hysteresis at each boundary so that a pot resting near a boundary does not flip.
-Pot 2 is an equal-power dry/wet crossfade, Pot 3 the decay time with CV 1 added,
-Pot 4 the cutoff of the low-pass filter in each line's feedback path. CV 2
-freezes the reverb, with separate on and off thresholds at 0.55 and 0.45. The
-LED is lit while frozen and flashes while the reverb is overloaded or bypassed.
-Pot readings are smoothed with a 20 ms slew; libDaisy's default of 2 ms
-computes a coefficient of exactly 1 at a 1 kHz callback rate, which is no
-smoothing at all.
+In the reference firmware, Pot 1 selects the program in ten zones of equal
+width, with a quarter-zone of hysteresis at each boundary so that a pot resting
+near a boundary does not flip. Pot 2 is an equal-power dry/wet crossfade, Pot 3
+the decay time with CV 1 added, Pot 4 the cutoff of the low-pass filter in each
+line's feedback path. CV 2 freezes the reverb, with separate on and off
+thresholds at 0.55 and 0.45. The LED is lit while frozen and flashes while the
+reverb is overloaded or bypassed. Pot readings are smoothed with a 20 ms slew;
+libDaisy's default of 2 ms computes a coefficient of exactly 1 at a 1 kHz
+callback rate, which is no smoothing at all.
 
 ## Signal flow
 
@@ -153,10 +151,10 @@ would change every preset's sound:
   *next* block, so a line's loop carries one block of extra latency. This is the
   plugin's block algorithm. `TestBlockFeedback` in the regression suite pins it
   with an independent impulse sequence.
-- **The decay definition.** A line's feedback coefficient is
-  `10^(-3 · delay / decay)` using the nominal, unrounded delay. The decay
-  control is therefore a definition, not a broadband RT60 guarantee once
-  diffusion, damping, modulation and the block feedback are included.
+- **The decay definition.** A line's feedback coefficient is `10^(-3 · delay /
+  decay)` using the nominal, unrounded delay. The decay control is therefore a
+  definition, not a broadband RT60 guarantee once diffusion, damping, modulation
+  and the block feedback are included.
 
 Freeze blocks new input and clears the input filters' state on entry, so notes
 played during a hold cannot enter the tail on release. What is already in the
@@ -169,38 +167,38 @@ exactly.[^interp][^allpass] Host-verified: a Medium Space tail held for 1.75 s
 loses 1.49 dB.
 
 Freeze also changes the wet level, by a step that is a property of the program
-and of the number of lines it runs. Muting the input removes the component
-every line carries in common: where `LateStageTap` puts the output tap before
-the delay, each line emits the same early-reflection signal at the same
-instant, so those copies add coherently, while `per_line_gain` is
-`1/sqrt(lines)` - the gain for copies that do not. Held, only each line's own
-recirculating tail is left, which is decorrelated between the lines and adds
-as their square root, so the level drops by up to `sqrt(lines)`. Late
-diffusion scrambles the common signal differently in each line, so the step
-shrinks as the stage count rises and is largest with the tap moved and no
-diffusion at all. Host-verified in the reference firmware's configuration: The
-90s Are Back (9 lines, tap moved, no late diffusion) loses 7.0 to 7.8 dB
-whatever it is fed; Dark Plate (12 lines, four stages) loses 3.8 dB on a
-filtered chord and 11.2 dB on white noise, most of that being the damping loss
-around its loop, which follows the source's spectrum. The eight programs that
-tap after the delay or run six to eight stages stay within a few decibels, and
-several come back slightly *louder*, since unity feedback without the damping
-filters keeps energy the running loop was shedding. A caller that wants the
-level to hold across the gate has to make the step up itself, per program and
-per line count; the reference firmware does so in `src/cloudseed/programs.h`.
+and of the number of lines it runs. Muting the input removes the component every
+line carries in common: where `LateStageTap` puts the output tap before the
+delay, each line emits the same early-reflection signal at the same instant, so
+those copies add coherently, while `per_line_gain` is `1/sqrt(lines)` - the gain
+for copies that do not. Held, only each line's own recirculating tail is left,
+which is decorrelated between the lines and adds as their square root, so the
+level drops by up to `sqrt(lines)`. Late diffusion scrambles the common signal
+differently in each line, so the step shrinks as the stage count rises and is
+largest with the tap moved and no diffusion at all. Host-verified in the
+reference firmware's configuration: The 90s Are Back (9 lines, tap moved, no
+late diffusion) loses 7.0 to 7.8 dB whatever it is fed; Dark Plate (12 lines,
+four stages) loses 3.8 dB on a filtered chord and 11.2 dB on white noise, most
+of that being the damping loss around its loop, which follows the source's
+spectrum. The eight programs that tap after the delay or run six to eight stages
+stay within a few decibels, and several come back slightly *louder*, since unity
+feedback without the damping filters keeps energy the running loop was shedding.
+A caller that wants the level to hold across the gate has to make the step up
+itself, per program and per line count; the reference firmware does so in
+`src/cloudseed/programs.h`.
 
 The reference firmware mixes the dry signal itself, so `DryOut` is forced to
 zero in the reverb after every load (the engine's load hook) and the tone pot
-always drives the feedback low-pass. Long decays can
-build the wet signal well past full scale, so it passes a soft clip before the
-mix; the dry path is untouched.
+always drives the feedback low-pass. Long decays can build the wet signal well
+past full scale, so it passes a soft clip before the mix; the dry path is
+untouched.
 
 ## Fidelity contract
 
 The port is compared against the plugin's own C++ kernel, corrected for
 portability and lifetime problems and for the same defects the port fixes
-(`test/prepare_reference.py`). The reference is therefore deliberately
-corrected legacy code, not an unmodified plugin binary.
+(`test/prepare_reference.py`). The reference is therefore deliberately corrected
+legacy code, not an unmodified plugin binary.
 
 | Condition | Result | Label |
 |---|---|---|
@@ -220,8 +218,8 @@ each of which is intentional:
   negative tail is no longer truncated. The high-pass also clears its internal
   accumulator when it settles.
 - `UpdateSeeds` refreshes every seeded setting, not only the delay lengths, so
-  modulation depth and rate no longer depend on the order in which a preset
-  sets its parameters.
+  modulation depth and rate no longer depend on the order in which a preset sets
+  its parameters.
 - Freeze clears the input filters on entry rather than after they have processed
   the blocked input.
 - Dark Plate's shelf gains are converted for the legacy filter's convention (see
@@ -271,14 +269,13 @@ own its destination memory, so main waits for it to stop before it reloads onto
 the CPU ring paths, and the fault never reduces the line count.
 
 **What the load figure includes.** `CpuLoadMeter` runs from
-`Engine::BeginBlock()` to `Engine::EndBlock()`, the first and last calls of
-the application's callback, so the application's control processing and
-mixing are inside the interval. libDaisy's `InternalCallback` converts the
-SAI's integers to floats before that point and back afterwards, so those
-conversions, the interrupt entry and exit, and any profiling overhead lie
-outside it.
-The 10% reserve is an engineering policy that covers them; it is not a measured
-bound for them.
+`Engine::BeginBlock()` to `Engine::EndBlock()`, the first and last calls of the
+application's callback, so the application's control processing and mixing are
+inside the interval. libDaisy's `InternalCallback` converts the SAI's integers
+to floats before that point and back afterwards, so those conversions, the
+interrupt entry and exit, and any profiling overhead lie outside it. The 10%
+reserve is an engineering policy that covers them; it is not a measured bound
+for them.
 
 ## Memory architecture
 
@@ -303,14 +300,14 @@ its 236 rings) in the SDRAM.
 **State in the DTCM.** The reverb object (filter state, block buffers, LFO
 state), the 16 KB sine table and the engine object with the callback's buffers
 are placed in `.dtcmram_bss`, which is neither cached nor subject to wait
-states, so per-sample state never competes with the delay memory for the
-cache. A constructor at priority 101 in the engine clears that section before
-the objects placed there are constructed, because libDaisy's startup code
-clears only `.bss`.
+states, so per-sample state never competes with the delay memory for the cache.
+A constructor at priority 101 in the engine clears that section before the
+objects placed there are constructed, because libDaisy's startup code clears
+only `.bss`.
 
 **Staging in the tightly coupled memories.** For every ring the loaded program
-processes, the planner reserves a *window* — the samples the next block will
-read, plus the modulation's excursion over the planning horizon — and a 48-float
+processes, the planner reserves a *window* (the samples the next block will
+read, plus the modulation's excursion over the planning horizon) and a 48-float
 *block buffer* in the TCMs. The kernels then read their window and write their
 block, and a transport moves the samples between the TCMs and the ring while the
 rest of the callback runs. Staging memory is the whole ITCM except its first 32
@@ -320,9 +317,9 @@ DTCM, 87 KB as the firmware reports it.
 A ring is eligible only when its shortest delay, less the modulation spread,
 clears the block still being written. Rings that fail that test keep the direct
 ring path: two per program in eight of the ten, none in Dull Echoes and Chorus
-Delay, and they are the short ones — a zero pre-delay and the shortest early
-stage. Candidates are taken most expensive memory first — SDRAM, then D2,
-then AXI — and within a tier the multitaps come last, because a staged allpass or
+Delay, and they are the short ones: a zero pre-delay and the shortest early
+stage. Candidates are taken most expensive memory first (SDRAM, then D2, then
+AXI), and within a tier the multitaps come last, because a staged allpass or
 delay saves more per byte of staging memory than a tap window does. Memory tiers
 are compared by physical address: they are separate allocations, and C++ does
 not specify the result of relational comparisons between unrelated pointers.
@@ -356,18 +353,19 @@ at the same time. Main clears the rings and cleans the data cache before the
 planner primes the first windows; when the staging is unplanned, the transport
 must have stopped before the CPU reuses that memory, and the cache is cleaned
 and invalidated so that stale lines cannot resurface. This is ownership
-transfer, not coherency maintenance per sample, which would cost far more.[^cache]
+transfer, not coherency maintenance per sample, which would cost far
+more.[^cache]
 
 ## The MDMA transport
 
 The Seed's master DMA moves the copies. Its descriptors are a linked list of up
 to 1,000 nodes (40,000 B) in the D2 SRAM. `Init()` writes every constant field
 and pre-links the whole chain once; `Copy()` then writes five words per node:
-the bus select, the byte count, the two addresses and the link to the next
-node, which `Commit()` cuts at a segment's last node and the next `Copy()` of
-that node restores. The staging is a template on the transport's type, so
-`Copy()` is inlined into the list builder instead of being called through a
-virtual interface (see [DSP kernels](#dsp-kernels)).
+the bus select, the byte count, the two addresses and the link to the next node,
+which `Commit()` cuts at a segment's last node and the next `Copy()` of that
+node restores. The staging is a template on the transport's type, so `Copy()` is
+inlined into the list builder instead of being called through a virtual
+interface (see [DSP kernels](#dsp-kernels)).
 
 The descriptor array is placed behind libDaisy's audio DMA buffers, at
 `0x30004140` in the default image. libDaisy's MPU makes only the first 32 KB of
@@ -376,7 +374,7 @@ the D2 SRAM non-cacheable, so the array crosses out of that window at
 descriptors from the data cache is therefore necessary, not defensive.[^mdma]
 
 **The list is streamed through the callback.** The reverb reports each group of
-heads it has finished with — a channel's early section, then each of its lines —
+heads it has finished with (a channel's early section, then each of its lines)
 through a per-reverb progress hook. The staging builds those entries' copies at
 once and commits them as a segment whenever the channel is idle, so the copies
 run while the rest of the block is processed and only the last segment runs
@@ -384,9 +382,10 @@ after it. A group waits only if the group four before it has not been written
 back yet, because that is the group whose block buffers it is about to reuse.
 
 Appending to a running list is not possible: the channel reads a node's
-registers when it transitions to that node, its own registers are write-protected
-while it is enabled, and a software request to a busy channel is ignored. Each
-segment therefore restarts the channel at its first new node.[^mdma]
+registers when it transitions to that node, its own registers are
+write-protected while it is enabled, and a software request to a busy channel is
+ignored. Each segment therefore restarts the channel at its first new
+node.[^mdma]
 
 Two safety properties are load-bearing:
 
@@ -418,8 +417,8 @@ suite compares the two paths over every block size from 1 to 48 samples.
   with zero gain are packed out of the hot loop, which matters for Noise in the
   Hallway: it configures 50 taps at zero gain, so only its direct tap
   contributes and the module reports `taps=1`.
-- **Staged run planning.** `PlanStagedRuns()` plans a block in one pass: the runs
-  it splits into at the LFO updates, and the read position of every run,
+- **Staged run planning.** `PlanStagedRuns()` plans a block in one pass: the
+  runs it splits into at the LFO updates, and the read position of every run,
   computed eight chains at a time. The per-run bookkeeping the kernels used to
   repeat is gone. The plan clamps by integer comparisons on the values' bit
   patterns and takes integer parts with `truncf` (`vrintz`), avoiding the
@@ -436,85 +435,84 @@ suite compares the two paths over every block size from 1 to 48 samples.
   advance. Static: 660 → 524 bytes, 206 → 174 instructions.
 - **Compare-free fade and mix loops.** The engine's program fade uses a step
   that is zero when idle and clamps by the bit pattern of the value; the
-  reference firmware's dry/wet loop soft-clips through a bit-pattern
-  comparison; neither loop contains a floating-point compare.
+  reference firmware's dry/wet loop soft-clips through a bit-pattern comparison;
+  neither loop contains a floating-point compare.
 - **Cold ring paths.** In a staging build the ring paths serve only the few
   ineligible rings per program, so they are compiled for size; a build with
   `CLOUDSEED_STAGING=0` compiles them for speed instead and drops the staging
   entirely.
-- **The transport inlined into the list builder.** The staging manager used
-  to reach its transport through a virtual interface, once per copy, and GCC
+- **The transport inlined into the list builder.** The staging manager used to
+  reach its transport through a virtual interface, once per copy, and GCC
   speculatively devirtualized that call to the *host* transport, the only
-  implementation visible in its translation unit: on the module every copy
-  paid a failed compare and then the virtual call anyway. Static, from the
-  default image before the change: about 50 instructions per copy, 12 in the
-  builder and 37 in `MdmaStagingTransport::Copy()` with its call overhead.
-  `Staging` is now a template on the transport's type, the abstract base
-  class is gone, and the transport addresses its nodes by pointer instead of
-  by index. Static, after: 27 instructions per copy, no call. Modeled: at
-  Through the Looking Glass's 575 copies per block, 13,000 cycles of the
-  480,000 in a block, 2.7 points; Hyperplane's 420 copies, 2 points.
-  Unmeasured on hardware.
+  implementation visible in its translation unit: on the module every copy paid
+  a failed compare and then the virtual call anyway. Static, from the default
+  image before the change: about 50 instructions per copy, 12 in the builder and
+  37 in `MdmaStagingTransport::Copy()` with its call overhead. `Staging` is now
+  a template on the transport's type, the abstract base class is gone, and the
+  transport addresses its nodes by pointer instead of by index. Static, after:
+  27 instructions per copy, no call. Modeled: at Through the Looking Glass's 575
+  copies per block, 13,000 cycles of the 480,000 in a block, 2.7 points;
+  Hyperplane's 420 copies, 2 points. Unmeasured on hardware.
 - **One-pole filters without floating-point compares.** The plugin's silence
   test in `Lp1` and `Hp1` (`input == 0 && |state| < 1e-12`) compiled to two
   `vcmp`/`vmrs` pairs per sample and filter. The block loops now test the
   sample's bits, loaded as an integer beside the float, and the state's bits
-  only when the sample is zero; the arithmetic and the results are those of
-  the scalar filter, which the tests compare bit for bit
-  (`TestOnePoleBlockForms`). The input gate in `ReverbChannel::Process`
-  compares the square's bits the same way. Static: the one-pole loops contain
-  no `vcmp` or `vmrs`; the pair loop is 24 instructions for two samples
-  instead of 28 with four flag transfers. Modeled from capture 8, where the
-  damping filters of Through the Looking Glass (24 one-poles, no biquads)
-  took 16 cycles per sample: a point or two. Unmeasured on hardware.
+  only when the sample is zero; the arithmetic and the results are those of the
+  scalar filter, which the tests compare bit for bit (`TestOnePoleBlockForms`).
+  The input gate in `ReverbChannel::Process` compares the square's bits the same
+  way. Static: the one-pole loops contain no `vcmp` or `vmrs`; the pair loop is
+  24 instructions for two samples instead of 28 with four flag transfers.
+  Modeled from capture 8, where the damping filters of Through the Looking Glass
+  (24 one-poles, no biquads) took 16 cycles per sample: a point or two.
+  Unmeasured on hardware.
 
 ## Numerical decisions
 
-**No contracted multiply-adds.** GCC contracts `a*b+c` into a fused
-multiply-add by default for C++, including in strict standard modes — verified
-directly against the installed arm-none-eabi-g++ 16.2.0. A fused operation
-rounds once where the reference implementation rounds twice, so it breaks
-bit-exactness against the host-built reference.[^contract] The firmware's own
-objects are therefore built with `-ffp-contract=off`.
+**No contracted multiply-adds.** GCC contracts `a*b+c` into a fused multiply-add
+by default for C++, including in strict standard modes, verified directly
+against the installed arm-none-eabi-g++ 16.2.0. A fused operation rounds once
+where the reference implementation rounds twice, so it breaks bit-exactness
+against the host-built reference.[^contract] The firmware's own objects are
+therefore built with `-ffp-contract=off`.
 
 This does not remove multiply-accumulate instructions, and it should not. `VMLA`
 on this architecture is *chained*: it rounds the product before accumulating, so
-it is numerically identical to a separate `VMUL` and `VADD`. Only `VFMA` is fused.[^vmla] Static, from the default image: the firmware's
-objects contain no fused single-precision operation at all; the only fused
-instructions are those in `fdlibm_trig.o`, written explicitly as `fma()` so
-that the argument reduction matches the toolchain's own libm object bit for
-bit. `cloudseed.mk` sets `-ffp-contract=off` for every object of a project
-that uses the library.
+it is numerically identical to a separate `VMUL` and `VADD`. Only `VFMA` is
+fused.[^vmla] Static, from the default image: the firmware's objects contain no
+fused single-precision operation at all; the only fused instructions are those
+in `fdlibm_trig.o`, written explicitly as `fma()` so that the argument reduction
+matches the toolchain's own libm object bit for bit. `cloudseed.mk` sets
+`-ffp-contract=off` for every object of a project that uses the library.
 
 Unfused is also faster here. On the Cortex-M7 a `vfma.f32` issues every third
 cycle, while `vmul.f32` and `vadd.f32` issue every cycle,[^cm7] and an
 independent measurement on the core agrees: independent `vfma` and `vadd`
 instructions at 2.5 cycles each, `vmul` and `vadd` at one.[^cm7bench] The same
-table gives the chained `vmla.f32` the same three-cycle issue rate, so a
-`vmla` in a hot loop would cost as much as a `vfma`. Static, from the default
-image: the staged kernels, the biquads and the one-pole filters compile to
-separate `vmul` and `vadd`; the 24 `vmla.f32`/`vmls.f32` in the image are in
-the ring paths (compiled for size, cold in a staging build) and in the
-controller's input mix, two per sample of a block. The kernels are written
-unfused for that reason as well as for reproducibility.
+table gives the chained `vmla.f32` the same three-cycle issue rate, so a `vmla`
+in a hot loop would cost as much as a `vfma`. Static, from the default image:
+the staged kernels, the biquads and the one-pole filters compile to separate
+`vmul` and `vadd`; the 24 `vmla.f32`/`vmls.f32` in the image are in the ring
+paths (compiled for size, cold in a staging build) and in the controller's input
+mix, two per sample of a block. The kernels are written unfused for that reason
+as well as for reproducibility.
 
 **Trigonometry.** `sin()` and `cos()` come from a port of newlib's own fdlibm
 implementation (`src/cloudseed/fdlibm_trig.cpp`, Sun Microsystems 1993, notice
-retained in `src/cloudseed/license.txt`). It reproduces the toolchain's libm bit for bit over the
-range the firmware uses and keeps libm's `sinf`, `cosf` and their table out of
-the image. Host-verified: 8,024,008 values compared, zero differences, in both
-fused and unfused configurations.
+retained in `src/cloudseed/license.txt`). It reproduces the toolchain's libm bit
+for bit over the range the firmware uses and keeps libm's `sinf`, `cosf` and
+their table out of the image. Host-verified: 8,024,008 values compared, zero
+differences, in both fused and unfused configurations.
 
 **Shelf gains.** The port's biquad substitutes the value passed to `SetGain`
 directly for `A` in the Audio EQ Cookbook shelf equations, whose endpoint
 magnitude is `A²`.[^cookbook] The legacy plugin passes a linear gain there, so
 its shelves attenuate by twice their nominal decibels. That is preserved for the
 nine factory programs, because their sound depends on it. The successor's filter
-follows the EarLevel formulation, where the requested decibels *are* the endpoint
-gain,[^earlevel] so Dark Plate's shelf values are converted with `10^(dB/40)`
-rather than `10^(dB/20)`. `TestDarkPlateShelves` drives the actual filter at DC
-and at Nyquist and checks both endpoints against the successor's targets within
-0.012 dB.
+follows the EarLevel formulation, where the requested decibels *are* the
+endpoint gain,[^earlevel] so Dark Plate's shelf values are converted with
+`10^(dB/40)` rather than `10^(dB/20)`. `TestDarkPlateShelves` drives the actual
+filter at DC and at Nyquist and checks both endpoints against the successor's
+targets within 0.012 dB.
 
 **Storage and evaluation.** Factory programs are stored as floats, which is the
 plugin's own storage format and exactly representable, halving the table. `10^x`
@@ -553,37 +551,50 @@ segment commit costs about 1.5 µs. Every program pays 3 to 5 points for it.
 
 ## Measured performance
 
-From the eighth hardware capture, image `623fe82a`, 480 MHz, 125 complete
+From the ninth hardware capture, image `59d22c54`, 480 MHz, 317 complete
 one-second reports, no overload, no staging failure, no MDMA error. Values are
-the mean of the interval averages over unmixed intervals, and the largest single
-block in any of them. Recomputed independently from the log for this document.
+the mean of the interval averages and the largest single block in any of them,
+over the 200 complete intervals in which the program ran unfrozen and its
+configuration did not change. Frozen intervals are excluded because the damping
+filters are bypassed there and the load is a few points lower, so including them
+would make a row depend on how long the gate happened to be held. Recomputed
+independently from the log for this document.
 
-| Program | Lines | Mean load | Peak block | Largest sections |
-|---|---:|---:|---:|---|
-| Small Room | 3 | 20.1% | 21.6% | linediff 4.9, stage 3.1 |
-| Medium Space | 3 | 23.7% | 25.0% | linediff 6.1, stage 3.6 |
-| Noise in the Hallway | 8 | 20.1% | 21.2% | linefilt 4.0, stage 3.4 |
-| Hyperplane | 9 | 56.2% | 59.3% | linediff 25.5, stage 9.1, linefilt 6.9 |
-| Rubi-Ka Fields | 4 | 27.7% | 29.1% | linediff 8.8, stage 4.5 |
-| Through the Looking Glass | 12 | 80.9% | 84.1% | linediff 36.5, stage 13.3, wait 8.5 |
-| The 90s Are Back | 9 | 22.7% | 24.3% | linefilt 4.8, stage 3.6 |
-| Dull Echoes | 12 | 27.3% | 28.8% | stage 5.2, linedelay 4.8 |
-| Chorus Delay | 12 | 44.0% | 46.0% | linediff 13.4, stage 7.9 |
+| Program | Lines | Reports | Mean load | Peak block | Largest sections |
+|---|---:|---:|---:|---:|---|
+| Small Room | 3 | 29 | 19.6% | 21.0% | linediff 4.8, stage 2.9, early 2.3 |
+| Medium Space | 3 | 17 | 23.2% | 24.6% | linediff 5.8, stage 3.2, early 2.6 |
+| Noise in the Hallway | 8 | 7 | 19.2% | 21.3% | linefilt 3.5, stage 3.1, linedelay 2.6 |
+| Hyperplane | 9 | 11 | 55.0% | 58.2% | linediff 25.9, stage 8.5, linefilt 6.3 |
+| Rubi-Ka Fields | 4 | 19 | 27.2% | 28.5% | linediff 8.9, stage 4.2, early 2.6 |
+| Through the Looking Glass | 12 | 2 | 77.8% | 80.1% | linediff 35.9, stage 12.0, wait 8.7 |
+| The 90s Are Back | 9 | 18 | 21.5% | 23.1% | linefilt 4.2, linedelay 3.4, stage 3.2 |
+| Dull Echoes | 12 | 19 | 25.6% | 27.2% | stage 4.6, linedelay 4.5, wait 3.5 |
+| Chorus Delay | 12 | 44 | 42.5% | 44.3% | linediff 13.6, stage 7.3, linedelay 4.7 |
+| Dark Plate | 12 | 34 | 46.1% | 48.1% | linediff 19.1, stage 7.7, linefilt 5.2 |
 
-The largest single block in the whole capture is 85.5%, during an interval that
-spans a program change. The lowest stack watermark is 16,252 bytes never
-written, of the 25,072 bytes between that build's DTCM data and the stack top.
+The reports are not spread evenly, because the capture was taken by playing the
+module: Through the Looking Glass rests on two intervals, two thousand blocks,
+and its row carries correspondingly less weight than Chorus Delay's forty-four.
+
+The largest single block in the whole capture is 80.1%, reached inside Through
+the Looking Glass's own intervals, so the table's peak column already covers the
+worst block seen anywhere. The lowest stack watermark is 15,792
+bytes never written, of the 25,072 bytes between that build's DTCM data and the
+stack top. The eighth capture, image `623fe82a`, measured the same programs half
+a point to three points higher and peaked at 85.5%; it predated the tenth
+program and the corrected floating-point build flag.
 
 **Reading the profiling fields.** `stage` is the callback's own list building
 and segment commits. `wait` is time spent waiting for a group's block buffers to
 be written back. `list=` sums a block's segments, each timed from its commit
-until the firmware notices its completion — and because the audio callback
-outranks the MDMA interrupt, a segment that finishes during the callback is
-counted until the next wait. It is an upper bound on the transport's time, and
-it is not comparable with the pre-streaming captures, which timed lists that ran
-alone. One `late=` and one `stale=` per block are normal: the end of a block
-waits for the running segment before committing the last one, and that wait
-handles the completion the interrupt would otherwise have handled.
+until the firmware notices its completion. Because the audio callback outranks
+the MDMA interrupt, a segment that finishes during the callback is counted until
+the next wait. It is an upper bound on the transport's time, and it is not
+comparable with the pre-streaming captures, which timed lists that ran alone.
+One `late=` and one `stale=` per block are normal: the end of a block waits for
+the running segment before committing the last one, and that wait handles the
+completion the interrupt would otherwise have handled.
 
 **What this does and does not establish.** These are observed maxima over a
 finite capture under one set of control positions. They are not a worst-case
@@ -600,9 +611,9 @@ inputs reading full scale; capture 8 was taken with the controls swept normally.
 
 ## Resource budget
 
-Static, from clean builds of the reference firmware with ARM GCC 16.2.0
-(the bare-Seed example, without the firmware's controls and mixing, takes
-109,296 B of flash and the same RAM).
+Static, from clean builds of the reference firmware with ARM GCC 16.2.0 (the
+bare-Seed example, without the firmware's controls and mixing, takes 109,296 B
+of flash and the same RAM).
 
 | Resource | Default | Profiling | Unstaged | Capacity |
 |---|---:|---:|---:|---:|
@@ -618,7 +629,7 @@ Two lines of that table need interpretation. The linker reports the ITCM as
 empty because the staging windows there are placed by address, not allocated by
 the linker; 64 KB of ITCM is in use, not free. And the space between the DTCM
 data and the stack top is an address-space allowance, not a measured stack
-margin — the measured margin is the watermark in the previous section.
+margin; the measured margin is the watermark in the previous section.
 
 D2 SRAM at 99.78% and the profiling build's flash are the tightest resources.
 Anything that adds descriptors, logging or template instantiation needs the map
@@ -626,9 +637,9 @@ checked afterwards.
 
 ## Build configuration
 
-A project's Makefile includes `cloudseed.mk`, which adds the library's
-sources, include path and flags, includes libDaisy's core Makefile and adds
-the rules below (README.md, "Quick start"). In the reference firmware:
+A project's Makefile includes `cloudseed.mk`, which adds the library's sources,
+include path and flags, includes libDaisy's core Makefile and adds the rules
+below (README.md, "Quick start"). In the reference firmware:
 
 ```sh
 make                      # default image, build/cloudseed.bin
@@ -660,20 +671,20 @@ The board options (`CLOUDSEED_BOOST`, `CLOUDSEED_SDRAM_WRITE_ALLOCATE`,
 reference firmware's Makefile, which passes them to its hardware class; the
 functions behind them are the library's `seed_system.h`.
 
-The options are recorded in a build prerequisite, so changing one on an
-existing build rebuilds every object. `reverb_channel.cpp` is compiled at
-`-O2` whatever the project's `OPT`, because every inner loop lives there;
-`engine.cpp`, which holds the callback's side of the library and instantiates
-the staging for the MDMA transport, at `CLOUDSEED_ENGINE_OPT`; the rest at the
-project's `OPT`. The reference firmware compiles its own callback at `-O2` and
-everything else at `-Os` to fit the flash, and its profiling build moves the
-engine and the callback to `-Os` because it needs the space more than the
-speed.
+The options are recorded in a build prerequisite, so changing one on an existing
+build rebuilds every object. `reverb_channel.cpp` is compiled at `-O2` whatever
+the project's `OPT`, because every inner loop lives there; `engine.cpp`, which
+holds the callback's side of the library and instantiates the staging for the
+MDMA transport, at `CLOUDSEED_ENGINE_OPT`; the rest at the project's `OPT`. The
+reference firmware compiles its own callback at `-O2` and everything else at
+`-Os` to fit the flash, and its profiling build moves the engine and the
+callback to `-Os` because it needs the space more than the speed.
 
 The SDRAM refresh count is 761, from 8192 refreshes per 64 ms at the 100 MHz
-SDRAM clock with the FMC's 20-cycle reserve; libDaisy's inherited value refreshes
-far too slowly for this part. The optional fast timings satisfy both the part's
-tRC and its tRFC, and the FMC's additional write-recovery constraints.[^sdram][^fmc]
+SDRAM clock with the FMC's 20-cycle reserve; libDaisy's inherited value
+refreshes far too slowly for this part. The optional fast timings satisfy both
+the part's tRC and its tRFC, and the FMC's additional write-recovery
+constraints.[^sdram][^fmc]
 
 ## Verification
 
@@ -752,30 +763,31 @@ lesson.
 
 Three of these are worth the detail.
 
-**The ownership bookkeeping.** `MdmaStagingTransport::Commit()` handles a channel
-whose enable bit is unexpectedly set by marking itself pending and failed. The
-staging's `Commit()` used to return on that failure *before* copying the
-transport's ownership state, and `Unplan()` reads exactly that state to decide
-whether to wait before detaching and freeing the windows. The priming path had
-always accounted for it; the per-block path had not. The fix reads `Idle()`
-after every attempted commit. `TestRejectedActiveCommit` holds an abort
+**The ownership bookkeeping.** `MdmaStagingTransport::Commit()` handles a
+channel whose enable bit is unexpectedly set by marking itself pending and
+failed. The staging's `Commit()` used to return on that failure *before* copying
+the transport's ownership state, and `Unplan()` reads exactly that state to
+decide whether to wait before detaching and freeing the windows. The priming
+path had always accounted for it; the per-block path had not. The fix reads
+`Idle()` after every attempted commit. `TestRejectedActiveCommit` holds an abort
 incomplete across repeated unplan attempts and requires the memory to stay
 reserved; it failed against the old code.
 
 **The out-of-array pointers.** A staged kernel was called with `s.window +
 s.lead` and then subtracted a delay inside its run loop. The lead can be
 thousands of samples while the window holds dozens, so the intermediate pointer
-left the array — and a later subtraction does not retroactively make it valid:
+left the array, and a later subtraction does not retroactively make it valid:
 C++ requires *each* pointer-arithmetic expression to stay within its array or
 one past its end.[^pointer] The kernels now keep the lead as an integer and form
 only `window + (lead - delay + done)`, which the planner already bounds.
 `TestLongStagedHeads` exercises a 20,000-sample delay served from a 64-float
 window.
 
-**The shelf conversion.** Described under [Numerical decisions](#numerical-decisions).
-It is the clearest example of a defect that no amount of internal consistency
-checking would have caught: the port agreed with itself and with its reference,
-and was still wrong about what the successor's number meant.
+**The shelf conversion.** Described under [Numerical
+decisions](#numerical-decisions). It is the clearest example of a defect that no
+amount of internal consistency checking would have caught: the port agreed with
+itself and with its reference, and was still wrong about what the successor's
+number meant.
 
 ## Lessons learned
 
@@ -794,12 +806,12 @@ and was still wrong about what the successor's number meant.
    Every kernel rewrite here was checked against the ring path bit for bit over
    every block size. That is what made it safe to rewrite loops, reorder filter
    work and share buffers without re-listening to nine programs each time. It
-   only works if the arithmetic is kept expression for expression — the moment a
+   only works if the arithmetic is kept expression for expression: the moment a
    change is *meant* to alter the sound, it needs a different kind of test.
-4. **Pin the floating-point evaluation model explicitly.** The compiler's default
-   is to contract multiply-adds, which silently breaks bit-exactness against a
-   host-built reference. `-ffp-contract=off` is a correctness setting here, not
-   a performance one — though on this core it happens to be faster too.
+4. **Pin the floating-point evaluation model explicitly.** The compiler's
+   default is to contract multiply-adds, which silently breaks bit-exactness
+   against a host-built reference. `-ffp-contract=off` is a correctness setting
+   here, not a performance one, though on this core it happens to be faster too.
 5. **Know which instruction the architecture actually fused.** `VMLA` is chained
    and bit-identical to a separate multiply and add; only `VFMA` is fused.
    Reading a disassembly and counting "multiply-accumulate" instructions would
@@ -830,32 +842,34 @@ and was still wrong about what the successor's number meant.
     scanning never appeared in the reported load. Diagnostics belong outside the
     interval they report on.
 11. **Report measured maxima as maxima.** A finite capture's largest block is a
-    high-water mark, not a worst-case bound.[^wcet] The 90% guard, the per-program
-    line limits and the dry-path recovery exist because the bound is unknown.
-12. **Adapting data from another implementation means adapting its conventions.**
-    Dark Plate's parameters converted cleanly except where the two code bases
-    disagreed about what a shelf gain means. Check every scaling against both
-    implementations' source, not against a shared name.
+    high-water mark, not a worst-case bound.[^wcet] The 90% guard, the
+    per-program line limits and the dry-path recovery exist because the bound is
+    unknown.
+12. **Adapting data from another implementation means adapting its
+    conventions.** Dark Plate's parameters converted cleanly except where the
+    two code bases disagreed about what a shelf gain means. Check every scaling
+    against both implementations' source, not against a shared name.
 13. **Give the compiler back the flash you are not using.** Two unused USB
-    stacks — a host stack pulled in by a handle reference, and the HAL driver
-    called from a dead branch — cost 3.4 KB. A linker map is worth reading once
+    stacks (a host stack pulled in by a handle reference, and the HAL driver
+    called from a dead branch) cost 3.4 KB. A linker map is worth reading once
     per project.
-14. **Read what the compiler guessed.** GCC's speculative devirtualization
-    (on at `-O2`) picked the only transport it could see, the host's, so the
+14. **Read what the compiler guessed.** GCC's speculative devirtualization (on
+    at `-O2`) picked the only transport it could see, the host's, so the
     module's copies paid a failed compare before every virtual call. The
-    disassembly showed it in one `cmp` against a relocated function address.
-    A virtual call on a hot path is worth replacing with a type the compiler
-    can see.
+    disassembly showed it in one `cmp` against a relocated function address. A
+    virtual call on a hot path is worth replacing with a type the compiler can
+    see.
 
 ## Limitations and open work
 
-- **No worst-case timing bound.** See [Measured performance](#measured-performance).
-  The evidence is a finite set of observed maxima plus a runtime guard.
+- **No worst-case timing bound.** See [Measured
+  performance](#measured-performance). The evidence is a finite set of observed
+  maxima plus a runtime guard.
 - **The current build is unmeasured on hardware.** The next capture should be
-  taken with the image CRC produced by the current build and should include
-  Dark Plate, which has never run
-  on the module. Modeled expectation for it: a callback near 45%, from its
-  section costs at Through the Looking Glass and its 362 copies.
+  taken with the image CRC produced by the current build and should include Dark
+  Plate, which has never run on the module. Modeled expectation for it: a
+  callback near 45%, from its section costs at Through the Looking Glass and its
+  362 copies.
 - **The TCM contention knob is untested.** `CLOUDSEED_AHBS_INITCOUNT` (2 to 4)
   is an A/B against capture 8; it exists and is unmeasured.
 - **Segment granularity.** The light programs commit 16 to 22 segments per block
@@ -874,9 +888,9 @@ and was still wrong about what the successor's number meant.
   and add quantization noise in feedback paths. Not attempted; the reference is
   double precision.
 
-The measurements above remain historical. The current make integration
-enforces `-ffp-contract=off` after libDaisy assigns its C++ flags; a fresh
-hardware capture is needed to measure the resulting image.
+The measurements above remain historical. The current make integration enforces
+`-ffp-contract=off` after libDaisy assigns its C++ flags; a fresh hardware
+capture is needed to measure the resulting image.
 
 ## Document history
 
@@ -899,20 +913,21 @@ The raw hardware captures behind the measured figures here are the serial logs
 of the profiling builds of rounds 5 through 9, taken on the reference module.
 They are not committed to this repository; each is identified by the `image=`
 CRC-32 its profiling build printed, and the figures under [Measured
-performance](#measured-performance) come from the eighth, image `623fe82a`.
+performance](#measured-performance) come from the ninth, image `59d22c54`, the
+first to cover all ten programs.
 
 **The split into this library (2026-09-12).** The code and this document moved
 into a repository of their own. The library had taken shape inside the
 Löwenzahnhonig firmware's `src/cloudseed` while it was being written. The
 firmware's callback and main loop became `Engine`
-(`src/cloudseed_daisy/engine.cpp`): what was module-specific (the pot
-mapping, the equal-power mix, the soft clip, the LED) stayed in the firmware,
-which now uses the library as a submodule; the Seed's system settings (the
-clock, the cache policies, the SDRAM refresh and timings) moved from the
-module's hardware class into `seed_system.h`, which that class now calls. The
-firmware test became the engine test, against the engine's public interface.
-The regression, fidelity and MDMA suites are unchanged in substance; the
-fidelity output is byte-identical to the pre-split runs.
+(`src/cloudseed_daisy/engine.cpp`): what was module-specific (the pot mapping,
+the equal-power mix, the soft clip, the LED) stayed in the firmware, which now
+uses the library as a submodule; the Seed's system settings (the clock, the
+cache policies, the SDRAM refresh and timings) moved from the module's hardware
+class into `seed_system.h`, which that class now calls. The firmware test became
+the engine test, against the engine's public interface. The regression, fidelity
+and MDMA suites are unchanged in substance; the fidelity output is
+byte-identical to the pre-split runs.
 
 ## Sources
 
