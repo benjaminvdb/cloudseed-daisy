@@ -16,3 +16,6 @@ build/
 # demo clips are built, not committed
 demo/build/
 demo/clips/
+
+# ctags output
+tags

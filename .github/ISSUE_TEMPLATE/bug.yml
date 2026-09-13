@@ -1,0 +1,59 @@
+name: Bug report
+description: Something the library does that it should not.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A profiling application (`CLOUDSEED_PROFILE=1`) can print the build,
+        the loaded program and the load through the engine's Print methods;
+        the bare-Seed example needs a logging sink wired up first (see
+        docs/release-acceptance.md). The `image=` field is the image's CRC-32, which
+        `make` also prints at the end of every build. Pasting a report answers
+        most of what is asked below at once.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what you expected instead
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce it
+      description: The program, the parameters and what the audio was doing.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Library version
+      description: A release tag, or the commit. `CLOUDSEED_DAISY_VERSION_STRING` in src/cloudseed_daisy/version.h.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: libdaisy
+    attributes:
+      label: libDaisy commit
+    validations:
+      required: true
+  - type: input
+    id: toolchain
+    attributes:
+      label: Toolchain
+      description: "`arm-none-eabi-gcc --version`, or the host compiler for a test failure."
+      placeholder: arm-none-eabi-gcc 12.2.Rel1
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Build options
+      description: Any CLOUDSEED_* option set away from its default, and the board.
+      placeholder: CLOUDSEED_STAGING=1, CLOUDSEED_MAX_LINES=12, Daisy Seed rev5
+  - type: textarea
+    id: report
+    attributes:
+      label: A profiling report, if you have one
+      render: text

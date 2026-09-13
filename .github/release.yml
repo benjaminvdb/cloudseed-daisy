@@ -1,0 +1,33 @@
+# Categories for GitHub's generated release notes. The changelog is written
+# by hand (CHANGELOG.md); these notes are the release page's detail.
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+    authors:
+      - dependabot
+  categories:
+    - title: Breaking changes
+      labels:
+        - breaking
+    - title: The reverb and the engine
+      labels:
+        - dsp
+        - engine
+    - title: Fixes
+      labels:
+        - bug
+    - title: Performance and memory
+      labels:
+        - performance
+    - title: Documentation
+      labels:
+        - documentation
+    - title: Tests and CI
+      labels:
+        - tests
+        - ci
+        - dependencies
+    - title: Other changes
+      labels:
+        - "*"

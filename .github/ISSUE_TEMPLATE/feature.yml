@@ -1,0 +1,19 @@
+name: Feature request
+description: Something the library should be able to do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What you want to do
+      description: The firmware you are writing, and what the library makes hard.
+    validations:
+      required: true
+  - type: textarea
+    id: cost
+    attributes:
+      label: What it would cost
+      description: |
+        The Seed is close to full — the D2 SRAM pool leaves an application
+        under a kilobyte, and the largest program uses most of the CPU budget.
+        If you have a sense of the flash, RAM or per-block cost, say so.

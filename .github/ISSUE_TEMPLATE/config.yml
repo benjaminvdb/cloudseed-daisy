@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Daisy questions
+    url: https://forum.electro-smith.com/
+    about: Anything about the Daisy Seed, libDaisy or the toolchain rather than this library.
+  - name: Security report
+    url: https://github.com/benjaminvdb/cloudseed-daisy/security/advisories/new
+    about: Report a vulnerability privately instead of opening an issue.

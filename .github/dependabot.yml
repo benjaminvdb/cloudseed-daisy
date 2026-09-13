@@ -1,0 +1,15 @@
+# The repository's only dependency manifest is its workflows: the library
+# itself vendors nothing and needs no package manager. Actions are pinned to
+# commit SHAs, which is what makes these updates worth reviewing — Dependabot
+# moves the SHA and the version comment together.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
