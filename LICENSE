@@ -19,27 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-----------------------------------------------------------------------------
-
-This library contains work by others, under their own terms:
-
-The reverb kernel in src/cloudseed is a port of Cloud Seed by Valdemar
-Erlingsson (https://github.com/ValdemarOrn/CloudSeed), released under the MIT
-License, Copyright (c) 2018 Valdemar Erlingsson. Its factory programs in
-src/cloudseed/presets.h are the plugin's.
-
-The Dark Plate program in src/cloudseed/presets.h is adapted from the
-built-in program of Cloud Seed 2's core by Ghost Note Engineering Ltd
-(https://github.com/GhostNoteAudio/CloudSeedCore), released under the MIT
-License, Copyright (c) 2024 Ghost Note Engineering Ltd.
-
-The SHA-256 implementation in src/cloudseed/sha_random.cpp is by Olivier Gay
-(Modified BSD License; the notice is in the file).
-
-The argument reduction in src/cloudseed/fdlibm_trig.cpp and its reference in
-test/trig.cpp are derived from fdlibm, Copyright (C) 1993 by Sun
-Microsystems, Inc. ("Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice is preserved.")
-
-The license texts of these works are reproduced in src/cloudseed/license.txt.

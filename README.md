@@ -521,8 +521,9 @@ DSP and worst-case-timing references behind the design.
 
 ## 📄 License and credits
 
-MIT, see [LICENSE](LICENSE). The full texts are in
-`src/cloudseed/license.txt`.
+MIT, see [LICENSE](LICENSE). The work by others this library contains is
+listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and the full texts
+are in [`src/cloudseed/license.txt`](src/cloudseed/license.txt).
 
 | Component | Attribution |
 |---|---|
