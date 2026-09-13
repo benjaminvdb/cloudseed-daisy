@@ -865,11 +865,9 @@ number meant.
 - **No worst-case timing bound.** See [Measured
   performance](#measured-performance). The evidence is a finite set of observed
   maxima plus a runtime guard.
-- **The current build is unmeasured on hardware.** The next capture should be
-  taken with the image CRC produced by the current build and should include Dark
-  Plate, which has never run on the module. Modeled expectation for it: a
-  callback near 45%, from its section costs at Through the Looking Glass and its
-  362 copies.
+- **The exact current image is unmeasured.** Capture 9 ran this library at
+  `3c4a1e0`; the source has changed since only by its version header and the
+  notices. A capture taken from the present build would close the gap.
 - **The TCM contention knob is untested.** `CLOUDSEED_AHBS_INITCOUNT` (2 to 4)
   is an A/B against capture 8; it exists and is unmeasured.
 - **Segment granularity.** The light programs commit 16 to 22 segments per block
@@ -887,10 +885,6 @@ number meant.
 - **Sixteen-bit delay storage** would halve the memory traffic of the ring paths
   and add quantization noise in feedback paths. Not attempted; the reference is
   double precision.
-
-The measurements above remain historical. The current make integration enforces
-`-ffp-contract=off` after libDaisy assigns its C++ flags; a fresh hardware
-capture is needed to measure the resulting image.
 
 ## Document history
 
