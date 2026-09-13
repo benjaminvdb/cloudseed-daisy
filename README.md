@@ -138,7 +138,12 @@ Add it next to libDaisy, as a git submodule or a plain checkout:
 
 ```sh
 git submodule add https://github.com/benjaminvdb/cloudseed-daisy lib/cloudseed-daisy
+git -C lib/cloudseed-daisy checkout v0.1.0   # a release, not the branch tip
 ```
+
+Pin it to a [release](https://github.com/benjaminvdb/cloudseed-daisy/releases)
+rather than tracking `main`, and commit the submodule pointer: that is what
+makes a firmware's build reproducible. See [Versioning](#-versioning).
 
 A project's Makefile names its own sources and libDaisy, sets the options it
 wants, and includes `cloudseed.mk` — which adds the library's sources, include
@@ -400,7 +405,9 @@ Historical measurements from reference image `623fe82a`, at **480 MHz, 48 kHz,
 counts are the programs' own. TECHNICAL.md, "Measured performance", has the
 breakdown per section. These observed peaks are not a worst-case timing bound.
 The current code, including the corrected floating-point build flag, needs a
-fresh hardware capture before these figures can be attributed to it.
+fresh hardware capture before these figures can be attributed to it —
+[`docs/release-acceptance.md`](docs/release-acceptance.md) is the checklist a
+release is measured with, since CI can build this firmware but not run it.
 
 | Program | Lines | Mean load | Peak block |
 |---|---:|---:|---:|
