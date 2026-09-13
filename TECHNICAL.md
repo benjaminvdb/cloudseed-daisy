@@ -24,9 +24,7 @@ Every quantitative claim below carries one of these labels.
 > capture, which covers all ten programs. It ran against this library at
 > `3c4a1e0`; the source has changed since only by a version header and the
 > notices, so the signal path and the engine it measured are the present ones.
-> The reference firmware around them has since gained the freeze make-up gain,
-> which adds a multiply per sample to its mix. Everything else here is
-> host-verified only.
+> Everything else here is host-verified only.
 
 ## Contents
 
@@ -177,15 +175,20 @@ level drops by up to `sqrt(lines)`. Late diffusion scrambles the common signal
 differently in each line, so the step shrinks as the stage count rises and is
 largest with the tap moved and no diffusion at all. Host-verified in the
 reference firmware's configuration: The 90s Are Back (9 lines, tap moved, no
-late diffusion) loses 7.0 to 7.8 dB whatever it is fed; Dark Plate (12 lines,
-four stages) loses 3.8 dB on a filtered chord and 11.2 dB on white noise, most
-of that being the damping loss around its loop, which follows the source's
-spectrum. The eight programs that tap after the delay or run six to eight stages
-stay within a few decibels, and several come back slightly *louder*, since unity
-feedback without the damping filters keeps energy the running loop was shedding.
+late diffusion) loses 5 to 8 dB whatever it is fed and wherever its decay and
+tone are set. Dark Plate (12 lines, four stages) ranges much further, from
+losing 13 dB with a bright source, a short decay and the feedback low-pass
+well down, to coming back about a decibel *louder* with decay and tone at
+maximum and a filtered chord: most of its step is the damping loss around its
+loop, which follows both the source's spectrum and the tone setting. The eight
+programs that tap after the delay or run six to eight stages stay within a few
+decibels, and several come back slightly *louder*, since unity feedback without
+the damping filters keeps energy the running loop was shedding.
 A caller that wants the level to hold across the gate has to make the step up
-itself, per program and per line count; the reference firmware does so in
-`src/cloudseed/programs.h`.
+itself, per program and per line count. The reference firmware does not: the
+step moves too far with the decay, the tone and the source's spectrum for a
+fixed gain to fit, and riding the gain to match would turn the tail's decay
+into pumping. It documents the step instead, and pins it with a test.
 
 The reference firmware mixes the dry signal itself, so `DryOut` is forced to
 zero in the reverb after every load (the engine's load hook) and the tone pot
