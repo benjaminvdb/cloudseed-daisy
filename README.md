@@ -195,7 +195,7 @@ int main() {
 make -C examples/seed LIBDAISY_DIR=/path/to/libDaisy
 ```
 
-Flash `examples/seed/build/cloudseed_seed.bin` with the [Daisy Web
+Flash `examples/seed/build/cloudseed-daisy-example.bin` with the [Daisy Web
 Programmer](https://electro-smith.github.io/Programmer/) or with `make
 program-dfu`.
 

@@ -5,7 +5,7 @@
 #   make LIBDAISY_DIR=/path/to/libDaisy
 #   make program-dfu
 #
-TARGET = cloudseed_seed
+TARGET = cloudseed-daisy-example
 CPP_SOURCES = main.cpp
 LIBDAISY_DIR ?= ../../../libDaisy
 

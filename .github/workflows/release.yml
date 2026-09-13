@@ -99,8 +99,8 @@ jobs:
           git archive --format=tar --prefix="$prefix/" "$GITHUB_SHA" \
             | gzip -n > "dist/$prefix.tar.gz"
 
-          cp examples/seed/build/cloudseed_seed.bin \
-             "dist/cloudseed_seed-$VERSION.bin"
+          cp examples/seed/build/cloudseed-daisy-example.bin \
+             "dist/cloudseed-daisy-example-$VERSION.bin"
 
           bash scripts/release-notices.sh "$PWD/libDaisy" \
             "$(dirname "$(command -v arm-none-eabi-gcc)")/../license.txt" \
@@ -164,7 +164,7 @@ jobs:
           | File | What it is |
           |---|---|
           | \`cloudseed-daisy-$VERSION.tar.gz\` | The source, from the tag's tree. |
-          | \`cloudseed_seed-$VERSION.bin\` | The bare-Seed example, built with GCC ${RELEASE_GCC}. Flash it with the [Daisy Web Programmer](https://electro-smith.github.io/Programmer/). |
+          | \`cloudseed-daisy-example-$VERSION.bin\` | The bare-Seed example, built with GCC ${RELEASE_GCC}. Flash it with the [Daisy Web Programmer](https://electro-smith.github.io/Programmer/). |
           | \`THIRD-PARTY-NOTICES.txt\` | License notices for the firmware; keep them with the image when redistributing it. |
           | \`SHA256SUMS\` | Checksums of the source, firmware and notices. |
 
@@ -172,7 +172,7 @@ jobs:
 
           \`\`\`sh
           sha256sum --check SHA256SUMS
-          gh attestation verify cloudseed_seed-$VERSION.bin --repo $GITHUB_REPOSITORY
+          gh attestation verify cloudseed-daisy-example-$VERSION.bin --repo $GITHUB_REPOSITORY
           \`\`\`
 
           ---
