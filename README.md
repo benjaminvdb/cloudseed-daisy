@@ -115,6 +115,7 @@ every clip: [`demo/make_demos.sh`](demo/make_demos.sh).
 - [Performance](#-performance)
   - [Measuring the load](#measuring-the-load)
 - [The kernel without the engine](#-the-kernel-without-the-engine)
+- [Versioning](#-versioning)
 - [Tests](#-tests)
 - [Reference application](#-reference-application)
 - [References](#-references)
@@ -466,9 +467,62 @@ manager, a template on a
 transport type, so that another STM32H7 board or another DMA can supply its own;
 [`test/queued_transport.h`](test/queued_transport.h) is the smallest one.
 
+## 🏷️ Versioning
+
+**This library is at 0.x.** It is complete and tested, but the interface is
+not frozen: it is out early so that people building on Daisy can put it in a
+real firmware and say what is wrong with it. A 0.x minor release may rename or
+change a call, and [CHANGELOG.md](CHANGELOG.md) says when one does. 1.0.0
+follows once that feedback has landed, and freezes the interface under the
+rules below. If that is not a trade you want, pin a tag and upgrade
+deliberately — which is the advice either way.
+
+[Semantic versioning](https://semver.org/spec/v2.0.0.html), over the
+**documented interface**: the engine
+([`engine.h`](src/cloudseed_daisy/engine.h)), the reverb
+([`reverb_controller.h`](src/cloudseed/reverb_controller.h)), the programs
+([`presets.h`](src/cloudseed/presets.h)), the system settings
+([`seed_system.h`](src/cloudseed_daisy/seed_system.h)) and the build options
+`cloudseed.mk` accepts. Anything an application cannot reach — a private
+member, a detail of the staging, the layout of an internal buffer — is not
+covered.
+
+| Release | May change |
+|---|---|
+| **Patch** (x.y.Z) | Defects, documentation, tests. Not the interface, and not the sound, unless the old sound was the defect. |
+| **Minor** (x.Y.0) | From 1.0.0 on: additions only — new calls, new options, new programs, new parameters accepted by `SetParameter` — and existing firmware keeps compiling and sounding the same. **Below 1.0.0 a minor release may also change or remove something**, with the change named in the changelog. |
+| **Major** (X.0.0) | Anything: a removed or renamed call, a changed signature or default, a removed build option, a raised minimum toolchain, a changed program. |
+
+From 1.0.0 this is a **source** promise: a firmware that builds against 1.0.0
+builds against any later 1.x without edits. It is not an ABI promise — the library is
+compiled into your image, and there is nothing to link against separately.
+Measured CPU load and memory figures are not part of the interface either;
+they move with the compiler, and the README's tables say what they were
+measured with.
+
+The version is in
+[`src/cloudseed_daisy/version.h`](src/cloudseed_daisy/version.h), as macros,
+so a firmware that supports more than one release can ask:
+
+```cpp
+#include "cloudseed_daisy/version.h"
+
+#if CLOUDSEED_DAISY_VERSION_AT_LEAST(1, 1, 0)
+  // something added in 1.1
+#endif
+```
+
+`engine.h` includes it, and the release workflow refuses a tag that disagrees
+with it. [CHANGELOG.md](CHANGELOG.md) records what each release changed.
+
+Found something, or want something? [Open an
+issue](https://github.com/benjaminvdb/cloudseed-daisy/issues/new/choose) —
+while the library is at 0.x that feedback is what 1.0.0 is waiting on.
+[CONTRIBUTING.md](CONTRIBUTING.md) covers sending a change.
+
 ## 🧪 Tests
 
-Every suite runs on the host with a C++14 compiler;
+The host suites need a C++14 compiler, Python 3, GNU make and git;
 **[`test/all.sh`](test/all.sh) runs them
 all** (pass a CloudSeed checkout to include fidelity), and the [GitHub workflow](.github/workflows/test.yml) runs the suites
 and builds the example.

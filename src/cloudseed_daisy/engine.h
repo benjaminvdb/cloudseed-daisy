@@ -46,6 +46,7 @@
 #include "cloudseed/parameter.h"
 #include "cloudseed/presets.h"
 #include "cloudseed/reverb_controller.h"
+#include "cloudseed_daisy/version.h"
 #include "util/CpuLoadMeter.h"
 
 // Build options (see cloudseed.mk and README.md, "Build options").
