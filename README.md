@@ -333,33 +333,33 @@ of flash headroom and 512 B per internal RAM region.
 
 ## 📊 Performance
 
-Measured on reference image `59d22c54` at 480 MHz, 48 kHz and 48-sample blocks,
+Measured on reference image `ad729560` at 480 MHz, 48 kHz and 48-sample blocks,
 over the one-second reports in which the program ran unfrozen and its
-configuration did not change: 200 of them, no overload, no staging failure and
+configuration did not change: 144 of them, no overload, no staging failure and
 no MDMA error. The line counts are the programs' own. These are observed peaks,
 not a worst-case timing bound. TECHNICAL.md, "Measured performance", has the
 breakdown per section and the number of reports behind each row.
 
 | Program | Lines | Mean load | Peak block |
 |---|---:|---:|---:|
-| Small Room | 3 | 19.6% | 21.0% |
+| Small Room | 3 | 19.6% | 20.9% |
 | Medium Space | 3 | 23.2% | 24.6% |
 | Noise in the Hallway | 8 | 19.2% | 21.3% |
-| Hyperplane | 9 | 55.0% | 58.2% |
-| Rubi-Ka Fields | 4 | 27.2% | 28.5% |
-| Through the Looking Glass | 12 | 77.8% | 80.1% |
-| The 90s Are Back | 9 | 21.5% | 23.1% |
-| Dull Echoes | 12 | 25.6% | 27.2% |
-| Chorus Delay | 12 | 42.5% | 44.3% |
+| Hyperplane | 9 | 55.1% | 58.2% |
+| Rubi-Ka Fields | 4 | 27.1% | 28.5% |
+| Through the Looking Glass | 12 | 77.9% | 81.7% |
+| The 90s Are Back | 9 | 21.5% | 21.8% |
+| Dull Echoes | 12 | 25.6% | 27.1% |
+| Chorus Delay | 12 | 42.4% | 44.3% |
 | Dark Plate | 12 | 46.1% | 48.1% |
 
 A program draws a few points less while frozen, since the damping filters are
 bypassed: Dark Plate holds 46.1% running and 40.7% frozen. Nine of the ten
 peaks fall in an interval where a pot was moving and the delay lines were being
-recomputed; Through the Looking Glass reaches its peak without one.
-These figures replace a capture of image `623fe82a`, which predated the tenth
-program and the corrected floating-point build flag and read half a point to
-three points higher.
+recomputed; The 90s Are Back reaches its peak without one. These figures
+supersede those of image `623fe82a`, which predated the tenth program and the
+corrected floating-point build flag and read half a point to three points
+higher.
 
 A profiling build (`CLOUDSEED_PROFILE=1`) counts the cycles of every section of
 the callback with the Cortex-M7's cycle counter and hands the application one

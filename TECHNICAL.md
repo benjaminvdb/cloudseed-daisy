@@ -19,12 +19,13 @@ Every quantitative claim below carries one of these labels.
 | **Modeled** | Calculated from an explicit model. Not an observation. |
 | **Unmeasured** | Believed, but with no evidence of either kind. Stated as such wherever it appears. |
 
-> **The current build has not run on hardware.** Everything under [Measured
-> performance](#measured-performance) describes image `59d22c54`, the ninth
+> **This build has run on hardware.** Everything under [Measured
+> performance](#measured-performance) describes image `ad729560`, the tenth
 > capture, which covers all ten programs. It ran against this library at
-> `3c4a1e0`; the source has changed since only by a version header and the
-> notices, so the signal path and the engine it measured are the present ones.
-> Everything else here is host-verified only.
+> `3c4a1e0`, which differs from the release only by a version header of
+> macros, one `#include` of it, and the notices: no compiled code, so the
+> signal path and the engine it measured are the released ones. Claims not
+> marked Measured are host-verified or static, as labelled.
 
 ## Contents
 
@@ -554,10 +555,10 @@ segment commit costs about 1.5 µs. Every program pays 3 to 5 points for it.
 
 ## Measured performance
 
-From the ninth hardware capture, image `59d22c54`, 480 MHz, 317 complete
+From the tenth hardware capture, image `ad729560`, 480 MHz, 273 complete
 one-second reports, no overload, no staging failure, no MDMA error. Values are
 the mean of the interval averages and the largest single block in any of them,
-over the 200 complete intervals in which the program ran unfrozen and its
+over the 144 complete intervals in which the program ran unfrozen and its
 configuration did not change. Frozen intervals are excluded because the damping
 filters are bypassed there and the load is a few points lower, so including them
 would make a row depend on how long the gate happened to be held. Recomputed
@@ -565,28 +566,32 @@ independently from the log for this document.
 
 | Program | Lines | Reports | Mean load | Peak block | Largest sections |
 |---|---:|---:|---:|---:|---|
-| Small Room | 3 | 29 | 19.6% | 21.0% | linediff 4.8, stage 2.9, early 2.3 |
-| Medium Space | 3 | 17 | 23.2% | 24.6% | linediff 5.8, stage 3.2, early 2.6 |
-| Noise in the Hallway | 8 | 7 | 19.2% | 21.3% | linefilt 3.5, stage 3.1, linedelay 2.6 |
-| Hyperplane | 9 | 11 | 55.0% | 58.2% | linediff 25.9, stage 8.5, linefilt 6.3 |
-| Rubi-Ka Fields | 4 | 19 | 27.2% | 28.5% | linediff 8.9, stage 4.2, early 2.6 |
-| Through the Looking Glass | 12 | 2 | 77.8% | 80.1% | linediff 35.9, stage 12.0, wait 8.7 |
-| The 90s Are Back | 9 | 18 | 21.5% | 23.1% | linefilt 4.2, linedelay 3.4, stage 3.2 |
-| Dull Echoes | 12 | 19 | 25.6% | 27.2% | stage 4.6, linedelay 4.5, wait 3.5 |
-| Chorus Delay | 12 | 44 | 42.5% | 44.3% | linediff 13.6, stage 7.3, linedelay 4.7 |
-| Dark Plate | 12 | 34 | 46.1% | 48.1% | linediff 19.1, stage 7.7, linefilt 5.2 |
+| Small Room | 3 | 19 | 19.6% | 20.9% | linediff 4.8, stage 2.9, early 2.3 |
+| Medium Space | 3 | 15 | 23.2% | 24.6% | linediff 5.8, stage 3.2, early 2.6 |
+| Noise in the Hallway | 8 | 15 | 19.2% | 21.3% | linefilt 3.5, stage 3.1, linedelay 2.6 |
+| Hyperplane | 9 | 11 | 55.1% | 58.2% | linediff 25.9, stage 8.5, linefilt 6.3 |
+| Rubi-Ka Fields | 4 | 9 | 27.1% | 28.5% | linediff 9.0, stage 4.2, early 2.6 |
+| Through the Looking Glass | 12 | 20 | 77.9% | 81.7% | linediff 35.9, stage 12.1, wait 8.7 |
+| The 90s Are Back | 9 | 15 | 21.5% | 21.8% | linefilt 4.2, linedelay 3.4, stage 3.2 |
+| Dull Echoes | 12 | 10 | 25.6% | 27.1% | stage 4.6, linedelay 4.5, wait 3.5 |
+| Chorus Delay | 12 | 10 | 42.4% | 44.3% | linediff 13.6, stage 7.3, linedelay 4.7 |
+| Dark Plate | 12 | 20 | 46.1% | 48.1% | linediff 19.1, stage 7.7, linefilt 5.2 |
 
 The reports are not spread evenly, because the capture was taken by playing the
-module: Through the Looking Glass rests on two intervals, two thousand blocks,
-and its row carries correspondingly less weight than Chorus Delay's forty-four.
+module: each program was held for twenty to thirty-four seconds, and the rows
+with nine or ten intervals carry correspondingly less weight than the twenty
+behind Through the Looking Glass and Dark Plate.
 
-The largest single block in the whole capture is 80.1%, reached inside Through
+The largest single block in the whole capture is 81.7%, reached inside Through
 the Looking Glass's own intervals, so the table's peak column already covers the
-worst block seen anywhere. The lowest stack watermark is 15,792
-bytes never written, of the 25,072 bytes between that build's DTCM data and the
-stack top. The eighth capture, image `623fe82a`, measured the same programs half
-a point to three points higher and peaked at 85.5%; it predated the tenth
-program and the corrected floating-point build flag.
+worst block seen anywhere. It leaves 8 points under the 90% guard. The lowest
+stack watermark is 15,816 bytes never written, of the 25,072 bytes between that
+build's DTCM data and the stack top. The ninth capture, image `59d22c54`, of the
+same library source, reproduces every program's mean within a tenth of a point;
+it sampled Through the Looking Glass over two intervals rather than twenty,
+which is why its worst block was 1.6 points lower. The eighth, image `623fe82a`,
+measured half a point to three points higher and peaked at 85.5%; it predated
+the tenth program and the corrected floating-point build flag.
 
 **Reading the profiling fields.** `stage` is the callback's own list building
 and segment commits. `wait` is time spent waiting for a group's block buffers to
@@ -910,8 +915,9 @@ The raw hardware captures behind the measured figures here are the serial logs
 of the profiling builds of rounds 5 through 9, taken on the reference module.
 They are not committed to this repository; each is identified by the `image=`
 CRC-32 its profiling build printed, and the figures under [Measured
-performance](#measured-performance) come from the ninth, image `59d22c54`, the
-first to cover all ten programs.
+performance](#measured-performance) come from the tenth, image `ad729560`,
+taken for the 0.1.0 release. The ninth, `59d22c54`, was the first to cover all
+ten programs and agrees with it to a tenth of a point.
 
 **The split into this library (2026-09-12).** The code and this document moved
 into a repository of their own. The library had taken shape inside the
