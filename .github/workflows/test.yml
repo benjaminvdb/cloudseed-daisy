@@ -2,33 +2,63 @@ name: Tests
 
 on:
   push:
+    branches: [main]
   pull_request:
+  # Weekly, so that a runner image or a toolchain moving under the pinned
+  # dependencies is found before a release is.
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+  # The release workflow runs these same suites against the tag.
+  workflow_call:
+
+# A new push supersedes the run of the one before it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# Nothing here writes to the repository.
+permissions:
+  contents: read
+
+env:
+  # The revisions the suites are developed against. README.md names them too.
+  LIBDAISY_REF: cc146d5065dd8286078a662e2830bf820c37a612
+  CLOUDSEED_REF: 13a625e00ec47db98b158a17e309d2cdaebb57ed
 
 jobs:
   host:
     name: Host suites
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Checkout libDaisy (headers for the engine and MDMA suites)
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: electro-smith/libDaisy
-          ref: cc146d5065dd8286078a662e2830bf820c37a612
+          ref: ${{ env.LIBDAISY_REF }}
           path: libDaisy
           submodules: recursive
+          persist-credentials: false
 
       - name: Checkout Cloud Seed (the fidelity reference)
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ValdemarOrn/CloudSeed
-          ref: 13a625e00ec47db98b158a17e309d2cdaebb57ed
+          ref: ${{ env.CLOUDSEED_REF }}
           path: CloudSeed
+          persist-credentials: false
+
+      - name: Release and firmware-check regressions
+        run: python3 test/release.py
 
       - name: Build integration
-        run: LIBDAISY_DIR=$PWD/libDaisy bash test/build.sh
+        run: LIBDAISY_DIR="$PWD/libDaisy" bash test/build.sh
 
       - name: WAV renderer
         run: python3 test/render.py
@@ -37,10 +67,10 @@ jobs:
         run: bash test/regression.sh
 
       - name: Engine
-        run: LIBDAISY_DIR=$PWD/libDaisy bash test/engine.sh
+        run: LIBDAISY_DIR="$PWD/libDaisy" bash test/engine.sh
 
       - name: MDMA transport
-        run: LIBDAISY_DIR=$PWD/libDaisy bash test/mdma.sh
+        run: LIBDAISY_DIR="$PWD/libDaisy" bash test/mdma.sh
 
       - name: Trigonometry
         run: bash test/trig.sh
@@ -52,33 +82,55 @@ jobs:
         run: bash test/benchmark.sh --stress
 
   firmware:
-    name: Daisy Seed example
+    name: Daisy Seed example (GCC ${{ matrix.gcc }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest toolchain the README supports, and the newest this
+        # action offers. The figures in test/size_budget.txt are taken with
+        # the newer one, so the size suite runs only there.
+        gcc: ['12.2.Rel1', '15.3.Rel1']
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # test/consumer.sh clones this checkout; it needs the history, and
+          # must not carry a credential into the fixture.
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Checkout libDaisy
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: electro-smith/libDaisy
-          ref: cc146d5065dd8286078a662e2830bf820c37a612
+          ref: ${{ env.LIBDAISY_REF }}
           path: libDaisy
           submodules: recursive
+          persist-credentials: false
 
       - name: Set up ARM toolchain
-        uses: carlosperate/arm-none-eabi-gcc-action@v1
+        uses: carlosperate/arm-none-eabi-gcc-action@98c40e51546516419841748d3210c290df0d2c6c # v1.13.0
         with:
-          release: "12.2.Rel1"
+          release: ${{ matrix.gcc }}
 
       - name: Build libDaisy
         run: make -C libDaisy -j -s
 
       - name: Build the example
-        run: make -C examples/seed -s LIBDAISY_DIR=$PWD/libDaisy
+        run: make -C examples/seed -s LIBDAISY_DIR="$PWD/libDaisy"
+
+      - name: The README's quick start, as a submodule consumer
+        run: LIBDAISY_DIR="$PWD/libDaisy" bash test/consumer.sh
+
+      - name: Flash and RAM against the budget
+        if: matrix.gcc == '15.3.Rel1'
+        run: LIBDAISY_DIR="$PWD/libDaisy" bash test/size.sh
 
       - name: Upload the image
-        uses: actions/upload-artifact@v4
+        if: matrix.gcc == '15.3.Rel1'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: cloudseed_seed-${{ github.sha }}
           path: examples/seed/build/cloudseed_seed.bin
